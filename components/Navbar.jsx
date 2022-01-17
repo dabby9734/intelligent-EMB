@@ -31,7 +31,7 @@ const Navbar = () => {
     deleteCookie("auth_token");
     deleteCookie("sess_id");
     deleteCookie("veri_token");
-    router.push("/login");
+    router.push("/");
   };
 
   return (

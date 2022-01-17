@@ -1,95 +1,30 @@
 import Head from "next/head";
-import Image from "next/image";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 
-import { getCookie, setCookie } from "../lib/cookieMonster";
+import { getCookie } from "../lib/cookieMonster";
 
-import Navbar from "../components/Navbar";
-import { Snackbar, Alert, Stack } from "@mui/material";
-import Messages from "../components/Messages";
+import Login from "../components/Login";
 
-export default function Home() {
-  const [messages, setMessages] = useState("");
-
-  const refreshToken = async () => {
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: getCookie("username"),
-        password: getCookie("password"),
-      }),
-    });
-
-    if (response.status != 200) {
-      return setInfo("Token refresh failed");
-    }
-
-    const data = await response.json();
-
-    if (data.success) {
-      setCookie("auth_token", data.AUTH_TOKEN, 1800);
-      setCookie("sess_id", data.SESSION_ID, 1800);
-      setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
-
-      setInfo("Token refreshed");
-      return await fetchMessages();
-    } else {
-      setInfo(data.message);
-    }
-  };
-
-  const fetchMessages = async () => {
-    const response = await fetch("/api/getStudentBoard", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        veriTokenCookie: getCookie("veri_token"),
-        authToken: getCookie("auth_token"),
-        sessionID: getCookie("sess_id"),
-      }),
-    });
-    const data = await response.json();
-
-    if (!data.success) {
-      setInfo(data.message);
-
-      if (data.message === "Needs to refresh token") {
-        return await refreshToken();
-      } else return;
-    }
-
-    // add data to localStorage
-    localStorage.setItem("studentBoard", JSON.stringify(data.messages));
-    setMessages(data.messages);
-    setInfo("Messages fetched");
-  };
-
+export default function LoginPage() {
   const router = useRouter();
-  useEffect(() => {
+  const needsLogin = () => {
     if (!getCookie("username") || !getCookie("password")) {
-      router.push("/login");
-    } else {
-      try {
-        setMessages(JSON.parse(localStorage.getItem("studentBoard")));
-      } catch (err) {
-        console.log(err);
-      }
-      fetchMessages();
+      return true;
     }
-  }, []);
+    return false;
+  };
 
-  const [info, setInfo] = useState("");
+  useEffect(() => {
+    if (!needsLogin()) {
+      router.push("/student");
+    }
+  });
 
   return (
     <div>
       <Head>
-        <title>iEMB</title>
+        <title>iEMB :: Login</title>
         <meta
           name="description"
           content="Fighting iemb's anticompetitive behaviours"
@@ -97,21 +32,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div>
-        <Snackbar
-          open={!!info}
-          autoHideDuration={5000}
-          onClose={() => setInfo("")}
-        >
-          <Alert severity="info" onClose={() => setInfo("")}>
-            {info}
-          </Alert>
-        </Snackbar>
-        <Stack direction="row" spacing={2}>
-          <Navbar />
-          <Messages messages={messages} />
-        </Stack>
-      </div>
+      <Login />
     </div>
   );
 }
