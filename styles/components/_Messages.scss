@@ -1,0 +1,67 @@
+.messages {
+  width: 75vw;
+  height: 100vh;
+  overflow-y: scroll;
+
+  @include respond(tab-port) {
+    width: 100%;
+  }
+
+  margin: 0 !important;
+  padding: 1rem;
+
+  &__item {
+    padding: 0.2em 0;
+    &:first-child {
+      padding-top: 0;
+    }
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    &__content {
+      padding: 0.8rem;
+
+      &.read-msg {
+        opacity: 0.6;
+      }
+
+      h2 {
+        font-family: "Assistant", sans-serif;
+        font-weight: 600;
+        font-size: 1.2rem;
+        font-style: normal;
+        line-height: initial;
+        margin: 0 0 0.5rem 0;
+      }
+
+      &__info {
+        &-wrapper {
+          display: flex;
+        }
+
+        &-item {
+          display: flex;
+          align-items: center;
+          padding-right: 1rem;
+
+          &-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          &-field {
+            padding-left: 0.5rem;
+          }
+        }
+      }
+    }
+
+    & > div:hover {
+      background-color: #f1f1f1;
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+    }
+  }
+}

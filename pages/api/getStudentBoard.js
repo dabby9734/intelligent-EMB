@@ -1,7 +1,15 @@
 import { parse } from "node-html-parser";
 
 async function handler(req, res) {
-  const { veriTokenCookie, authToken, sessionID } = { ...req.body };
+  // only accept POST requests
+  if (req.method != "POST") {
+    return res.status(405).send("Method not allowed");
+  }
+
+  const { veriTokenCookie, authToken, sessionID } = {
+    ...req.body,
+  };
+
   const response = await fetch("https://iemb.hci.edu.sg/Board/Detail/1048", {
     method: "GET",
     mode: "no-cors",
@@ -16,13 +24,21 @@ async function handler(req, res) {
     },
   });
 
+  if (response.status != 200) {
+    return res
+      .status(200)
+      .json({ success: false, message: "iemb.hci.edu.sg is down" });
+  }
+
+  // parse the html
   const iembHTML = parse(await response.text());
 
-  const needsSignIn = iembHTML.querySelector(".login-page");
-  if (needsSignIn) {
+  // check if we are stuck on the sign in page (i.e. needs a token refresh)
+  const needsTokenRefresh = iembHTML.querySelector(".login-page");
+  if (needsTokenRefresh) {
     return res.status(200).json({
       success: false,
-      message: "Needs to sign in",
+      message: "Needs to refresh token",
     });
   }
 
@@ -32,39 +48,55 @@ async function handler(req, res) {
     return section.querySelectorAll("tbody > tr");
   });
 
-  const messages = {
-    unread: [],
-    read: [],
-  };
+  const messages = [];
 
   if (!unreadMessages[0].querySelector("td > b")) {
-    console.log("there are unread messages");
     unreadMessages.forEach((message) => {
       const data = message.querySelectorAll("td");
-      console.log(data.length);
-    });
-  }
 
-  if (!readMessages[0].querySelector("td > b")) {
-    console.log("there are read messages");
-    readMessages.forEach((message) => {
-      const data = message.querySelectorAll("td");
-
-      messages.read.push({
-        date: data[0].rawText,
+      messages.push({
+        date: data[0].text,
         sender: data[1].querySelector("a").getAttribute("tooltip-data"),
-        username: data[1].querySelector("a").rawText.trim(),
-        subject: data[2].querySelector("a").rawText,
-        url: data[2].querySelector("a").getAttribute("href"),
+        username: data[1].querySelector("a").text.trim(),
+        subject: data[2].querySelector("a").text,
+        url: data[2]
+          .querySelector("a")
+          .getAttribute("href")
+          .match(/\/Board\/content\/(\d+)/)[1],
         urgency: data[3].querySelector("img").getAttribute("alt"),
-        recipient: data[4].rawText.trim(),
-        viewCount: data[5].rawText.match(/Viewer:\s+(\d+)/)[1],
-        replyCount: data[5].rawText.match(/Response:\s+(\d+)/)[1],
+        recipient: data[4].text.trim(),
+        viewCount: data[5].text.match(/Viewer:\s+(\d+)/)[1],
+        replyCount: data[5].text.match(/Response:\s+(\d+)/)[1],
+        read: false,
       });
     });
   }
 
-  res.status(200).json({ success: true, messages });
+  if (!readMessages[0].querySelector("td > b")) {
+    readMessages.forEach((message) => {
+      const data = message.querySelectorAll("td");
+
+      messages.push({
+        date: data[0].text,
+        sender: data[1].querySelector("a").getAttribute("tooltip-data"),
+        username: data[1].querySelector("a").text.trim(),
+        subject: data[2].querySelector("a").text,
+        url: data[2]
+          .querySelector("a")
+          .getAttribute("href")
+          .match(/\/Board\/content\/(\d+)/)[1],
+        urgency: data[3].querySelector("img").getAttribute("alt"),
+        recipient: data[4].text.trim(),
+        viewCount: data[5].text.match(/Viewer:\s+(\d+)/)[1],
+        replyCount: data[5].text.match(/Response:\s+(\d+)/)[1],
+        read: true,
+      });
+    });
+  }
+
+  res
+    .status(200)
+    .json({ success: true, message: "Fetched messages!", messages });
 }
 
 export default handler;

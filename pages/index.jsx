@@ -1,13 +1,47 @@
 import Head from "next/head";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-import { getCookie } from "../lib/cookieMonster";
+import { getCookie, setCookie } from "../lib/cookieMonster";
 
-import Login from "../components/Login";
-import { Button } from "@mui/material";
+import Navbar from "../components/Navbar";
+import { Snackbar, Alert, Stack } from "@mui/material";
+import Messages from "../components/Messages";
 
 export default function Home() {
+  const [messages, setMessages] = useState("");
+
+  const refreshToken = async () => {
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: getCookie("username"),
+        password: getCookie("password"),
+      }),
+    });
+
+    if (response.status != 200) {
+      return setInfo("Token refresh failed");
+    }
+
+    const data = await response.json();
+
+    if (data.success) {
+      setCookie("auth_token", data.AUTH_TOKEN, 1800);
+      setCookie("sess_id", data.SESSION_ID, 1800);
+      setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
+
+      setInfo("Token refreshed");
+      return await fetchMessages();
+    } else {
+      setInfo(data.message);
+    }
+  };
+
   const fetchMessages = async () => {
     const response = await fetch("/api/getStudentBoard", {
       method: "POST",
@@ -21,71 +55,41 @@ export default function Home() {
       }),
     });
     const data = await response.json();
+
+    if (!data.success) {
+      setInfo(data.message);
+
+      if (data.message === "Needs to refresh token") {
+        return await refreshToken();
+      } else return;
+    }
+
     // add data to localStorage
     localStorage.setItem("studentBoard", JSON.stringify(data.messages));
-    setL(true);
+    setMessages(data.messages);
+    setInfo("Messages fetched");
   };
 
-  const getMessagesFromLocalStorage = () => {
-    const studentBoard = JSON.parse(localStorage.getItem("studentBoard"));
-    console.log(studentBoard);
-    return studentBoard;
-  };
+  const router = useRouter();
+  useEffect(() => {
+    if (!getCookie("username") || !getCookie("password")) {
+      router.push("/login");
+    } else {
+      try {
+        setMessages(JSON.parse(localStorage.getItem("studentBoard")));
+      } catch (err) {
+        console.log(err);
+      }
+      fetchMessages();
+    }
+  }, []);
 
-  const getUnread = () => {
-    return (
-      <div>
-        <h2>unReAd mEssAgEs</h2>
-        {getMessagesFromLocalStorage().unread.length
-          ? getMessagesFromLocalStorage().unread.map((m) => (
-              <div key={m}>
-                <div>{m.date}</div>
-                <div>{m.sender}</div>
-                <div>{m.username}</div>
-                <div>{m.subject}</div>
-                <div>{m.url}</div>
-                <div>{m.urgency}</div>
-                <div>{m.recipient}</div>
-                <div>{m.viewCount}</div>
-                <div>{m.replyCount}</div>
-                <div>-----------------------------------</div>
-              </div>
-            ))
-          : "no messages u suck"}
-      </div>
-    );
-  };
-
-  const getRead = () => {
-    return (
-      <div>
-        <h2>rEaD mesSagES</h2>
-        {getMessagesFromLocalStorage().read.length
-          ? getMessagesFromLocalStorage().read.map((m) => (
-              <div key={m}>
-                <div>{m.date}</div>
-                <div>{m.sender}</div>
-                <div>{m.username}</div>
-                <div>{m.subject}</div>
-                <div>{m.url}</div>
-                <div>{m.urgency}</div>
-                <div>{m.recipient}</div>
-                <div>{m.viewCount}</div>
-                <div>{m.replyCount}</div>
-                <div>-----------------------------------</div>
-              </div>
-            ))
-          : "no messages u suck"}
-      </div>
-    );
-  };
-
-  const [l, setL] = useState(false);
+  const [info, setInfo] = useState("");
 
   return (
     <div>
       <Head>
-        <title>iEMB-Z</title>
+        <title>iEMB</title>
         <meta
           name="description"
           content="Fighting iemb's anticompetitive behaviours"
@@ -94,30 +98,19 @@ export default function Home() {
       </Head>
 
       <div>
-        <Login />
-        <h3>
-          u cant sign out so just wait for session to time out :) FUNNY MEME
-          BELOW 👇👇👇👇
-        </h3>
-        <Image
-          src="https://cdn.discordapp.com/attachments/692997415443234846/889874878348546058/image0.png"
-          width={508}
-          height={429}
-          alt="funni meme"
-        />
-        <Button variant="contained" onClick={fetchMessages}>
-          Fetch messages LOL
-        </Button>
-        <h1>
-          internal iemb client ( do not distribute) (will cause crying cause of
-          bad ui)
-        </h1>
-        {typeof window !== "undefined" && localStorage.getItem("studentBoard") && (
-          <div>
-            {getUnread()}
-            {getRead()}
-          </div>
-        )}
+        <Snackbar
+          open={!!info}
+          autoHideDuration={5000}
+          onClose={() => setInfo("")}
+        >
+          <Alert severity="info" onClose={() => setInfo("")}>
+            {info}
+          </Alert>
+        </Snackbar>
+        <Stack direction="row" spacing={2}>
+          <Navbar />
+          <Messages messages={messages} />
+        </Stack>
       </div>
     </div>
   );

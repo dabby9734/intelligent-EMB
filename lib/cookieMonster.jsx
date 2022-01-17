@@ -19,3 +19,9 @@ export function getCookie(cname) {
   }
   return "";
 }
+
+export function deleteCookie(cname) {
+  // get a cookie and set the expiry to Thu, 01 Jan 1970 00:00:01 GMT
+  const cvalue = getCookie(cname);
+  setCookie(cname, cvalue, -1);
+}

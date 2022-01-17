@@ -1,0 +1,67 @@
+.nav {
+  height: 100vh;
+  border-right: 1px solid #eaeaea;
+  width: 25vw;
+  @include respond(tab-port) {
+    width: inherit;
+  }
+
+  &__wrapper {
+    // box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    padding: 1rem;
+
+    @include respond(tab-port) {
+      padding: 0.2rem;
+    }
+  }
+
+  &__item {
+    border-radius: 2rem;
+    padding: 0.8rem;
+
+    display: flex;
+    align-items: center;
+
+    &.bg-true {
+      background-color: #ce9eff;
+      justify-content: center;
+
+      span {
+        color: white;
+      }
+    }
+
+    &:hover {
+      background-color: #f1f1f1;
+      cursor: pointer;
+
+      &.bg-true {
+        background-color: darken(#ce9eff, 10%);
+      }
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    &__wrapper {
+      padding: 0.5rem;
+    }
+
+    &-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &-text {
+      padding-left: 0.5rem;
+      font-family: "Assistant", sans-serif;
+      font-weight: 600;
+      font-style: normal;
+      line-height: initial;
+
+      @include respond(tab-port) {
+        display: none;
+      }
+    }
+  }
+}

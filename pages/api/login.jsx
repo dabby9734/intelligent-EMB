@@ -6,7 +6,9 @@ async function handler(req, res) {
 
   // check if request is valid
   if (!req.body.username || !req.body.password) {
-    return res.status(400).send("Username is required");
+    return res
+      .status(200)
+      .json({ success: false, message: "Username and password are required" });
   }
 
   const response = await fetch("https://iemb.hci.edu.sg", {
@@ -14,7 +16,10 @@ async function handler(req, res) {
     mode: "no-cors",
   });
 
-  if (response.status != 200) return res.status(500).end();
+  if (response.status != 200)
+    return res
+      .status(200)
+      .json({ success: false, message: "Failed to fetch iemb.hci.edu.sg" });
 
   const VERI_TOKEN_COOKIE = response.headers
     .get("set-cookie")
@@ -46,7 +51,8 @@ async function handler(req, res) {
     redirect: "manual",
   });
 
-  if (loginResponse.status != 302) return res.status(500).end();
+  if (loginResponse.status != 302)
+    return res.status(200).json({ success: false, message: "Failed to login" });
 
   if (
     !loginResponse.headers
@@ -56,7 +62,7 @@ async function handler(req, res) {
   ) {
     return res
       .status(200)
-      .json({ success: false, message: "Wrong username or password" });
+      .json({ success: false, message: "Invalid username or password" });
   }
 
   const SESSION_ID = loginResponse.headers
