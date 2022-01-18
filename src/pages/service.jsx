@@ -7,9 +7,13 @@ import { getCookie, setCookie } from "../lib/cookieMonster";
 import Navbar from "../components/Navbar";
 import { Snackbar, Alert, Stack } from "@mui/material";
 import Messages from "../components/Messages";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function Home() {
   const [messages, setMessages] = useState("");
+  const [info, setInfo] = useState("");
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   const refreshToken = async () => {
     const response = await fetch("/api/login", {
@@ -65,26 +69,29 @@ export default function Home() {
     }
 
     // add data to localStorage
-    localStorage.setItem("serviceBoard", JSON.stringify(data.messages));
+    localStorage.setItem("studentBoard", JSON.stringify(data.messages));
     setMessages(data.messages);
     setInfo("Messages fetched");
+    setLoading(false);
   };
 
-  const router = useRouter();
   useEffect(() => {
     if (!getCookie("username") || !getCookie("password")) {
       router.push("/");
-    } else {
-      try {
-        setMessages(JSON.parse(localStorage.getItem("serviceBoard")));
-      } catch (err) {
-        console.log(err);
-      }
-      fetchMessages();
     }
+
+    try {
+      setMessages(JSON.parse(localStorage.getItem("studentBoard")));
+    } catch (err) {
+      console.log(err);
+    }
+
+    fetchMessages();
   }, []);
 
-  const [info, setInfo] = useState("");
+  useEffect(() => {
+    if (!!messages) setLoading(false);
+  }, [messages]);
 
   return (
     <div>
@@ -109,7 +116,11 @@ export default function Home() {
         </Snackbar>
         <Stack direction="row" spacing={2}>
           <Navbar />
-          <Messages messages={messages} boardID={1039} />
+          {loading ? (
+            <LoadingSpinner />
+          ) : (
+            <Messages messages={messages} boardID={1039} />
+          )}
         </Stack>
       </div>
     </div>

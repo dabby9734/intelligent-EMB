@@ -2,6 +2,8 @@ import { Card } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 
+import LoadingSpinner from "./LoadingSpinner";
+
 const colors = {
   Information: "#4caf50",
   Important: "#ff9800",
@@ -30,7 +32,7 @@ const Messages = ({ messages, boardID }) => {
   return (
     <div className="messages">
       <div className="messages__wrapper">
-        {!messages && <h2>No messages</h2>}
+        {(!messages || messages.length === 0) && <h2>No messages</h2>}
         {!!messages &&
           messages
             ?.sort((a, b) => (a.url < b.url ? 1 : -1))
