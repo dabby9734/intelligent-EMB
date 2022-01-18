@@ -37,16 +37,16 @@ const Navbar = () => {
   return (
     <div className="nav">
       <Stack className="nav__wrapper">
-        <NavItem text="Student" link="/">
+        <NavItem text="Student" link="/student">
           <PeopleIcon fontSize="small" />
         </NavItem>
-        <NavItem text="Service Request &amp; Safety" link="/">
+        <NavItem text="Service Request &amp; Safety" link="/service">
           <LocalShippingIcon fontSize="small" />
         </NavItem>
-        <NavItem text="Lost &amp; Found" link="/">
+        <NavItem text="Lost &amp; Found" link="/lost-and-found">
           <ConstructionIcon fontSize="small" />
         </NavItem>
-        <NavItem text="Archive" link="/">
+        <NavItem text="Archive" link="/archive">
           <ArchiveIcon fontSize="small" />
         </NavItem>
         <div className="nav__item__wrapper" onClick={handleSignOut}>
