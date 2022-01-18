@@ -69,7 +69,7 @@ export default function Home() {
     }
 
     // add data to localStorage
-    localStorage.setItem("studentBoard", JSON.stringify(data.messages));
+    localStorage.setItem("serviceBoard", JSON.stringify(data.messages));
     setMessages(data.messages);
     setInfo("Messages fetched");
     setLoading(false);
@@ -81,7 +81,7 @@ export default function Home() {
     }
 
     try {
-      setMessages(JSON.parse(localStorage.getItem("studentBoard")));
+      setMessages(JSON.parse(localStorage.getItem("serviceBoard")));
     } catch (err) {
       console.log(err);
     }
