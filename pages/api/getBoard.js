@@ -10,12 +10,6 @@ async function handler(req, res) {
     ...req.body,
   };
 
-  if (!veriTokenCookie || !authToken || !sessionID || !boardID) {
-    return res
-      .status(200)
-      .json({ success: false, message: "Missing parameters" });
-  }
-
   const response = await fetch(
     `https://iemb.hci.edu.sg/Board/Detail/${boardID}`,
     {
@@ -34,9 +28,10 @@ async function handler(req, res) {
   );
 
   if (response.status != 200) {
-    return res
-      .status(200)
-      .json({ success: false, message: "iemb.hci.edu.sg is down" });
+    return res.status(200).json({
+      success: false,
+      message: "An error occured while processing your request",
+    });
   }
 
   // parse the html
