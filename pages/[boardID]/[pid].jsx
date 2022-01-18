@@ -57,8 +57,6 @@ const Post = () => {
       }),
     });
 
-    console.log(response.status);
-
     if (response.status != 200) {
       setInfo("Cannot fetch post");
     }
@@ -93,9 +91,7 @@ const Post = () => {
     // https://nextjs.org/docs/routing/dynamic-routes
     // Pages that are statically optimized by Automatic Static Optimization will be hydrated without their route parameters provided, i.e query will be an empty object ({}).
     // After hydration, Next.js will trigger an update to your application to provide the route parameters in the query object.
-    console.log(router.query);
     if (router.query.pid && router.query.boardID) {
-      console.log("fetching post");
       if (!getCookie("username") || !getCookie("password")) {
         router.push("/login");
       } else {
