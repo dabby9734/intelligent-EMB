@@ -31,6 +31,9 @@ const Navbar = () => {
     deleteCookie("auth_token");
     deleteCookie("sess_id");
     deleteCookie("veri_token");
+    localStorage.removeItem("studentBoard");
+    localStorage.removeItem("serviceBoard");
+    localStorage.removeItem("lostBoard");
     router.push("/");
   };
 
