@@ -26,10 +26,11 @@ const getTimePassed = (date) => {
   }
 };
 
-const Messages = ({ messages }) => {
+const Messages = ({ messages, boardID }) => {
   return (
     <div className="messages">
       <div className="messages__wrapper">
+        {!messages && <h2>No messages</h2>}
         {!!messages &&
           messages
             ?.sort((a, b) => (new Date(a.date) < new Date(b.date) ? 1 : -1)) // sort by date
@@ -44,7 +45,7 @@ const Messages = ({ messages }) => {
                     borderLeft: `5px solid ${colors[message.urgency]}`,
                   }}
                 >
-                  <a href={`student/${message.url}`}>
+                  <a href={`${boardID}/${message.url}`}>
                     <h2 className="messages__item__content__subject">
                       {message.subject}
                     </h2>

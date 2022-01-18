@@ -52,7 +52,7 @@ export default function Home() {
         veriTokenCookie: getCookie("veri_token"),
         authToken: getCookie("auth_token"),
         sessionID: getCookie("sess_id"),
-        boardID: "1048",
+        boardID: "1039",
       }),
     });
     const data = await response.json();
@@ -66,7 +66,7 @@ export default function Home() {
     }
 
     // add data to localStorage
-    localStorage.setItem("studentBoard", JSON.stringify(data.messages));
+    localStorage.setItem("serviceBoard", JSON.stringify(data.messages));
     setMessages(data.messages);
     setInfo("Messages fetched");
   };
@@ -77,7 +77,7 @@ export default function Home() {
       router.push("/");
     } else {
       try {
-        setMessages(JSON.parse(localStorage.getItem("studentBoard")));
+        setMessages(JSON.parse(localStorage.getItem("serviceBoard")));
       } catch (err) {
         console.log(err);
       }
@@ -110,7 +110,7 @@ export default function Home() {
         </Snackbar>
         <Stack direction="row" spacing={2}>
           <Navbar />
-          <Messages messages={messages} boardID={1048} />
+          <Messages messages={messages} boardID={1039} />
         </Stack>
       </div>
     </div>

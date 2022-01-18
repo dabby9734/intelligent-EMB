@@ -6,18 +6,18 @@ async function handler(req, res) {
     return res.status(405).send("Method not allowed");
   }
 
-  const { veriTokenCookie, authToken, sessionID, pid } = {
+  const { veriTokenCookie, authToken, sessionID, pid, boardID } = {
     ...req.body,
   };
 
   const response = await fetch(
-    `https://iemb.hci.edu.sg/Board/content/${pid}?board=1048&isArchived=False`,
+    `https://iemb.hci.edu.sg/Board/content/${pid}?board=${boardID}&isArchived=False`,
     {
       method: "GET",
       mode: "no-cors",
       headers: {
         host: "iemb.hci.edu.sg",
-        referer: "https://iemb.hci.edu.sg/Board/Detail/1048",
+        referer: `https://iemb.hci.edu.sg/Board/Detail/${boardID}`,
         "user-agent":
           "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Mobile Safari/537.36",
         cookie: `__RequestVerificationToken=${veriTokenCookie};.Mozilla%2f4.0+(compatible%3b+MSIE+6.1%3b+Windows+XP);ASP.NET_SessionId=${sessionID}; AuthenticationToken=${authToken};`,
@@ -26,9 +26,10 @@ async function handler(req, res) {
   );
 
   if (response.status != 200) {
-    return res
-      .status(200)
-      .json({ success: false, message: "iemb.hci.edu.sg is down" });
+    return res.status(200).json({
+      success: false,
+      message: "iemb.hci.edu.sg did not return a successful response",
+    });
   }
 
   //   parse the html

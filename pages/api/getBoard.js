@@ -6,23 +6,32 @@ async function handler(req, res) {
     return res.status(405).send("Method not allowed");
   }
 
-  const { veriTokenCookie, authToken, sessionID } = {
+  const { veriTokenCookie, authToken, sessionID, boardID } = {
     ...req.body,
   };
 
-  const response = await fetch("https://iemb.hci.edu.sg/Board/Detail/1048", {
-    method: "GET",
-    mode: "no-cors",
-    headers: {
-      host: "iemb.hci.edu.sg",
-      referer: "https://iemb.hci.edu.sg/",
-      origin: "https://iemb.hci.edu.sg",
-      "content-type": "application/x-www-form-urlencoded",
-      "user-agent":
-        "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Mobile Safari/537.36",
-      cookie: `__RequestVerificationToken=${veriTokenCookie};.Mozilla%2f4.0+(compatible%3b+MSIE+6.1%3b+Windows+XP);ASP.NET_SessionId=${sessionID}; AuthenticationToken=${authToken};`,
-    },
-  });
+  if (!veriTokenCookie || !authToken || !sessionID || !boardID) {
+    return res
+      .status(200)
+      .json({ success: false, message: "Missing parameters" });
+  }
+
+  const response = await fetch(
+    `https://iemb.hci.edu.sg/Board/Detail/${boardID}`,
+    {
+      method: "GET",
+      mode: "no-cors",
+      headers: {
+        host: "iemb.hci.edu.sg",
+        referer: "https://iemb.hci.edu.sg/",
+        origin: "https://iemb.hci.edu.sg",
+        "content-type": "application/x-www-form-urlencoded",
+        "user-agent":
+          "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Mobile Safari/537.36",
+        cookie: `__RequestVerificationToken=${veriTokenCookie};.Mozilla%2f4.0+(compatible%3b+MSIE+6.1%3b+Windows+XP);ASP.NET_SessionId=${sessionID}; AuthenticationToken=${authToken};`,
+      },
+    }
+  );
 
   if (response.status != 200) {
     return res
