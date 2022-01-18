@@ -33,7 +33,9 @@ const Messages = ({ messages, boardID }) => {
         {!messages && <h2>No messages</h2>}
         {!!messages &&
           messages
-            ?.sort((a, b) => (new Date(a.date) < new Date(b.date) ? 1 : -1)) // sort by date
+            ?.sort((a, b) => (a.url < b.url ? 1 : -1))
+            // sort by pid
+            // Fun fact: because iemb doesn't do this their messages are sorted correctly by date but not by time
             ?.map((message) => (
               <div className="messages__item" key={message.subject}>
                 <Card
