@@ -70,6 +70,7 @@ const Post = () => {
       if (data.message === "Needs to refresh token") {
         return await refreshToken();
       } else {
+        setPostLoading(false);
         document.querySelector("#post-content").innerHTML = "<h2>404</h2>";
         return;
       }
