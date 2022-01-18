@@ -28,7 +28,7 @@ async function handler(req, res) {
   if (response.status != 200) {
     return res.status(200).json({
       success: false,
-      message: "An error occured while processing your request",
+      message: `iemb.hci.edu.sg responded with status ${response.status} (try refreshing)`,
     });
   }
 

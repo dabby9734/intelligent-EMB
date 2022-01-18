@@ -7,6 +7,7 @@ import { getCookie, setCookie } from "../../lib/cookieMonster";
 
 import Navbar from "../../components/Navbar";
 import PostContent from "../../components/PostContent";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const Post = () => {
   const router = useRouter();
@@ -69,23 +70,20 @@ const Post = () => {
       if (data.message === "Needs to refresh token") {
         return await refreshToken();
       } else {
+        setPostLoading(false);
         document.querySelector("#post-content").innerHTML = "<h2>404</h2>";
-        document
-          .querySelector("#post-content")
-          .classList.remove("loading-animation");
         return;
       }
     }
 
+    setPostLoading(false);
     document.querySelector("#post-content").innerHTML = data.post;
-    document
-      .querySelector("#post-content")
-      .classList.remove("loading-animation");
 
     setInfo(`Post ${pid} fetched`);
   };
 
   const [info, setInfo] = useState("");
+  const [postLoading, setPostLoading] = useState(true);
 
   useEffect(() => {
     // https://nextjs.org/docs/routing/dynamic-routes
@@ -122,7 +120,7 @@ const Post = () => {
       </Snackbar>
       <Stack direction="row" spacing={2}>
         <Navbar />
-        <PostContent />
+        {postLoading ? <LoadingSpinner /> : <PostContent />}
       </Stack>
     </>
   );
