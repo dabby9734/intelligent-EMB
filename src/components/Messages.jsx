@@ -2,6 +2,8 @@ import { Card } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 
+import LoadingSpinner from "./LoadingSpinner";
+
 const colors = {
   Information: "#4caf50",
   Important: "#ff9800",
