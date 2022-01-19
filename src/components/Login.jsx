@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  Button,
   Snackbar,
   TextField,
   Alert,
@@ -8,6 +7,8 @@ import {
   ThemeProvider,
   Stack,
 } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import LoginIcon from "@mui/icons-material/Login";
 
 import { getCookie, setCookie } from "../lib/cookieMonster";
 import { useRouter } from "next/router";
@@ -16,10 +17,11 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
-  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const loginUser = async () => {
+    setLoading(true);
     const response = await fetch("/api/login", {
       method: "POST",
       headers: {
@@ -32,6 +34,7 @@ const Login = () => {
     });
 
     if (response.status != 200) {
+      setLoading(false);
       return setErr("Login Failed");
     }
 
@@ -44,11 +47,9 @@ const Login = () => {
       setCookie("username", username, 15552000);
       setCookie("password", password, 15552000);
 
-      setSuccess("Login Successful");
-      setTimeout(() => {
-        router.push("/");
-      }, 1000);
+      router.push("/student");
     } else {
+      setLoading(false);
       setErr(data.message);
     }
   };
@@ -75,15 +76,6 @@ const Login = () => {
         >
           <Alert severity="error" onClose={() => setErr("")}>
             {err}
-          </Alert>
-        </Snackbar>
-        <Snackbar
-          open={!!success}
-          autoHideDuration={3000}
-          onClose={() => setSuccess("")}
-        >
-          <Alert severity="success" onClose={() => setErr("")}>
-            {success}
           </Alert>
         </Snackbar>
         <div className="login__hero">
@@ -116,14 +108,16 @@ const Login = () => {
                   type="password"
                 />
                 <div className="login-button-right-align">
-                  <Button
+                  <LoadingButton
                     variant="contained"
                     onClick={loginUser}
+                    endIcon={<LoginIcon />}
+                    loading={loading}
+                    loadingPosition="end"
                     sx={{ maxWidth: "8rem", textTransform: "none" }}
-                    type="submit"
                   >
                     Login
-                  </Button>
+                  </LoadingButton>
                 </div>
               </Stack>
             </ThemeProvider>
