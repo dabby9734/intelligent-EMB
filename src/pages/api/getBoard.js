@@ -54,7 +54,10 @@ async function handler(req, res) {
 
   const messages = [];
 
-  if (!unreadMessages[0].querySelector("td > b")) {
+  if (
+    unreadMessages[0].querySelector("td > b")?.text.toString().trim() !==
+    "No Record Found!"
+  ) {
     unreadMessages.forEach((message) => {
       const data = message.querySelectorAll("td");
 
@@ -76,7 +79,10 @@ async function handler(req, res) {
     });
   }
 
-  if (!readMessages[0].querySelector("td > b")) {
+  if (
+    readMessages[0].querySelector("td > b")?.text.toString().trim() !==
+    "No Record Found!"
+  ) {
     readMessages.forEach((message) => {
       const data = message.querySelectorAll("td");
 
