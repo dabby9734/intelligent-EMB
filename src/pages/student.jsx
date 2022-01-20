@@ -2,7 +2,12 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { getCookie, setCookie } from "../lib/cookieMonster";
+import {
+  getCookie,
+  setCookie,
+  checkCookie,
+  deleteCookie,
+} from "../lib/cookieMonster";
 
 import Navbar from "../components/Navbar";
 import { Snackbar, Alert, Stack } from "@mui/material";
@@ -46,6 +51,15 @@ export default function Home() {
   };
 
   const fetchMessages = async () => {
+    // immediately refresh token if it has expired already
+    // saves ~2s because iemb is slow...
+    if (
+      !checkCookie("auth_token") ||
+      !checkCookie("sess_id") ||
+      !checkCookie("veri_token")
+    ) {
+      return await refreshToken();
+    }
     const response = await fetch("/api/getBoard", {
       method: "POST",
       headers: {

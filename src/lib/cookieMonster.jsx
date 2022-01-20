@@ -25,3 +25,8 @@ export function deleteCookie(cname) {
   const cvalue = getCookie(cname);
   setCookie(cname, cvalue, -1);
 }
+
+export function checkCookie(cname) {
+  // get a cookie and check if it's expired
+  return getCookie(cname) !== "";
+}

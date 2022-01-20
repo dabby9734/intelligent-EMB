@@ -46,6 +46,15 @@ export default function Home() {
   };
 
   const fetchMessages = async () => {
+    // immediately refresh token if it has expired already
+    // saves ~2s because iemb is slow...
+    if (
+      !checkCookie("auth_token") ||
+      !checkCookie("sess_id") ||
+      !checkCookie("veri_token")
+    ) {
+      return await refreshToken();
+    }
     const response = await fetch("/api/getBoard", {
       method: "POST",
       headers: {
