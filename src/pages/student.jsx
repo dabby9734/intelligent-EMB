@@ -2,12 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import {
-  getCookie,
-  setCookie,
-  checkCookie,
-  deleteCookie,
-} from "../lib/cookieMonster";
+import { getCookie, setCookie, checkCookie } from "../lib/cookieMonster";
 
 import Navbar from "../components/Navbar";
 import { Snackbar, Alert, Stack } from "@mui/material";
