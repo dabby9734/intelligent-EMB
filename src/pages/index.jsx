@@ -27,7 +27,7 @@ export default function LoginPage() {
         <title>iEMB :: Login</title>
         <meta
           name="description"
-          content="Fighting iemb's anticompetitive behaviours"
+          content="Fighting HCI IT Department's anticompetitive behaviours"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
