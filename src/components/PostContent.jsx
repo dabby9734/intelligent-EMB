@@ -38,7 +38,7 @@ const PostContent = ({ attachments, setInfo }) => {
         <div className="post-attachments">
           <Grid container spacing={2}>
             {attachments.map((attachment) => (
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={6} key={attachment}>
                 <Button
                   variant="outlined"
                   startIcon={<DownloadIcon />}
