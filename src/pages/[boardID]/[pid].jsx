@@ -12,6 +12,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 const Post = () => {
   const router = useRouter();
   const { pid, boardID } = router.query;
+  const [attachments, setAttachments] = useState([]);
 
   const refreshToken = async () => {
     const response = await fetch("/api/login", {
@@ -44,7 +45,7 @@ const Post = () => {
   };
 
   const fetchPost = async (pid, boardID) => {
-    const response = await fetch("/api/getPost", {
+    const response = await fetch("/api/getPostWithAttachmentURL", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -71,13 +72,14 @@ const Post = () => {
         return await refreshToken();
       } else {
         setPostLoading(false);
-        document.querySelector("#post-content").innerHTML = "<h2>404</h2>";
+        document.querySelector(".post-content").innerHTML = "<h2>404</h2>";
         return;
       }
     }
 
     setPostLoading(false);
-    document.querySelector("#post-content").innerHTML = data.post;
+    document.querySelector(".post-content").innerHTML = data.post;
+    setAttachments(data.attachments);
 
     setInfo(`Post ${pid} fetched`);
   };
@@ -91,7 +93,7 @@ const Post = () => {
     // After hydration, Next.js will trigger an update to your application to provide the route parameters in the query object.
     if (router.query.pid && router.query.boardID) {
       if (!getCookie("username") || !getCookie("password")) {
-        router.push("/login");
+        router.push("/");
       } else {
         fetchPost(pid, boardID);
       }
@@ -120,7 +122,11 @@ const Post = () => {
       </Snackbar>
       <Stack direction="row" spacing={2}>
         <Navbar />
-        {postLoading ? <LoadingSpinner /> : <PostContent />}
+        {postLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <PostContent attachments={attachments} setInfo={setInfo} />
+        )}
       </Stack>
     </>
   );
