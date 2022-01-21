@@ -108,7 +108,7 @@ export default function Home() {
         <title>iEMB</title>
         <meta
           name="description"
-          content="Fighting iemb's anticompetitive behaviours"
+          content="Fighting HCI IT Department's anticompetitive behaviours"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>

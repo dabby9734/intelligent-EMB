@@ -81,7 +81,7 @@ const Login = () => {
         <div className="login__hero">
           <p className="login__hero__main-text">iEMB</p>
           <p className="login__hero__description">
-            This one is better though, and is fighting iEMB&apos;s
+            This one is better though, and is fighting HCI IT Department&apos;s
             anticompetitive behaviours 👍
           </p>
         </div>
