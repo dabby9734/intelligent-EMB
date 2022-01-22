@@ -13,21 +13,22 @@ async function handler(req, res) {
     return res.status(405).send("Method not allowed");
   }
 
-  const { veriTokenCookie, authToken, sessionID, fileUrl } = { ...req.body };
+  const { veriTokenCookie, authToken, sessionID, attachment } = { ...req.body };
 
-  const response = await fetch(`https://iemb.hci.edu.sg/${fileUrl}`, {
+  const response = await fetch(`https://iemb.hci.edu.sg/${attachment.url}`, {
     method: "GET",
     mode: "no-cors",
     headers: {
       host: "iemb.hci.edu.sg",
-      // referer: `https://iemb.hci.edu.sg/Board/content/${docID}?board=${boardID}&isArchived=False`,
+      referer: `https://iemb.hci.edu.sg/Board/content/${attachment.fileID}?board=${attachment.boardID}&isArchived=False`,
       "user-agent":
         "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Mobile Safari/537.36",
       cookie: `__RequestVerificationToken=${veriTokenCookie};.Mozilla%2f4.0+(compatible%3b+MSIE+6.1%3b+Windows+XP);ASP.NET_SessionId=${sessionID}; AuthenticationToken=${authToken};`,
     },
   });
+
   if (response.status != 200 || !response.headers.get("content-disposition")) {
-    return res.status(500).end();
+    return res.status(503).send("School servers errored");
   }
 
   res.setHeader("Content-Type", "application/pdf");

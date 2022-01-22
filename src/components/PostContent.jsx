@@ -6,7 +6,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { Grid } from "@mui/material";
 
 const PostContent = ({ attachments, setInfo }) => {
-  const downloadFile = async (fileUrl, fileName) => {
+  const downloadFile = async (attachment) => {
     const response = await fetch("/api/downloadFile", {
       method: "POST",
       headers: {
@@ -16,8 +16,7 @@ const PostContent = ({ attachments, setInfo }) => {
         veriTokenCookie: getCookie("veri_token"),
         authToken: getCookie("auth_token"),
         sessionID: getCookie("sess_id"),
-        fileUrl: fileUrl,
-        fileName: fileName,
+        attachment,
       }),
     });
 
@@ -26,7 +25,7 @@ const PostContent = ({ attachments, setInfo }) => {
     }
 
     const blob = await response.blob();
-    download(blob, fileName, blob.type);
+    download(blob, attachment.fileName, blob.type);
   };
 
   return (
@@ -43,7 +42,7 @@ const PostContent = ({ attachments, setInfo }) => {
                   variant="outlined"
                   startIcon={<DownloadIcon />}
                   onClick={() => {
-                    downloadFile(attachment.url, attachment.fileName);
+                    downloadFile(attachment);
                   }}
                   sx={{
                     width: "100%",
