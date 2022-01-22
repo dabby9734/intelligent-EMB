@@ -45,7 +45,7 @@ const Post = () => {
   };
 
   const fetchPost = async (pid, boardID) => {
-    const response = await fetch("/api/getPost", {
+    const response = await fetch("/api/getPostWithAttachmentURL", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
