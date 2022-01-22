@@ -1,5 +1,6 @@
 import { parse } from "node-html-parser";
 const puppeteer = require("puppeteer");
+const chrome = require("chrome-aws-lambda");
 
 async function handler(req, res) {
   // only accept POST requests
@@ -11,7 +12,15 @@ async function handler(req, res) {
     ...req.body,
   };
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch(
+    process.env.NODE_ENV === "production"
+      ? {
+          args: chrome.args,
+          executablePath: await chrome.executablePath,
+          headless: chrome.headless,
+        }
+      : {}
+  );
   const page = await browser.newPage();
   await page.setExtraHTTPHeaders({
     referer: `https://iemb.hci.edu.sg/Board/Detail/${boardID}`,
