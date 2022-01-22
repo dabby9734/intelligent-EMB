@@ -80,6 +80,10 @@ async function handler(req, res) {
           fileName
         )}&boardId=${boardID}`,
         fileName,
+        fileType,
+        fileID,
+        boardID,
+        containerType,
       };
     });
   }
