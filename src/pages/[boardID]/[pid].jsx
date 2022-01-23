@@ -38,7 +38,7 @@ const Post = () => {
       setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
 
       setInfo("Token refreshed");
-      return await fetchPost(pid);
+      return await fetchPost(pid, boardID);
     } else {
       setInfo(data.message);
     }
