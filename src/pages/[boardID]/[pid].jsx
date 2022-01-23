@@ -38,13 +38,20 @@ const Post = () => {
       setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
 
       setInfo("Token refreshed");
-      return await fetchPost(pid);
+      return await fetchPost(pid, boardID);
     } else {
       setInfo(data.message);
     }
   };
 
   const fetchPost = async (pid, boardID) => {
+    if (
+      !getCookie("auth_token") ||
+      !getCookie("sess_id") ||
+      !getCookie("veri_token")
+    ) {
+      return await refreshToken();
+    }
     const response = await fetch("/api/getPostWithAttachmentURL", {
       method: "POST",
       headers: {
