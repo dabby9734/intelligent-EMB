@@ -45,6 +45,13 @@ const Post = () => {
   };
 
   const fetchPost = async (pid, boardID) => {
+    if (
+      !getCookie("auth_token") ||
+      !getCookie("sess_id") ||
+      !getCookie("veri_token")
+    ) {
+      return await refreshToken();
+    }
     const response = await fetch("/api/getPostWithAttachmentURL", {
       method: "POST",
       headers: {
