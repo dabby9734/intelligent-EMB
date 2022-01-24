@@ -47,7 +47,7 @@ const Navbar = () => {
   return (
     <div className="nav">
       <Stack className="nav__wrapper">
-        <div className="nav__item__wrapper" onClick={handleSignOut}>
+        <div className="nav__item__wrapper">
           <div className="nav__item bg-disabled">
             <span className="nav__item-icon">
               <AccountCircleIcon />
