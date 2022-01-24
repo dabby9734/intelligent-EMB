@@ -23,6 +23,12 @@
     display: flex;
     align-items: center;
 
+    @include respond(tab-port) {
+      width: 2.9rem;
+      height: 2.9rem;
+      justify-content: center;
+    }
+
     &.bg-true {
       background-color: #ce9eff;
       justify-content: center;
@@ -48,6 +54,10 @@
 
     &__wrapper {
       padding: 0.5rem;
+
+      @include respond(tab-port) {
+        padding: 0.2rem;
+      }
     }
 
     &-icon {
