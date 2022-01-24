@@ -37,8 +37,11 @@ const Post = () => {
       setCookie("sess_id", data.SESSION_ID, 1800);
       setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
 
-      setInfo("Token refreshed");
-      return await fetchPost(pid, boardID);
+      // You might think it's better to do `return await fetchPost()` here, but
+      // iemb.hci.edu.sg likes to throw a HTTP status code 500 if you do that.
+      // I have no idea why it does that, just like I have no idea how this
+      // seems to work much more reliably...
+      router.reload();
     } else {
       setInfo(data.message);
     }
