@@ -49,6 +49,13 @@ async function handler(req, res) {
     },
     body: postData,
     redirect: "manual",
+  }).catch((err) => {
+    return res
+      .status(200)
+      .json({
+        success: false,
+        message: `Failed to fetch iemb.hci.edu.sg [${err}]`,
+      });
   });
 
   if (loginResponse.status != 302)
