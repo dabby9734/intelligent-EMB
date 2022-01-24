@@ -44,8 +44,8 @@ const Login = () => {
       setCookie("auth_token", data.AUTH_TOKEN, 1800);
       setCookie("sess_id", data.SESSION_ID, 1800);
       setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
-      setCookie("username", username, 15552000);
-      setCookie("password", password, 15552000);
+      setCookie("username", username, 2592000);
+      setCookie("password", password, 2592000);
 
       router.push("/student");
     } else {
@@ -53,12 +53,6 @@ const Login = () => {
       setErr(data.message);
     }
   };
-
-  useEffect(() => {
-    if (!getCookie("username") || !getCookie("password")) {
-      return;
-    }
-  });
 
   const darkTheme = createTheme({
     palette: {

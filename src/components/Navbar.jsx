@@ -12,7 +12,12 @@ import { useRouter } from "next/router";
 
 const NavItem = (props) => {
   return (
-    <a href={props.link}>
+    <a
+      href={props.link}
+      style={{
+        color: props.router?.route === props.link ? "#ce9eff" : "",
+      }}
+    >
       <div className="nav__item__wrapper">
         <div className="nav__item">
           {props.children && (
@@ -55,13 +60,17 @@ const Navbar = () => {
             <span className="nav__item-text">Signed in as:&nbsp;{user}</span>
           </div>
         </div>
-        <NavItem text="Student" link="/student">
+        <NavItem text="Student" link="/student" router={router}>
           <PeopleIcon fontSize="small" />
         </NavItem>
-        <NavItem text="Service Request &amp; Safety" link="/service">
+        <NavItem
+          text="Service Request &amp; Safety"
+          link="/service"
+          router={router}
+        >
           <ConstructionIcon fontSize="small" />
         </NavItem>
-        <NavItem text="Lost &amp; Found" link="/lost-and-found">
+        <NavItem text="Lost &amp; Found" link="/lost-and-found" router={router}>
           <ExploreIcon fontSize="small" />
         </NavItem>
         <NavItem text="Archive" link="/archive">
