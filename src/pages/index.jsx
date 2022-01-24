@@ -2,21 +2,19 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { getCookie } from "../lib/cookieMonster";
+import { getCookie, setCookie } from "../lib/cookieMonster";
 
 import Login from "../components/Login";
 
 export default function LoginPage() {
   const router = useRouter();
-  const needsLogin = () => {
-    if (!getCookie("username") || !getCookie("password")) {
-      return true;
-    }
-    return false;
-  };
 
   useEffect(() => {
-    if (!needsLogin()) {
+    if (getCookie("username") && getCookie("password")) {
+      // update cookie
+      setCookie("username", getCookie("username"), 2592000);
+
+      // redirect to student page
       router.push("/student");
     }
   });
