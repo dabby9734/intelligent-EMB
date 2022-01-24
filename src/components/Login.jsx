@@ -54,12 +54,6 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
-    if (!getCookie("username") || !getCookie("password")) {
-      return;
-    }
-  });
-
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
