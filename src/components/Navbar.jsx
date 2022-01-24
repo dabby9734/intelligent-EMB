@@ -1,11 +1,13 @@
+import { useState, useEffect } from "react";
 import { Stack } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import ExploreIcon from "@mui/icons-material/Explore";
 import ConstructionIcon from "@mui/icons-material/Construction";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ArchiveIcon from "@mui/icons-material/Archive";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-import { deleteCookie } from "../lib/cookieMonster";
+import { getCookie, deleteCookie } from "../lib/cookieMonster";
 import { useRouter } from "next/router";
 
 const NavItem = (props) => {
@@ -37,17 +39,30 @@ const Navbar = () => {
     router.push("/");
   };
 
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    setUser(getCookie("username"));
+  }, []);
+
   return (
     <div className="nav">
       <Stack className="nav__wrapper">
+        <div className="nav__item__wrapper" onClick={handleSignOut}>
+          <div className="nav__item bg-disabled">
+            <span className="nav__item-icon">
+              <AccountCircleIcon />
+            </span>
+            <span className="nav__item-text">Signed in as:&nbsp;{user}</span>
+          </div>
+        </div>
         <NavItem text="Student" link="/student">
           <PeopleIcon fontSize="small" />
         </NavItem>
         <NavItem text="Service Request &amp; Safety" link="/service">
-          <LocalShippingIcon fontSize="small" />
+          <ConstructionIcon fontSize="small" />
         </NavItem>
         <NavItem text="Lost &amp; Found" link="/lost-and-found">
-          <ConstructionIcon fontSize="small" />
+          <ExploreIcon fontSize="small" />
         </NavItem>
         <NavItem text="Archive" link="/archive">
           <ArchiveIcon fontSize="small" />
