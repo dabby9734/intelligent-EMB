@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Stack } from "@mui/material";
+import { Stack, Tooltip } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import ExploreIcon from "@mui/icons-material/Explore";
 import ConstructionIcon from "@mui/icons-material/Construction";
@@ -51,14 +51,16 @@ const Navbar = () => {
 
   return (
     <div className="nav">
-      <Stack className="nav__wrapper">
+      <div className="nav__wrapper">
         <div className="nav__item__wrapper">
-          <div className="nav__item bg-disabled">
-            <span className="nav__item-icon">
-              <AccountCircleIcon />
-            </span>
-            <span className="nav__item-text">Signed in as:&nbsp;{user}</span>
-          </div>
+          <Tooltip title={user} disableFocusListener>
+            <div className="nav__item bg-disabled">
+              <span className="nav__item-icon">
+                <AccountCircleIcon />
+              </span>
+              <span className="nav__item-text">Signed in as:&nbsp;{user}</span>
+            </div>
+          </Tooltip>
         </div>
         <NavItem text="Student" link="/student" router={router}>
           <PeopleIcon fontSize="small" />
@@ -84,7 +86,7 @@ const Navbar = () => {
             <span className="nav__item-text">Sign Out</span>
           </div>
         </div>
-      </Stack>
+      </div>
     </div>
   );
 };

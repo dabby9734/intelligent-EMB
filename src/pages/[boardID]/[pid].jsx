@@ -136,14 +136,16 @@ const Post = () => {
           {info}
         </Alert>
       </Snackbar>
-      <Stack direction="row" spacing={2}>
+      <div className="pageframe">
         <Navbar />
-        {postLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <PostContent attachments={attachments} setInfo={setInfo} />
-        )}
-      </Stack>
+        <div className="contentframe">
+          {postLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <PostContent attachments={attachments} setInfo={setInfo} />
+          )}
+        </div>
+      </div>
     </>
   );
 };
