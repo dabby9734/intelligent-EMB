@@ -44,6 +44,10 @@ const Post = () => {
       router.reload();
     } else {
       setInfo(data.message);
+      setPostLoading(false);
+      document.querySelector(
+        ".post-content"
+      ).innerHTML = `<h2>${data.message}</h2>`;
     }
   };
 
@@ -82,7 +86,9 @@ const Post = () => {
         return await refreshToken();
       } else {
         setPostLoading(false);
-        document.querySelector(".post-content").innerHTML = "<h2>404</h2>";
+        document.querySelector(
+          ".post-content"
+        ).innerHTML = `<h2>${data.message}</h2>`;
         return;
       }
     }
