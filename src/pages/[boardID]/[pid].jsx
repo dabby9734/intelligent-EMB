@@ -44,6 +44,10 @@ const Post = () => {
       router.reload();
     } else {
       setInfo(data.message);
+      setPostLoading(false);
+      document.querySelector(
+        ".post-content"
+      ).innerHTML = `<h2>${data.message}</h2>`;
     }
   };
 
@@ -82,7 +86,9 @@ const Post = () => {
         return await refreshToken();
       } else {
         setPostLoading(false);
-        document.querySelector(".post-content").innerHTML = "<h2>404</h2>";
+        document.querySelector(
+          ".post-content"
+        ).innerHTML = `<h2>${data.message}</h2>`;
         return;
       }
     }
@@ -130,14 +136,16 @@ const Post = () => {
           {info}
         </Alert>
       </Snackbar>
-      <Stack direction="row" spacing={2}>
+      <div className="pageframe">
         <Navbar />
-        {postLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <PostContent attachments={attachments} setInfo={setInfo} />
-        )}
-      </Stack>
+        <div className="contentframe">
+          {postLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <PostContent attachments={attachments} setInfo={setInfo} />
+          )}
+        </div>
+      </div>
     </>
   );
 };

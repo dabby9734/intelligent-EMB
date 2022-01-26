@@ -123,14 +123,16 @@ export default function Home() {
             {info}
           </Alert>
         </Snackbar>
-        <Stack direction="row" spacing={2}>
+        <div className="pageframe">
           <Navbar />
-          {loading ? (
-            <LoadingSpinner />
-          ) : (
-            <Messages messages={messages} boardID={1050} />
-          )}
-        </Stack>
+          <div className="contentframe">
+            {loading ? (
+              <LoadingSpinner />
+            ) : (
+              <Messages messages={messages} boardID={1050} />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

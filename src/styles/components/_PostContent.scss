@@ -1,11 +1,4 @@
 .post {
-  width: 100%;
-  height: 100vh;
-  overflow-y: scroll;
-
-  margin: 0 !important;
-  padding: 1rem;
-
   @include respond(tab-port) {
     width: 100%;
   }
