@@ -22,16 +22,11 @@ const Login = () => {
 
   const loginUser = async () => {
     setLoading(true);
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    });
+    const response = await fetch(
+      `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURI(
+        username
+      )}&password=${encodeURI(password)}`
+    );
 
     if (response.status != 200) {
       setLoading(false);
