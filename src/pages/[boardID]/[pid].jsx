@@ -15,16 +15,11 @@ const Post = () => {
   const [attachments, setAttachments] = useState([]);
 
   const refreshToken = async () => {
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: getCookie("username"),
-        password: getCookie("password"),
-      }),
-    });
+    const response = await fetch(
+      `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURI(
+        getCookie("username")
+      )}&password=${encodeURI(getCookie("password"))}`
+    );
 
     if (response.status != 200) {
       return setInfo("Token refresh failed");
@@ -59,19 +54,12 @@ const Post = () => {
     ) {
       return await refreshToken();
     }
-    const response = await fetch("/api/getPostWithAttachmentURL", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        veriTokenCookie: getCookie("veri_token"),
-        authToken: getCookie("auth_token"),
-        sessionID: getCookie("sess_id"),
-        pid: pid,
-        boardID: boardID,
-      }),
-    });
+    const url = `https://iemb-backend.azurewebsites.net/api/getPost?authToken=${encodeURI(
+      getCookie("auth_token")
+    )}&veriToken=${encodeURI(getCookie("veri_token"))}&sessionID=${encodeURI(
+      getCookie("sess_id")
+    )}&pid=${pid}&boardID=${boardID}`;
+    const response = await fetch(url);
 
     if (response.status != 200) {
       setInfo("Cannot fetch post");
