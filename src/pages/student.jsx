@@ -69,6 +69,9 @@ export default function Home() {
 
     // add data to localStorage
     localStorage.setItem("studentBoard", JSON.stringify(data.messages));
+    if (data.name) {
+      localStorage.setItem("name", data.name);
+    }
     setMessages(data.messages);
     setInfo("Messages fetched");
     setLoading(false);

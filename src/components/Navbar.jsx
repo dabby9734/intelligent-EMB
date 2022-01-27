@@ -41,19 +41,29 @@ const Navbar = () => {
     localStorage.removeItem("studentBoard");
     localStorage.removeItem("serviceBoard");
     localStorage.removeItem("lostBoard");
+    localStorage.removeItem("name");
     router.push("/");
   };
 
   const [user, setUser] = useState("");
   useEffect(() => {
-    setUser(getCookie("username"));
+    setUser(
+      localStorage.getItem("name")
+        ? localStorage
+            .getItem("name")
+            .toLowerCase()
+            .split(" ")
+            .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+            .join(" ") // converts JOHN SMITH to John Smith
+        : getCookie("username")
+    );
   }, []);
 
   return (
     <div className="nav">
       <div className="nav__wrapper">
         <div className="nav__item__wrapper">
-          <Tooltip title={user} disableFocusListener>
+          <Tooltip title={user} enterTouchDelay={0}>
             <div className="nav__item bg-disabled">
               <span className="nav__item-icon">
                 <AccountCircleIcon />
