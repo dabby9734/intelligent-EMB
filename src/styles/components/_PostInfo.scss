@@ -1,0 +1,36 @@
+.post-info {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eaeaea;
+
+  h1 {
+    font-family: "Assistant", sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    font-style: normal;
+    line-height: initial;
+    margin: 0 0 0.5rem 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  &__field-wrapper {
+    padding-right: 1rem;
+
+    @include respond(tab-port) {
+      padding-bottom: 0.5rem;
+    }
+
+    &:last-child {
+      padding-right: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  &__field-text {
+    padding-left: 0.5rem;
+  }
+}

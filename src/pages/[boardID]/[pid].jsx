@@ -7,12 +7,14 @@ import { getCookie, setCookie } from "../../lib/cookieMonster";
 
 import Navbar from "../../components/Navbar";
 import PostContent from "../../components/PostContent";
+import PostInfo from "../../components/PostInfo";
 import LoadingSpinner from "../../components/LoadingSpinner";
 
 const Post = () => {
   const router = useRouter();
   const { pid, boardID } = router.query;
   const [attachments, setAttachments] = useState([]);
+  const [details, setDetails] = useState({});
 
   const refreshToken = async () => {
     const response = await fetch(
@@ -81,6 +83,7 @@ const Post = () => {
       }
     }
 
+    setDetails(data.postInfo);
     setPostLoading(false);
     document.querySelector(".post-content").innerHTML = data.post;
     setAttachments(data.attachments);
@@ -130,7 +133,10 @@ const Post = () => {
           {postLoading ? (
             <LoadingSpinner />
           ) : (
-            <PostContent attachments={attachments} setInfo={setInfo} />
+            <>
+              <PostInfo info={details} />
+              <PostContent attachments={attachments} setInfo={setInfo} />
+            </>
           )}
         </div>
       </div>
