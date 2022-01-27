@@ -80,7 +80,7 @@ const Login = () => {
             <ThemeProvider theme={darkTheme}>
               <Stack spacing={2}>
                 <TextField
-                  id="outlined-basic"
+                  id="username"
                   label="Username"
                   variant="outlined"
                   onChange={(e) => {
@@ -88,7 +88,7 @@ const Login = () => {
                   }}
                 />
                 <TextField
-                  id="outlined-basic"
+                  id="password"
                   label="Password"
                   variant="outlined"
                   onChange={(e) => {
