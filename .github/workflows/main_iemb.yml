@@ -63,3 +63,6 @@ jobs:
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FD079B3CDB8E40099EA358C9DFA326D1 }}
           package: .
+          
+      - name: "Cleanup build files"
+        run: rm -r * .env .next
