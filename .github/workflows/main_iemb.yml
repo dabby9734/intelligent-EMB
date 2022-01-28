@@ -10,6 +10,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Cleanup build files"
+        run: rm -rf * .env .next
   build:
     runs-on: ubuntu-latest
 
