@@ -4,6 +4,7 @@
 import stream from "stream";
 import { promisify } from "util";
 import fetch from "node-fetch";
+import { parse } from "node-html-parser";
 
 const pipeline = promisify(stream.pipeline);
 
@@ -28,7 +29,22 @@ async function handler(req, res) {
   });
 
   if (response.status != 200 || !response.headers.get("content-disposition")) {
-    return res.status(503).send("School servers errored");
+    // parse the html
+    const iembHTML = parse(await response.text());
+
+    // check if we are stuck on the sign in page (i.e. needs a token refresh)
+    const needsTokenRefresh = iembHTML.querySelector(".login-page");
+    if (needsTokenRefresh) {
+      return res.status(401).json({
+        success: false,
+        message: "Needs to refresh token",
+      });
+    }
+
+    return res.status(503).json({
+      success: false,
+      message: "Failed to download file",
+    });
   }
 
   res.setHeader("Content-Type", "application/pdf");
