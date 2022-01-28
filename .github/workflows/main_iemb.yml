@@ -10,13 +10,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  cleanup:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: "Cleanup build files"
-        run: rm -rf node_modules
-
   build:
     runs-on: ubuntu-latest
 
