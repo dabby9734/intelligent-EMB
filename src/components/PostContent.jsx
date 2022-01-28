@@ -35,7 +35,7 @@ const PostContent = ({ attachments, setInfo }) => {
       !getCookie("sess_id") ||
       !getCookie("veri_token")
     ) {
-      return await refreshToken();
+      return await refreshToken(attachment);
     }
 
     const response = await fetch("/api/downloadFile", {
@@ -73,7 +73,7 @@ const PostContent = ({ attachments, setInfo }) => {
         <div className="post-attachments">
           <Grid container spacing={2}>
             {attachments.map((attachment) => (
-              <Grid item xs={12} md={6} key={attachment}>
+              <Grid item xs={12} md={6} key={attachment.url}>
                 <Button
                   variant="outlined"
                   startIcon={<DownloadIcon />}
