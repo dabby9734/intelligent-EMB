@@ -26,7 +26,13 @@ const PostContent = ({ attachments, setInfo }) => {
       setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
 
       return await downloadFile(attachment);
-    } else return;
+    }
+
+    if (data.message === "Invalid username or password") {
+      router.push("/");
+    } else {
+      setInfo(data.message);
+    }
   };
 
   const downloadFile = async (attachment) => {
