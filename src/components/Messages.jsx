@@ -1,8 +1,7 @@
-import { Card } from "@mui/material";
+import { Card, Fab } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
-
-import LoadingSpinner from "./LoadingSpinner";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 const colors = {
   Information: "#4caf50",
@@ -30,7 +29,7 @@ const getTimePassed = (date) => {
 
 const Messages = ({ messages, boardID }) => {
   return (
-    <div className="messages">
+    <div className="messages" id="messages">
       <div className="messages__wrapper">
         {(!messages || messages.length === 0) && <h2>No messages</h2>}
         {!!messages &&
@@ -83,6 +82,32 @@ const Messages = ({ messages, boardID }) => {
                 </Card>
               </div>
             ))}
+        <Fab
+          size="medium"
+          color="secondary"
+          aria-label="back-to-top"
+          sx={{
+            margin: 0,
+            top: "auto",
+            right: "2rem",
+            bottom: "2rem",
+            left: "auto",
+            position: "fixed",
+            backgroundColor: "#ce9eff",
+            "&:hover": {
+              backgroundColor: "#b46bff",
+            },
+          }}
+          onClick={() => {
+            document.querySelector(".contentframe").scrollTo({
+              top: 0,
+              left: 0,
+              behavior: "smooth",
+            });
+          }}
+        >
+          <KeyboardArrowUpIcon />
+        </Fab>
       </div>
     </div>
   );
