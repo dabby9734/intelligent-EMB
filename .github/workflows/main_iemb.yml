@@ -65,4 +65,4 @@ jobs:
           package: .
           
       - name: "Cleanup build files"
-        run: rm -r * .env .next
+        run: rm -rf * .env .next
