@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: "Cleanup build files"
+        run: rm -rf * .env .next
+
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
@@ -63,6 +66,6 @@ jobs:
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FD079B3CDB8E40099EA358C9DFA326D1 }}
           package: .
-          
+
       - name: "Cleanup build files"
         run: rm -rf * .env .next
