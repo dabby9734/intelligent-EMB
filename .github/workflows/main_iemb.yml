@@ -16,9 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: "Cleanup build files"
-        run: rm -rf * .env .next
-
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
