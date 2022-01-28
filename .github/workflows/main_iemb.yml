@@ -15,7 +15,8 @@ jobs:
 
     steps:
       - name: "Cleanup build files"
-        run: rm -rf * .env .next
+        run: rm -rf node_modules
+
   build:
     runs-on: ubuntu-latest
 
