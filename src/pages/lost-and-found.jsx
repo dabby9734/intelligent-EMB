@@ -35,6 +35,10 @@ export default function Home() {
 
       setInfo("Token refreshed");
       return await fetchMessages();
+    }
+
+    if (data.message === "Invalid username or password") {
+      router.push("/");
     } else {
       setInfo(data.message);
     }
