@@ -74,6 +74,9 @@ const Post = () => {
 
       if (data.message === "Needs to refresh token") {
         return await refreshToken();
+      }
+      if (data.message === "Invalid username or password") {
+        router.push("/");
       } else {
         setPostLoading(false);
         document.querySelector(
