@@ -9,12 +9,14 @@ import Navbar from "../../components/Navbar";
 import PostContent from "../../components/PostContent";
 import PostInfo from "../../components/PostInfo";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import PostReply from "../../components/PostReply";
 
 const Post = () => {
   const router = useRouter();
   const { pid, boardID } = router.query;
   const [attachments, setAttachments] = useState([]);
   const [details, setDetails] = useState({});
+  const [replyInfo, setReplyInfo] = useState({ canReply: false });
 
   const refreshToken = async () => {
     const response = await fetch(
@@ -87,6 +89,7 @@ const Post = () => {
     }
 
     setDetails(data.postInfo);
+    setReplyInfo(data.postReply);
     setPostLoading(false);
     document.querySelector(".post-content").innerHTML = data.post;
     setAttachments(data.attachments);
@@ -139,6 +142,12 @@ const Post = () => {
             <>
               <PostInfo info={details} />
               <PostContent attachments={attachments} setInfo={setInfo} />
+              <PostReply
+                info={replyInfo}
+                pid={pid}
+                boardID={boardID}
+                setInfo={setInfo}
+              />
             </>
           )}
         </div>

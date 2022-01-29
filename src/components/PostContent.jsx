@@ -76,7 +76,10 @@ const PostContent = ({ attachments, setInfo }) => {
     <div className="post">
       <div className="post-content"></div>
       {attachments && (
-        <div className="post-attachments">
+        <div
+          className="post-attachments"
+          style={{ display: attachments.length ? "block" : "none" }}
+        >
           <Grid container spacing={2}>
             {attachments.map((attachment) => (
               <Grid item xs={12} md={6} key={attachment.url}>

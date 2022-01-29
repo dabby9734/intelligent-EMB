@@ -1,0 +1,120 @@
+import { useRouter } from "next/router";
+import {
+  FormLabel,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+} from "@mui/material";
+import ReplyIcon from "@mui/icons-material/Reply";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useState, useEffect } from "react";
+import { getCookie } from "../lib/cookieMonster";
+import { refreshToken } from "../lib/browserMonster";
+
+const PostReply = ({ info, boardID, pid, setInfo }) => {
+  const [selection, setSelect] = useState("");
+  const [val, setVal] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (info.text) setVal(info.text);
+    if (info.selection) setSelect(info.selection);
+  }, [info]);
+
+  const processReply = async () => {
+    setLoading(true);
+
+    if (
+      !getCookie("auth_token") ||
+      !getCookie("sess_id") ||
+      !getCookie("veri_token")
+    ) {
+      return await refreshToken(processReply);
+    }
+
+    const url = `https://iemb-backend.azurewebsites.net/api/reply?authToken=${encodeURI(
+      getCookie("auth_token")
+    )}&veriToken=${encodeURI(getCookie("veri_token"))}&sessionID=${encodeURI(
+      getCookie("sess_id")
+    )}&pid=${pid}&boardID=${boardID}&replyContent=${encodeURIComponent(
+      val
+    )}&selection=${selection}`;
+    const response = await fetch(url).catch((err) => {
+      setLoading(false);
+      setInfo();
+      return;
+    });
+
+    if (response.status != 200) {
+      setInfo("Failed to reply");
+    }
+
+    const data = await response.json();
+
+    setInfo(data.message);
+    if (!data.success) {
+      if (data.message === "Needs to refresh token") {
+        return await refreshToken(processReply);
+      }
+      if (data.message === "Invalid username or password") {
+        router.push("/");
+      }
+    }
+
+    setLoading(false);
+  };
+
+  return (
+    <div
+      className="post-reply"
+      style={{ display: info.canReply ? "block" : "none" }}
+    >
+      <FormControl className="post-reply__selection" sx={{ width: "100%" }}>
+        <FormLabel id="post-reply">Reply to post</FormLabel>
+        <RadioGroup
+          aria-labelledby="post-reply-selection-group"
+          defaultValue={info.selection}
+          name="post-reply-selection"
+          row
+          onChange={(e) => setSelect(e.target.value)}
+        >
+          <FormControlLabel value="A" control={<Radio />} label="A" />
+          <FormControlLabel value="B" control={<Radio />} label="B" />
+          <FormControlLabel value="C" control={<Radio />} label="C" />
+          <FormControlLabel value="D" control={<Radio />} label="D" />
+          <FormControlLabel value="E" control={<Radio />} label="E" />
+        </RadioGroup>
+        <TextField
+          id="post-reply"
+          aria-labelledby="post-reply-text-field"
+          multiline
+          value={val}
+          onChange={(e) => {
+            setVal(e.target.value);
+          }}
+          placeholder="Enter your reply!"
+          maxRows={10}
+          fullWidth
+        />
+        <div className="post-reply-submit-button-right-align">
+          <LoadingButton
+            onClick={processReply}
+            loading={loading}
+            loadingPosition="end"
+            endIcon={<ReplyIcon />}
+            variant="contained"
+            sx={{ maxWidth: "6rem", textTransform: "none" }}
+            type="submit"
+          >
+            Reply
+          </LoadingButton>
+        </div>
+      </FormControl>
+    </div>
+  );
+};
+
+export default PostReply;
