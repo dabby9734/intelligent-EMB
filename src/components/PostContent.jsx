@@ -1,47 +1,21 @@
-import { getCookie, setCookie } from "../lib/cookieMonster";
+import { getCookie } from "../lib/cookieMonster";
 import download from "downloadjs";
 
 import Button from "@mui/material/Button";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Grid } from "@mui/material";
+import { refreshToken } from "../lib/browserMonster";
 
 const PostContent = ({ attachments, setInfo }) => {
-  const refreshToken = async (attachment) => {
-    const response = await fetch(
-      `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURI(
-        getCookie("username")
-      )}&password=${encodeURI(getCookie("password"))}`
-    );
-
-    if (response.status != 200) {
-      return setInfo("Token refresh failed");
-    }
-
-    const data = await response.json();
-
-    if (data.success) {
-      setInfo(data.message);
-      setCookie("auth_token", data.AUTH_TOKEN, 1800);
-      setCookie("sess_id", data.SESSION_ID, 1800);
-      setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
-
-      return await downloadFile(attachment);
-    }
-
-    if (data.message === "Invalid username or password") {
-      router.push("/");
-    } else {
-      setInfo(data.message);
-    }
-  };
-
   const downloadFile = async (attachment) => {
     if (
       !getCookie("auth_token") ||
       !getCookie("sess_id") ||
       !getCookie("veri_token")
     ) {
-      return await refreshToken(attachment);
+      return await refreshToken(async () => {
+        downloadFile(attachment);
+      });
     }
 
     const response = await fetch("/api/downloadFile", {
@@ -62,7 +36,9 @@ const PostContent = ({ attachments, setInfo }) => {
       setInfo(data.message);
 
       if (data.message == "Needs to refresh token") {
-        return await refreshToken(attachment);
+        return await refreshToken(async () => {
+          downloadFile(attachment);
+        });
       } else return;
     }
 

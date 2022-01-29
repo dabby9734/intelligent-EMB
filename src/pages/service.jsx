@@ -2,10 +2,11 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { getCookie, setCookie, checkCookie } from "../lib/cookieMonster";
+import { getCookie, checkCookie } from "../lib/cookieMonster";
+import { refreshToken } from "../lib/browserMonster";
 
 import Navbar from "../components/Navbar";
-import { Snackbar, Alert, Stack } from "@mui/material";
+import { Snackbar, Alert } from "@mui/material";
 import Messages from "../components/Messages";
 import LoadingSpinner from "../components/LoadingSpinner";
 
@@ -15,35 +16,6 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const refreshToken = async () => {
-    const response = await fetch(
-      `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURI(
-        getCookie("username")
-      )}&password=${encodeURI(getCookie("password"))}`
-    );
-
-    if (response.status != 200) {
-      return setInfo("Token refresh failed");
-    }
-
-    const data = await response.json();
-
-    if (data.success) {
-      setCookie("auth_token", data.AUTH_TOKEN, 1800);
-      setCookie("sess_id", data.SESSION_ID, 1800);
-      setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
-
-      setInfo("Token refreshed");
-      return await fetchMessages();
-    }
-
-    if (data.message === "Invalid username or password") {
-      router.push("/");
-    } else {
-      setInfo(data.message);
-    }
-  };
-
   const fetchMessages = async () => {
     // immediately refresh token if it has expired already
     // saves ~2s because iemb is slow...
@@ -52,7 +24,7 @@ export default function Home() {
       !checkCookie("sess_id") ||
       !checkCookie("veri_token")
     ) {
-      return await refreshToken();
+      return await refreshToken(fetchMessages);
     }
     const url = `https://iemb-backend.azurewebsites.net/api/getBoard?authToken=${encodeURI(
       getCookie("auth_token")
@@ -66,7 +38,7 @@ export default function Home() {
       setInfo(data.message);
 
       if (data.message === "Needs to refresh token") {
-        return await refreshToken();
+        return await refreshToken(fetchMessages);
       } else return;
     }
 
