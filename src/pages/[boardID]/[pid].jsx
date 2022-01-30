@@ -117,6 +117,7 @@ const Post = () => {
     <>
       <Head>
         <title>iEMB :: {pid}</title>
+        <html lang="en" />
         <meta
           name="description"
           content="Fighting iemb's anticompetitive behaviours"
