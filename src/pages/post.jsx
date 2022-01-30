@@ -3,13 +3,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Stack, Snackbar, Alert } from "@mui/material";
 
-import { getCookie, setCookie } from "../../lib/cookieMonster";
+import { getCookie, setCookie } from "../lib/cookieMonster";
 
-import Navbar from "../../components/Navbar";
-import PostContent from "../../components/PostContent";
-import PostInfo from "../../components/PostInfo";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import PostReply from "../../components/PostReply";
+import Navbar from "../components/Navbar";
+import PostContent from "../components/PostContent";
+import PostInfo from "../components/PostInfo";
+import LoadingSpinner from "../components/LoadingSpinner";
+import PostReply from "../components/PostReply";
 
 const Post = () => {
   const router = useRouter();
@@ -116,7 +116,7 @@ const Post = () => {
   return (
     <>
       <Head>
-        <title>iEMB :: {pid}</title>
+        <title>iEMB :: Post {pid}</title>
         <html lang="en" />
         <meta
           name="description"

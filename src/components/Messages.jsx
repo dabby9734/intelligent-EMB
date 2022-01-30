@@ -68,7 +68,7 @@ const Messages = ({ messages, boardID }) => {
                     borderLeft: `5px solid ${colors[message.urgency]}`,
                   }}
                 >
-                  <a href={`${boardID}/${message.url}`}>
+                  <a href={`/post?boardID=${boardID}&pid=${message.url}`}>
                     <h2 className="messages__item__content__subject">
                       {message.subject}
                     </h2>
