@@ -6,6 +6,9 @@ import {
   createTheme,
   ThemeProvider,
   Stack,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import LoginIcon from "@mui/icons-material/Login";
@@ -16,6 +19,7 @@ import { useRouter } from "next/router";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [rem, setRem] = useState(true);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -39,8 +43,11 @@ const Login = () => {
       setCookie("auth_token", data.AUTH_TOKEN, 1800);
       setCookie("sess_id", data.SESSION_ID, 1800);
       setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
-      setCookie("username", username, 2592000);
-      setCookie("password", password, 2592000);
+
+      if (rem) {
+        setCookie("username", username, 2592000);
+        setCookie("password", password, 2592000);
+      }
 
       router.push("/student");
     } else {
@@ -78,7 +85,7 @@ const Login = () => {
           <div className="login__content">
             <h1>Login</h1>
             <ThemeProvider theme={darkTheme}>
-              <Stack spacing={2}>
+              <Stack spacing={2} component="form">
                 <TextField
                   id="username"
                   label="Username"
@@ -86,6 +93,7 @@ const Login = () => {
                   onChange={(e) => {
                     setUsername(e.target.value);
                   }}
+                  autoComplete="username"
                 />
                 <TextField
                   id="password"
@@ -95,8 +103,22 @@ const Login = () => {
                     setPassword(e.target.value);
                   }}
                   type="password"
+                  autoComplete="current-password"
                 />
                 <div className="login-button-right-align">
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<Checkbox defaultChecked />}
+                      label="Remember Me"
+                      sx={{
+                        color: "text.secondary",
+                        paddingLeft: "1rem",
+                      }}
+                      onChange={(e) => {
+                        setRem(e.target.checked);
+                      }}
+                    />
+                  </FormGroup>
                   <LoadingButton
                     variant="contained"
                     onClick={loginUser}
