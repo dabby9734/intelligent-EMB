@@ -1,6 +1,6 @@
 import { getCookie, setCookie } from "./cookieMonster.jsx";
 
-export const refreshToken = async (onComplete, setInfo) => {
+export const refreshToken = async (onComplete, setInfo, router) => {
   const response = await fetch(
     `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURI(
       getCookie("username")
@@ -22,7 +22,7 @@ export const refreshToken = async (onComplete, setInfo) => {
     return await onComplete();
   }
 
-  if (data.message === "Invalid username or password") {
+  if (data.message === "Missing username and/or password") {
     router.push("/");
   } else {
     setInfo(data.message);

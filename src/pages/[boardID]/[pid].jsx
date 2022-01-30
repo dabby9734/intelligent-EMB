@@ -42,6 +42,10 @@ const Post = () => {
       // seems to work much more reliably...
       router.reload();
     } else {
+      if (data.message === "Missing username and/or password") {
+        router.push("/");
+      }
+
       setInfo(data.message);
       setPostLoading(false);
       document.querySelector(
@@ -105,11 +109,7 @@ const Post = () => {
     // Pages that are statically optimized by Automatic Static Optimization will be hydrated without their route parameters provided, i.e query will be an empty object ({}).
     // After hydration, Next.js will trigger an update to your application to provide the route parameters in the query object.
     if (router.query.pid && router.query.boardID) {
-      if (!getCookie("username") || !getCookie("password")) {
-        router.push("/");
-      } else {
-        fetchPost(pid, boardID);
-      }
+      fetchPost(pid, boardID);
     }
   }, [router.query]);
 

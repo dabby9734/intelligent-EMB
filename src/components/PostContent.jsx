@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { getCookie } from "../lib/cookieMonster";
 import download from "downloadjs";
 
@@ -7,15 +8,20 @@ import { Grid } from "@mui/material";
 import { refreshToken } from "../lib/browserMonster";
 
 const PostContent = ({ attachments, setInfo }) => {
+  const router = useRouter();
   const downloadFile = async (attachment) => {
     if (
       !getCookie("auth_token") ||
       !getCookie("sess_id") ||
       !getCookie("veri_token")
     ) {
-      return await refreshToken(async () => {
-        downloadFile(attachment);
-      }, setInfo);
+      return await refreshToken(
+        async () => {
+          downloadFile(attachment);
+        },
+        setInfo,
+        router
+      );
     }
 
     const response = await fetch("/api/downloadFile", {
@@ -36,9 +42,13 @@ const PostContent = ({ attachments, setInfo }) => {
       setInfo(data.message);
 
       if (data.message == "Needs to refresh token") {
-        return await refreshToken(async () => {
-          downloadFile(attachment);
-        }, setInfo);
+        return await refreshToken(
+          async () => {
+            downloadFile(attachment);
+          },
+          setInfo,
+          router
+        );
       } else return;
     }
 

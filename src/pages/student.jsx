@@ -24,7 +24,7 @@ export default function Home() {
       !checkCookie("sess_id") ||
       !checkCookie("veri_token")
     ) {
-      return await refreshToken(fetchMessages, setInfo);
+      return await refreshToken(fetchMessages, setInfo, router);
     }
     const url = `https://iemb-backend.azurewebsites.net/api/getBoard?authToken=${encodeURI(
       getCookie("auth_token")
@@ -39,7 +39,7 @@ export default function Home() {
       setInfo(data.message);
 
       if (data.message === "Needs to refresh token") {
-        return await refreshToken(fetchMessages, setInfo);
+        return await refreshToken(fetchMessages, setInfo, router);
       } else return;
     }
 
@@ -54,10 +54,6 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!getCookie("username") || !getCookie("password")) {
-      router.push("/");
-    }
-
     try {
       setMessages(JSON.parse(localStorage.getItem("studentBoard")));
     } catch (err) {
