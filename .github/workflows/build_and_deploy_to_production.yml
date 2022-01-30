@@ -1,4 +1,4 @@
-name: Azure Static Web Apps CI/CD
+name: Deploy to Azure Static Web Apps
 
 on:
   push:
@@ -13,7 +13,11 @@ jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
-    name: Build and Deploy Job
+    name: Build and Deploy
+    environment:
+      name: Production
+      url: "https://iemb.dabby.studio"
+      
     steps:
       - uses: actions/checkout@v2
         with:
