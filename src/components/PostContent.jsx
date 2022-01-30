@@ -24,17 +24,23 @@ const PostContent = ({ attachments, setInfo }) => {
       );
     }
 
-    const response = await fetch("/api/downloadFile", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        veriTokenCookie: getCookie("veri_token"),
-        authToken: getCookie("auth_token"),
-        sessionID: getCookie("sess_id"),
-        attachment,
-      }),
+    const response = await fetch(
+      "https://iemb-backend.azurewebsites.net/api/download",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          veriTokenCookie: getCookie("veri_token"),
+          authToken: getCookie("auth_token"),
+          sessionID: getCookie("sess_id"),
+          attachment,
+        }),
+      }
+    ).catch((err) => {
+      console.log(err);
+      setInfo("Error downloading file");
     });
 
     if (response.status != 200) {
@@ -49,7 +55,7 @@ const PostContent = ({ attachments, setInfo }) => {
           setInfo,
           router
         );
-      } else return;
+      } else setInfo("Error downloading file");
     }
 
     const blob = await response.blob();
