@@ -15,7 +15,7 @@ const PostContent = ({ attachments, setInfo }) => {
     ) {
       return await refreshToken(async () => {
         downloadFile(attachment);
-      });
+      }, setInfo);
     }
 
     const response = await fetch("/api/downloadFile", {
@@ -38,7 +38,7 @@ const PostContent = ({ attachments, setInfo }) => {
       if (data.message == "Needs to refresh token") {
         return await refreshToken(async () => {
           downloadFile(attachment);
-        });
+        }, setInfo);
       } else return;
     }
 

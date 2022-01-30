@@ -1,4 +1,6 @@
-export const refreshToken = async (onComplete) => {
+import { getCookie, setCookie } from "./cookieMonster.jsx";
+
+export const refreshToken = async (onComplete, setInfo) => {
   const response = await fetch(
     `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURI(
       getCookie("username")

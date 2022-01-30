@@ -32,7 +32,7 @@ const PostReply = ({ info, boardID, pid, setInfo }) => {
       !getCookie("sess_id") ||
       !getCookie("veri_token")
     ) {
-      return await refreshToken(processReply);
+      return await refreshToken(processReply, setInfo);
     }
 
     const url = `https://iemb-backend.azurewebsites.net/api/reply?authToken=${encodeURI(
@@ -57,7 +57,7 @@ const PostReply = ({ info, boardID, pid, setInfo }) => {
     setInfo(data.message);
     if (!data.success) {
       if (data.message === "Needs to refresh token") {
-        return await refreshToken(processReply);
+        return await refreshToken(processReply, setInfo);
       }
       if (data.message === "Invalid username or password") {
         router.push("/");

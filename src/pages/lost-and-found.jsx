@@ -24,7 +24,7 @@ export default function Home() {
       !checkCookie("sess_id") ||
       !checkCookie("veri_token")
     ) {
-      return await refreshToken(fetchMessages);
+      return await refreshToken(fetchMessages, setInfo);
     }
     const url = `https://iemb-backend.azurewebsites.net/api/getBoard?authToken=${encodeURI(
       getCookie("auth_token")
@@ -38,7 +38,7 @@ export default function Home() {
       setInfo(data.message);
 
       if (data.message === "Needs to refresh token") {
-        return await refreshToken(fetchMessages);
+        return await refreshToken(fetchMessages, setInfo);
       } else return;
     }
 
