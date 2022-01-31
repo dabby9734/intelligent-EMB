@@ -1,10 +1,10 @@
-# intelligent E-Message Board (iEMB)
+# [intelligent E-Message Board](https://iemb.dabby.studio) · [![Deploy to Azure Static Web Apps](https://github.com/dabby9734/intelligent-EMB/actions/workflows/build_and_deploy_to_production.yml/badge.svg)](https://github.com/dabby9734/intelligent-EMB/actions/workflows/build_and_deploy_to_production.yml)
 
-Have you ever found that the i-EMB by HCI IT department was hard to use?
+Have you ever found that the integrated-EMB by HCI IT department was hard to use?
 
 Have you ever tried accessing it from a mobile device and was met with a lot of display problems?
 
-Have you ever wished that your i-EMB session could be saved and renewed without the need to login repeatedly?
+Have you ever wished that your integrated-EMB session could be saved and renewed without the need to login repeatedly?
 
 Well, fear not, for intelligent E-Message Board is here to help you!
 
@@ -18,6 +18,7 @@ It also has a pleasing user interface, which is responsive and changes based on 
 
 - View messages in a minimal and beautiful way
 - Download attachments from messages
+- Reply to messages
 - More to come...
 
 ## Also check out
