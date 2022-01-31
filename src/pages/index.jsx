@@ -23,7 +23,6 @@ export default function LoginPage() {
     <div>
       <Head>
         <title>iEMB :: Login</title>
-        <html lang="en" />
         <meta
           name="description"
           content="Fighting HCI IT Department's anticompetitive behaviours"
