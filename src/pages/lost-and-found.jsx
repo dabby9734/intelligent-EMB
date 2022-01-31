@@ -70,7 +70,6 @@ export default function Home() {
     <div>
       <Head>
         <title>iEMB</title>
-        <html lang="en" />
         <meta
           name="description"
           content="Fighting HCI IT Department's anticompetitive behaviours"
