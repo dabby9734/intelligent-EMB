@@ -51,7 +51,7 @@ export default function Home() {
       default:
         endpoint = "getBoard";
     }
-    const url = `http://localhost:7071/api/${endpoint}?authToken=${encodeURI(
+    const url = `https://iemb-backend.azurewebsites.net/api/${endpoint}?authToken=${encodeURI(
       getCookie("auth_token")
     )}&veriToken=${encodeURI(getCookie("veri_token"))}&sessionID=${encodeURI(
       getCookie("sess_id")
