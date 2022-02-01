@@ -7,6 +7,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import LoadingSpinner from "./LoadingSpinner";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const colors = {
   Information: "#4caf50",
@@ -54,10 +55,22 @@ const Messages = ({ boardID }) => {
     } else setIsVisible(false);
   };
 
+  // set theme colour
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#ce9eff",
+        contrastText: "#fff",
+      },
+    },
+  });
+
   // Control message display
   const [messages, setMessages] = useState("");
   const [info, setInfo] = useState("");
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const { type } = router.query;
 
   const fetchMessages = async (type) => {
@@ -90,6 +103,7 @@ const Messages = ({ boardID }) => {
         break;
       case "archived":
         endpoint = "getBoardArchived";
+        extraArgs = `&page=${page}`;
         break;
       default:
         endpoint = "getBoard";
@@ -116,6 +130,10 @@ const Messages = ({ boardID }) => {
     if (data.name) {
       localStorage.setItem("name", data.name);
     }
+    if (type === "archived" || type === "starred") {
+      setPage(data.currentPage);
+      setTotalPages(data.totalPages);
+    }
 
     setMessages(data.messages);
     setInfo("Messages fetched");
@@ -140,6 +158,16 @@ const Messages = ({ boardID }) => {
     if (!!messages) setLoading(false);
   }, [messages]);
 
+  // fetches messages again if the user navigates to a different board
+  // for archived and starred board only
+  useEffect(() => {
+    if (router.query.type === "archived" || router.query.type === "starred") {
+      setMessages("");
+      setLoading(true);
+      fetchMessages(router.query.type, page);
+    }
+  }, [page]);
+
   return (
     <>
       {loading ? (
@@ -148,7 +176,7 @@ const Messages = ({ boardID }) => {
         <div className="messages" id="messages">
           <Snackbar
             open={!!info}
-            autoHideDuration={5000}
+            autoHideDuration={1000}
             onClose={() => setInfo("")}
           >
             <Alert severity="info" onClose={() => setInfo("")}>
@@ -224,12 +252,16 @@ const Messages = ({ boardID }) => {
                   paddingTop: "1rem",
                 }}
               >
-                <Pagination
-                  count={10}
-                  showFirstButton
-                  showLastButton
-                  disabled
-                />
+                <ThemeProvider theme={theme}>
+                  <Pagination
+                    color="primary"
+                    count={totalPages}
+                    page={page}
+                    onChange={(e, page) => {
+                      setPage(page);
+                    }}
+                  />
+                </ThemeProvider>
               </div>
             )}
           <Zoom in={isVisible} timeout={300}>
