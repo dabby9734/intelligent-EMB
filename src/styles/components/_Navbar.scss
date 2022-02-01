@@ -47,11 +47,5 @@
         background-color: #f1f1f1;
       }
     }
-
-    &-text {
-      @include respond(tab-port) {
-        display: none;
-      }
-    }
   }
 }
