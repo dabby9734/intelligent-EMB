@@ -15,7 +15,7 @@ export default function LoginPage() {
       setCookie("username", getCookie("username"), 2592000);
 
       // redirect to student page
-      router.push("/student");
+      router.push("/student?type=inbox");
     }
   });
 

@@ -1,84 +1,54 @@
 .nav {
-  border-right: 1px solid #eaeaea;
-  border-bottom: 1px solid #eaeaea;
-  width: 25vw;
-
+  // padding: 1rem;
+  width: 100%;
   box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
-  @include respond(tab-port) {
-    width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  &__paths {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
 
-  &__wrapper {
-    // box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;
-    padding: 1rem;
+  &__menu-button {
+    position: relative;
+    margin-right: auto;
+  }
 
-    display: flex;
-    flex-direction: column;
-
-    @include respond(tab-port) {
-      padding: 0.2rem;
-      flex-direction: row;
-    }
+  &__sign-out-button {
+    position: relative;
+    margin-left: auto;
   }
 
   &__item {
-    border-radius: 2rem;
-    padding: 0.8rem;
-
     display: flex;
+    flex-direction: row;
     align-items: center;
+    align-content: center;
+    justify-content: center;
 
+    padding: 0.5rem 2rem;
     @include respond(tab-port) {
-      width: 2.9rem;
-      height: 2.9rem;
-      justify-content: center;
+      padding: 0.5rem 1rem;
     }
 
-    &.bg-true {
-      background-color: #ce9eff;
-      justify-content: center;
-
-      span {
-        color: white;
-      }
-    }
-
-    &.bg-disabled {
-      background-color: #f1f1f1;
-    }
-
-    &:hover {
-      background-color: #f1f1f1;
-      cursor: pointer;
-
-      &.bg-true {
-        background-color: darken(#ce9eff, 10%);
-      }
-      transition: background-color 0.2s ease-in-out;
-    }
-
-    &__wrapper {
+    &-button {
       padding: 0.5rem;
+      border-radius: 2.5rem;
 
-      @include respond(tab-port) {
-        padding: 0.2rem;
+      color: black;
+
+      &:hover {
+        background-color: #f1f1f1;
       }
-    }
-
-    &-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     &-text {
-      padding-left: 0.5rem;
-      font-family: "Assistant", sans-serif;
-      font-weight: 600;
-      font-style: normal;
-      line-height: initial;
-
       @include respond(tab-port) {
         display: none;
       }

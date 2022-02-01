@@ -1,5 +1,6 @@
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { Card, Fab, Zoom } from "@mui/material";
+import { Card, Fab, Zoom, Pagination } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -30,6 +31,7 @@ const getTimePassed = (date) => {
 
 const Messages = ({ messages, boardID }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const router = useRouter();
   useEffect(() => {
     document.querySelector(".contentframe").addEventListener("scroll", (e) => {
       listenToScroll(e);
@@ -50,38 +52,41 @@ const Messages = ({ messages, boardID }) => {
 
   return (
     <div className="messages" id="messages">
-      <div className="messages__wrapper">
-        {(!messages || messages.length === 0) && <h2>No messages</h2>}
-        {!!messages &&
-          messages
-            ?.sort((a, b) => (a.url < b.url ? 1 : -1))
-            // sort by pid
-            // Fun fact: because iemb doesn't do this their messages are sorted correctly by date but not by time
-            ?.map((message) => (
-              <div className="messages__item" key={message.subject}>
-                <Card
-                  variant="outlined"
-                  className={`messages__item__content ${
-                    message.read ? "read-msg" : "unread-msg"
-                  }`}
-                  sx={{
-                    borderLeft: `5px solid ${colors[message.urgency]}`,
-                  }}
-                >
-                  <a href={`/post?boardID=${boardID}&pid=${message.url}`}>
-                    <h2 className="messages__item__content__subject">
-                      {message.subject}
-                    </h2>
-                    <div className="messages__item__content__info-wrapper">
-                      <div className="messages__item__content__info-item">
-                        <span className="messages__item__content__info-item-icon">
-                          <PersonIcon fontSize="small" />
-                        </span>
-                        <span className="messages__item__content__info-item-field">
-                          {message.sender}
-                        </span>
-                      </div>
-                      {/* <div className="messages__item__content__info-item">
+      {(!messages || messages.length === 0) && <h2>No messages</h2>}
+      {!!messages &&
+        messages
+          ?.sort((a, b) => (a.pid < b.pid ? 1 : -1))
+          // sort by pid
+          // Fun fact: because iemb doesn't do this their messages are sorted correctly by date but not by time
+          ?.map((message) => (
+            <div className="messages__item" key={message.subject}>
+              <Card
+                variant="outlined"
+                className={`messages__item__content ${
+                  message.read ? "read-msg" : "unread-msg"
+                }`}
+                sx={{
+                  borderLeft: `5px solid ${
+                    colors[message.urgency]
+                      ? colors[message.urgency]
+                      : "#ce9eff"
+                  }`,
+                }}
+              >
+                <a href={`/post?boardID=${boardID}&pid=${message.pid}`}>
+                  <h2 className="messages__item__content__subject">
+                    {message.subject}
+                  </h2>
+                  <div className="messages__item__content__info-wrapper">
+                    <div className="messages__item__content__info-item">
+                      <span className="messages__item__content__info-item-icon">
+                        <PersonIcon fontSize="small" />
+                      </span>
+                      <span className="messages__item__content__info-item-field">
+                        {message.username ? message.username : message.sender}
+                      </span>
+                    </div>
+                    {/* <div className="messages__item__content__info-item">
                     <span className="messages__item__content__info-item-icon">
                       <GroupIcon fontSize="small" />
                     </span>
@@ -89,48 +94,62 @@ const Messages = ({ messages, boardID }) => {
                       {message.recipient}
                     </span>
                   </div> */}
-                      <div className="messages__item__content__info-item">
-                        <span className="messages__item__content__info-item-icon">
-                          <EventIcon fontSize="small" />
-                        </span>
-                        <span className="messages__item__content__info-item-field">
-                          {getTimePassed(message.date)}
-                        </span>
-                      </div>
+                    <div className="messages__item__content__info-item">
+                      <span className="messages__item__content__info-item-icon">
+                        <EventIcon fontSize="small" />
+                      </span>
+                      <span className="messages__item__content__info-item-field">
+                        {getTimePassed(message.date)}
+                      </span>
                     </div>
-                  </a>
-                </Card>
-              </div>
-            ))}
-        <Zoom in={isVisible} timeout={300}>
-          <Fab
-            size="medium"
-            color="secondary"
-            aria-label="back-to-top"
-            sx={{
-              margin: 0,
-              top: "auto",
-              right: "2rem",
-              bottom: "3.2rem",
-              left: "auto",
-              position: "fixed",
-              backgroundColor: "#ce9eff",
-              "&:hover": {
-                backgroundColor: "#b46bff",
-              },
-            }}
-            onClick={() => {
-              document.querySelector(".contentframe").scrollTo({
-                top: 0,
-                left: 0,
-                behavior: "smooth",
-              });
+                  </div>
+                </a>
+              </Card>
+            </div>
+          ))}
+
+      {!!messages &&
+        (router.query.type === "archived" ||
+          router.query.type === "starred") && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingTop: "1rem",
             }}
           >
-            <KeyboardArrowUpIcon />
-          </Fab>
-        </Zoom>
-      </div>
+            <Pagination count={10} showFirstButton showLastButton disabled />
+          </div>
+        )}
+      <Zoom in={isVisible} timeout={300}>
+        <Fab
+          size="medium"
+          color="secondary"
+          aria-label="back-to-top"
+          sx={{
+            margin: 0,
+            top: "auto",
+            right: "2rem",
+            bottom: "3.2rem",
+            left: "auto",
+            position: "fixed",
+            backgroundColor: "#ce9eff",
+            "&:hover": {
+              backgroundColor: "#b46bff",
+            },
+          }}
+          onClick={() => {
+            document.querySelector(".contentframe").scrollTo({
+              top: 0,
+              left: 0,
+              behavior: "smooth",
+            });
+          }}
+        >
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </Zoom>
     </div>
   );
 };

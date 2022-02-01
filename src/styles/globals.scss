@@ -16,27 +16,33 @@ a {
   box-sizing: border-box;
 }
 
-.pageframe {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
+.desktop-only {
+  @include respond(tab-port) {
+    display: none;
+  }
+}
+
+.mobile-only {
+  display: none;
 
   @include respond(tab-port) {
-    flex-direction: column;
+    display: inherit;
+  }
+}
+
+.bg-disabled {
+  background-color: transparent !important;
+
+  &:hover {
+    background-color: transparent !important;
   }
 }
 
 .contentframe {
+  height: calc(100vh - 65px);
   width: 100%;
-  height: 100%;
   overflow-y: scroll;
-
-  margin: 0 !important;
   padding: 1rem;
-
-  display: flex;
-  flex-direction: column;
-
   @include respond(tab-port) {
     padding: 0.5rem;
   }

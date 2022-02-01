@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Stack, Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert } from "@mui/material";
 
 import { getCookie, setCookie } from "../lib/cookieMonster";
 
@@ -133,24 +133,23 @@ const Post = () => {
           {info}
         </Alert>
       </Snackbar>
-      <div className="pageframe">
-        <Navbar />
-        <div className="contentframe">
-          {postLoading ? (
-            <LoadingSpinner />
-          ) : (
-            <>
-              <PostInfo info={details} />
-              <PostContent attachments={attachments} setInfo={setInfo} />
-              <PostReply
-                info={replyInfo}
-                pid={pid}
-                boardID={boardID}
-                setInfo={setInfo}
-              />
-            </>
-          )}
-        </div>
+
+      <Navbar />
+      <div className="contentframe">
+        {postLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <PostInfo info={details} />
+            <PostContent attachments={attachments} setInfo={setInfo} />
+            <PostReply
+              info={replyInfo}
+              pid={pid}
+              boardID={boardID}
+              setInfo={setInfo}
+            />
+          </>
+        )}
       </div>
     </>
   );

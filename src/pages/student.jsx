@@ -15,8 +15,9 @@ export default function Home() {
   const [info, setInfo] = useState("");
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { type } = router.query;
 
-  const fetchMessages = async () => {
+  const fetchMessages = async (type) => {
     // immediately refresh token if it has expired already
     // saves ~2s because iemb is slow...
     if (
@@ -26,11 +27,35 @@ export default function Home() {
     ) {
       return await refreshToken(fetchMessages, setInfo, router);
     }
-    const url = `https://iemb-backend.azurewebsites.net/api/getBoard?authToken=${encodeURI(
+
+    let endpoint = "getBoard";
+    let extraArgs = "";
+    switch (type) {
+      case "updated-messages":
+        extraArgs = "&isupdated=True&t=1";
+        break;
+      case "my-messages":
+        extraArgs = `&postBy=${encodeURIComponent(
+          localStorage.getItem("name")
+        )}&t=2`;
+        break;
+      case "my-drafts":
+        extraArgs = "&t=3";
+        break;
+      case "starred":
+        endpoint = "getBoardStarred";
+        break;
+      case "archived":
+        endpoint = "getBoardArchived";
+        break;
+      default:
+        endpoint = "getBoard";
+    }
+    const url = `http://localhost:7071/api/${endpoint}?authToken=${encodeURI(
       getCookie("auth_token")
     )}&veriToken=${encodeURI(getCookie("veri_token"))}&sessionID=${encodeURI(
       getCookie("sess_id")
-    )}&boardID=${1048}`;
+    )}&boardID=${1048}${extraArgs}`;
     const response = await fetch(url);
 
     const data = await response.json();
@@ -44,7 +69,7 @@ export default function Home() {
     }
 
     // add data to localStorage
-    localStorage.setItem("studentBoard", JSON.stringify(data.messages));
+    localStorage.setItem(`studentBoard+${type}`, JSON.stringify(data.messages));
     if (data.name) {
       localStorage.setItem("name", data.name);
     }
@@ -54,21 +79,23 @@ export default function Home() {
   };
 
   useEffect(() => {
-    try {
-      setMessages(JSON.parse(localStorage.getItem("studentBoard")));
-    } catch (err) {
-      console.log(err);
-    }
+    if (type) {
+      try {
+        setMessages(JSON.parse(localStorage.getItem(`studentBoard+${type}`)));
+      } catch (err) {
+        console.log(err);
+      }
 
-    fetchMessages();
-  }, []);
+      fetchMessages(type);
+    }
+  }, [type]);
 
   useEffect(() => {
     if (!!messages) setLoading(false);
   }, [messages]);
 
   return (
-    <div>
+    <>
       <Head>
         <title>iEMB</title>
         <meta
@@ -78,27 +105,24 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div>
-        <Snackbar
-          open={!!info}
-          autoHideDuration={5000}
-          onClose={() => setInfo("")}
-        >
-          <Alert severity="info" onClose={() => setInfo("")}>
-            {info}
-          </Alert>
-        </Snackbar>
-        <div className="pageframe">
-          <Navbar />
-          <div className="contentframe">
-            {loading ? (
-              <LoadingSpinner />
-            ) : (
-              <Messages messages={messages} boardID={1048} />
-            )}
-          </div>
-        </div>
+      <Snackbar
+        open={!!info}
+        autoHideDuration={5000}
+        onClose={() => setInfo("")}
+      >
+        <Alert severity="info" onClose={() => setInfo("")}>
+          {info}
+        </Alert>
+      </Snackbar>
+
+      <Navbar />
+      <div className="contentframe">
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <Messages messages={messages} boardID={1048} />
+        )}
       </div>
-    </div>
+    </>
   );
 }

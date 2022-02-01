@@ -49,7 +49,7 @@ const Login = () => {
         setCookie("password", password, 2592000);
       }
 
-      router.push("/student");
+      router.push("/student?type=inbox");
     } else {
       setLoading(false);
       setErr(data.message);
