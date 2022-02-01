@@ -38,13 +38,13 @@
     }
 
     &-button {
-      padding: 0.5rem;
-      border-radius: 2.5rem;
+      padding: 0.5rem !important;
+      border-radius: 2.5rem !important;
 
       color: black !important;
 
       &:hover {
-        background-color: #f1f1f1;
+        background-color: #f1f1f1 !important;
       }
     }
   }
