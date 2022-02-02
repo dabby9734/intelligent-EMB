@@ -119,6 +119,7 @@ const Navbar = () => {
                 aria-label="Menu"
                 onClick={() => setOpen(!open)}
                 className="nav__item-button"
+                sx={{ color: "black" }}
               >
                 <MenuIcon />
               </IconButton>
@@ -169,7 +170,7 @@ const Navbar = () => {
                 variant="text"
                 startIcon={<LogoutIcon />}
                 onClick={handleSignOut}
-                sx={{ textTransform: "none" }}
+                sx={{ textTransform: "none", color: "black" }}
               >
                 <span className="nav__item-text">Sign Out</span>
               </Button>
@@ -177,6 +178,7 @@ const Navbar = () => {
                 aria-label="Sign Out"
                 onClick={handleSignOut}
                 className="nav__item-button mobile-only"
+                sx={{ color: "black" }}
               >
                 <LogoutIcon />
               </IconButton>
