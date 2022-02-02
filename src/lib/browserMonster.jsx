@@ -1,4 +1,4 @@
-import { getCookie, setCookie } from "./cookieMonster.jsx";
+import { getCookie, setCookie, deleteCookie } from "./cookieMonster.jsx";
 
 export const refreshToken = async (onComplete, setInfo, router) => {
   const response = await fetch(
@@ -23,6 +23,12 @@ export const refreshToken = async (onComplete, setInfo, router) => {
   }
 
   if (data.message === "Missing username and/or password") {
+    deleteCookie("username");
+    deleteCookie("password");
+    deleteCookie("auth_token");
+    deleteCookie("sess_id");
+    deleteCookie("veri_token");
+    localStorage.clear();
     router.push("/");
   } else {
     setInfo(data.message);

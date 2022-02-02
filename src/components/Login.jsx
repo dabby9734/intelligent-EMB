@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import LoginIcon from "@mui/icons-material/Login";
+import Link from "next/link";
 
 import { getCookie, setCookie } from "../lib/cookieMonster";
 import { useRouter } from "next/router";
@@ -81,57 +82,100 @@ const Login = () => {
             anticompetitive behaviours 👍
           </p>
         </div>
-        <div className="login__content-wrapper">
-          <div className="login__content">
-            <h1>Login</h1>
-            <ThemeProvider theme={darkTheme}>
-              <Stack spacing={2} component="form">
-                <TextField
-                  id="username"
-                  label="Username"
-                  variant="outlined"
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                  }}
-                  autoComplete="username"
-                />
-                <TextField
-                  id="password"
-                  label="Password"
-                  variant="outlined"
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                  type="password"
-                  autoComplete="current-password"
-                />
-                <div className="login-button-right-align">
-                  <FormGroup>
-                    <FormControlLabel
-                      control={<Checkbox defaultChecked />}
-                      label="Remember Me"
-                      sx={{
-                        color: "text.secondary",
-                        paddingLeft: "1rem",
-                      }}
-                      onChange={(e) => {
-                        setRem(e.target.checked);
-                      }}
-                    />
-                  </FormGroup>
-                  <LoadingButton
-                    variant="contained"
-                    onClick={loginUser}
-                    endIcon={<LoginIcon />}
-                    loading={loading}
-                    loadingPosition="end"
-                    sx={{ maxWidth: "8rem", textTransform: "none" }}
+        <div className="login__content-bg">
+          <div className="login__content-wrapper">
+            <div className="login__content">
+              <h1>Login</h1>
+              <ThemeProvider theme={darkTheme}>
+                <Stack spacing={2} component="form">
+                  <TextField
+                    id="username"
+                    label="Username"
+                    variant="outlined"
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                    }}
+                    autoComplete="username"
+                  />
+                  <TextField
+                    id="password"
+                    label="Password"
+                    variant="outlined"
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                    type="password"
+                    autoComplete="current-password"
+                  />
+                  <div className="login-button-right-align">
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<Checkbox defaultChecked />}
+                        label="Remember Me"
+                        sx={{
+                          color: "text.secondary",
+                          paddingLeft: "1rem",
+                        }}
+                        onChange={(e) => {
+                          setRem(e.target.checked);
+                        }}
+                      />
+                    </FormGroup>
+                    <LoadingButton
+                      variant="contained"
+                      onClick={loginUser}
+                      endIcon={<LoginIcon />}
+                      loading={loading}
+                      loadingPosition="end"
+                      sx={{ maxWidth: "8rem", textTransform: "none" }}
+                    >
+                      Login
+                    </LoadingButton>
+                  </div>
+                </Stack>
+              </ThemeProvider>
+
+              <div className="login__content-links">
+                <p>
+                  <Link href="/articles/faq" passHref>
+                    <a className="underline">FAQ</a>
+                  </Link>
+                  &nbsp;⋅&nbsp;
+                  <Link href="/articles/privacy-policy" passHref>
+                    <a className="underline">Privacy Policy</a>
+                  </Link>
+                  &nbsp;⋅&nbsp;
+                  <Link href="/articles/terms-and-conditions" passHref>
+                    <a className="underline">{"Terms & Conditions"}</a>
+                  </Link>
+                </p>
+                <p>
+                  Source code for&nbsp;
+                  <a
+                    href="https://github.com/dabby9734/intelligent-EMB"
+                    className="underline"
                   >
-                    Login
-                  </LoadingButton>
-                </div>
-              </Stack>
-            </ThemeProvider>
+                    Frontend
+                  </a>
+                  &nbsp;and&nbsp;
+                  <a
+                    href="https://github.com/dabby9734/iemb-backend"
+                    className="underline"
+                  >
+                    Backend
+                  </a>
+                </p>
+                <p>
+                  Also check out{" "}
+                  <a
+                    href="https://betteriemb.skytect.one"
+                    className="underline"
+                  >
+                    Better iEMB by The Better iEMB Developers
+                  </a>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

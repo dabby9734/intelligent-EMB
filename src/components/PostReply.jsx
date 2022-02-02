@@ -10,7 +10,7 @@ import {
 import ReplyIcon from "@mui/icons-material/Reply";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useState, useEffect } from "react";
-import { getCookie } from "../lib/cookieMonster";
+import { getCookie, deleteCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
 
 const PostReply = ({ info, boardID, pid, setInfo }) => {
@@ -60,6 +60,12 @@ const PostReply = ({ info, boardID, pid, setInfo }) => {
         return await refreshToken(processReply, setInfo, router);
       }
       if (data.message === "Invalid username or password") {
+        deleteCookie("username");
+        deleteCookie("password");
+        deleteCookie("auth_token");
+        deleteCookie("sess_id");
+        deleteCookie("veri_token");
+        localStorage.clear();
         router.push("/");
       }
     }

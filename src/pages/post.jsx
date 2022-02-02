@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Snackbar, Alert } from "@mui/material";
 
-import { getCookie, setCookie } from "../lib/cookieMonster";
+import { getCookie, setCookie, deleteCookie } from "../lib/cookieMonster";
 
 import Navbar from "../components/Navbar";
 import PostContent from "../components/PostContent";
@@ -43,6 +43,12 @@ const Post = () => {
       router.reload();
     } else {
       if (data.message === "Missing username and/or password") {
+        deleteCookie("username");
+        deleteCookie("password");
+        deleteCookie("auth_token");
+        deleteCookie("sess_id");
+        deleteCookie("veri_token");
+        localStorage.clear();
         router.push("/");
       }
 
@@ -82,6 +88,12 @@ const Post = () => {
         return await refreshToken();
       }
       if (data.message === "Invalid username or password") {
+        deleteCookie("username");
+        deleteCookie("password");
+        deleteCookie("auth_token");
+        deleteCookie("sess_id");
+        deleteCookie("veri_token");
+        localStorage.clear();
         router.push("/");
       } else {
         setPostLoading(false);
