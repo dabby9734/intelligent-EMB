@@ -25,8 +25,18 @@ const Post = () => {
       )}&password=${encodeURI(getCookie("password"))}`
     );
 
-    if (response.status != 200) {
-      return setInfo("Token refresh failed");
+    switch (response.status) {
+      case 200:
+        break;
+      default:
+        setInfo("Token refresh failed");
+        deleteCookie("username");
+        deleteCookie("password");
+        deleteCookie("auth_token");
+        deleteCookie("sess_id");
+        deleteCookie("veri_token");
+        localStorage.clear();
+        router.push("/");
     }
 
     const data = await response.json();
@@ -73,10 +83,18 @@ const Post = () => {
     )}&veriToken=${encodeURI(getCookie("veri_token"))}&sessionID=${encodeURI(
       getCookie("sess_id")
     )}&pid=${pid}&boardID=${boardID}`;
-    const response = await fetch(url);
+    const response = await fetch(url).catch((err) => {
+      return setInfo("An error occured while fetching messages");
+    });
 
-    if (response.status != 200) {
-      setInfo("Cannot fetch post");
+    switch (response.status) {
+      case 401:
+        return await refreshToken();
+      case 200:
+        break;
+      default:
+        // also handles response code 500
+        return setInfo("An error occured while fetching messages");
     }
 
     const data = await response.json();

@@ -81,7 +81,11 @@ const Messages = ({ boardID }) => {
       !checkCookie("sess_id") ||
       !checkCookie("veri_token")
     ) {
-      return await refreshToken(fetchMessages, setInfo, router);
+      return await refreshToken(
+        async () => fetchMessages(type),
+        setInfo,
+        router
+      );
     }
 
     let endpoint = "getBoard";
@@ -113,17 +117,25 @@ const Messages = ({ boardID }) => {
     )}&veriToken=${encodeURI(getCookie("veri_token"))}&sessionID=${encodeURI(
       getCookie("sess_id")
     )}&boardID=${boardID}${extraArgs}`;
-    const response = await fetch(url);
+    const response = await fetch(url).catch((err) => {
+      return setInfo("An error occured while fetching messages");
+    });
+
+    switch (response.status) {
+      case 401:
+        return await refreshToken(
+          async () => fetchMessages(type),
+          setInfo,
+          router
+        );
+      case 200:
+        break;
+      default:
+        // also handles response code 500
+        return setInfo("An error occured while fetching messages");
+    }
 
     const data = await response.json();
-
-    if (!data.success) {
-      setInfo(data.message);
-
-      if (data.message === "Needs to refresh token") {
-        return await refreshToken(fetchMessages, setInfo, router);
-      } else return;
-    }
 
     // add data to localStorage
     localStorage.setItem(`${boardID}+${type}`, JSON.stringify(data.messages));
