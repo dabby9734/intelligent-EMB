@@ -14,6 +14,10 @@ As [iemb.hci.edu.sg](https://iemb.hci.edu.sg) updates, the app may stop working 
 
 You should try out [better iEMB](https://betteriemb.skytect.one) by The Better iEMB Developers.
 
+## Why does the website occasionally experience increased latency?
+
+intelligent-EMB's backend is powered by Azure Cloud Functions on a "serverless" model. This means that the backend scales up and down according to demand, and may even scale to 0 when idle. To start the backend processes again results in slight latency increase, also known as a cold start. However, once the backend starts up, the latency will be reduced. [Learn more](https://azure.microsoft.com/en-us/blog/understanding-serverless-cold-start/).
+
 ## I found a bug, how can I report it?
 
 Please contact us via Telegram [@dabby_dabby_chicken_wing](https://t.me/dabby_dabby_chicken_wing). We, just like The Better iEMB Developers, are currently preoccupied with school work so a response might take some time.
