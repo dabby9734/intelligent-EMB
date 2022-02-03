@@ -33,9 +33,12 @@ const Login = () => {
       )}&password=${encodeURI(password)}`
     );
 
-    if (response.status != 200) {
-      setLoading(false);
-      return setErr("Login Failed");
+    switch (response.status) {
+      case 200:
+        break;
+      default:
+        setLoading(false);
+        return setErr("Login Failed");
     }
 
     const data = await response.json();

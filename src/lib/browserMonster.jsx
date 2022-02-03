@@ -7,8 +7,18 @@ export const refreshToken = async (onComplete, setInfo, router) => {
     )}&password=${encodeURI(getCookie("password"))}`
   );
 
-  if (response.status != 200) {
-    return setInfo("Token refresh failed");
+  switch (response.status) {
+    case 200:
+      break;
+    default:
+      setInfo("Token refresh failed");
+      deleteCookie("username");
+      deleteCookie("password");
+      deleteCookie("auth_token");
+      deleteCookie("sess_id");
+      deleteCookie("veri_token");
+      localStorage.clear();
+      router.push("/");
   }
 
   const data = await response.json();
@@ -20,17 +30,5 @@ export const refreshToken = async (onComplete, setInfo, router) => {
 
     setInfo("Token refreshed");
     return await onComplete();
-  }
-
-  if (data.message === "Missing username and/or password") {
-    deleteCookie("username");
-    deleteCookie("password");
-    deleteCookie("auth_token");
-    deleteCookie("sess_id");
-    deleteCookie("veri_token");
-    localStorage.clear();
-    router.push("/");
-  } else {
-    setInfo(data.message);
   }
 };
