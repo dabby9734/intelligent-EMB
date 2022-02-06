@@ -10,9 +10,13 @@ Well, fear not, for intelligent E-Message Board is here to help you!
 
 ## Introduction
 
+✨ Responsive ✨ Fast ✨ Secure ✨ Easy to use ✨ Open source ✨
+
 iEMB is a blazingly fast, easy to use client for i-EMB. With a near perfect score on lighthouse, it is light years ahead of i-EMB in terms of speed.
 
-It also has a pleasing user interface, which is responsive and changes based on your display size. (No more squinting at tiny text meant for the desktop on your phone!)
+It also has a pleasing user interface, which is responsive and adapt to your display size. (No more squinting at tiny text meant for the desktop on your phone!)
+
+All source code is available on Github, allowing fellow programmers to evaluate the security of the system and report any vulnerabilities.
 
 ## Features
 
