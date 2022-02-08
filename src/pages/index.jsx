@@ -23,10 +23,7 @@ export default function LoginPage() {
     <div>
       <Head>
         <title>iEMB :: Login</title>
-        <meta
-          name="description"
-          content="Fighting HCI IT Department's anticompetitive behaviours"
-        />
+        <meta name="description" content="i-EMB, reimagined." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
