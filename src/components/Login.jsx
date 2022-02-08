@@ -81,8 +81,7 @@ const Login = () => {
         <div className="login__hero">
           <p className="login__hero__main-text">iEMB</p>
           <p className="login__hero__description">
-            This one is better though, and is fighting HCI IT Department&apos;s
-            anticompetitive behaviours 👍
+            integrated E-Message Board, now made intelligent.
           </p>
         </div>
         <div className="login__content-bg">

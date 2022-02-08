@@ -147,10 +147,7 @@ const Post = () => {
     <>
       <Head>
         <title>iEMB :: Post {pid}</title>
-        <meta
-          name="description"
-          content="Fighting iemb's anticompetitive behaviours"
-        />
+        <meta name="description" content="i-EMB, reimagined." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

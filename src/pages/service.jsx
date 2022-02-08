@@ -7,10 +7,7 @@ export default function serviceBoard() {
     <>
       <Head>
         <title>iEMB</title>
-        <meta
-          name="description"
-          content="Fighting HCI IT Department's anticompetitive behaviours"
-        />
+        <meta name="description" content="i-EMB, reimagined." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
