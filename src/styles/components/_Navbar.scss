@@ -40,10 +40,32 @@
     &-button {
       padding: 0.5rem !important;
       border-radius: 2.5rem !important;
-
       &:hover {
-        background-color: #f1f1f1 !important;
+        background-color: var(--button-hover);
       }
     }
+  }
+}
+
+.theme-toggler-wrapper {
+  width: 100%;
+  padding: 8px 16px;
+
+  .theme-toggler-input#checkbox {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+
+    &:not(:checked) ~ .theme-icon-sun {
+      display: none;
+    }
+
+    &:checked ~ .theme-icon-moon {
+      display: none;
+    }
+  }
+  .theme-toggler-icons {
+    cursor: pointer;
+    margin: 0;
   }
 }
