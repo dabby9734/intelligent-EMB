@@ -23,6 +23,7 @@ All source code is available on Github, allowing fellow programmers to evaluate 
 - View messages in a minimal and beautiful way
 - Download attachments from messages
 - Reply to messages
+- Dark / Light mode
 - More to come...
 
 ## Also check out
