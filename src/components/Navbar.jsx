@@ -12,6 +12,7 @@ import {
   ListItemText,
   ThemeProvider,
   createTheme,
+  useMediaQuery,
   Divider,
 } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
@@ -117,6 +118,12 @@ const Navbar = () => {
 
   // theme switcher state
   const { theme, setTheme } = useTheme();
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+
+  useEffect(() => {
+    setTheme(prefersDarkMode ? "dark" : "light");
+  }, [prefersDarkMode]);
+
   const t = useMemo(
     () =>
       createTheme({
