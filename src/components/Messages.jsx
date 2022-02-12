@@ -209,7 +209,7 @@ const Messages = ({ boardID }) => {
                 // sort by pid
                 // Fun fact: because iemb doesn't do this their messages are sorted correctly by date but not by time
                 ?.map((message) => (
-                  <div className="messages__item" key={message.subject}>
+                  <div className="messages__item" key={message.pid}>
                     <Card
                       variant="outlined"
                       className={`messages__item__content ${
