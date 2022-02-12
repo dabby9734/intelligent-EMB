@@ -1,7 +1,8 @@
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, ThemeProvider, createTheme } from "@mui/material";
+import { useTheme } from "next-themes";
 
 import { getCookie, setCookie, deleteCookie } from "../lib/cookieMonster";
 
@@ -126,6 +127,10 @@ const Post = () => {
     setReplyInfo(data.postReply);
     setPostLoading(false);
     document.querySelector(".post-content").innerHTML = data.post;
+    document.querySelectorAll("span").forEach((span) => {
+      span.classList.add("post-text");
+    });
+
     setAttachments(data.attachments);
 
     setInfo(`Post ${pid} fetched`);
@@ -142,6 +147,17 @@ const Post = () => {
       fetchPost(pid, boardID);
     }
   }, [router.query]);
+
+  const { theme, setTheme } = useTheme();
+  const t = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: theme === "dark" ? "dark" : "light",
+        },
+      }),
+    [theme]
+  );
 
   return (
     <>
@@ -167,14 +183,16 @@ const Post = () => {
           <LoadingSpinner />
         ) : (
           <>
-            <PostInfo info={details} />
-            <PostContent attachments={attachments} setInfo={setInfo} />
-            <PostReply
-              info={replyInfo}
-              pid={pid}
-              boardID={boardID}
-              setInfo={setInfo}
-            />
+            <ThemeProvider theme={t}>
+              <PostInfo info={details} />
+              <PostContent attachments={attachments} setInfo={setInfo} />
+              <PostReply
+                info={replyInfo}
+                pid={pid}
+                boardID={boardID}
+                setInfo={setInfo}
+              />
+            </ThemeProvider>
           </>
         )}
       </div>

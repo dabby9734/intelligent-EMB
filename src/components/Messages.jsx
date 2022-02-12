@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Card, Fab, Zoom, Pagination, Snackbar, Alert } from "@mui/material";
 import { getCookie, checkCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
@@ -8,6 +8,7 @@ import EventIcon from "@mui/icons-material/Event";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import LoadingSpinner from "./LoadingSpinner";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useTheme } from "next-themes";
 
 const colors = {
   Information: "#4caf50",
@@ -54,16 +55,6 @@ const Messages = ({ boardID }) => {
       setIsVisible(true);
     } else setIsVisible(false);
   };
-
-  // set theme colour
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#ce9eff",
-        contrastText: "#fff",
-      },
-    },
-  });
 
   // Control message display
   const [messages, setMessages] = useState("");
@@ -180,58 +171,74 @@ const Messages = ({ boardID }) => {
     }
   }, [page]);
 
+  const { theme, setTheme } = useTheme();
+  const t = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: theme === "dark" ? "dark" : "light",
+          primary: {
+            main: "#ce9eff",
+            contrastText: "#fff",
+          },
+        },
+      }),
+    [theme]
+  );
+
   return (
     <>
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <div className="messages" id="messages">
-          <Snackbar
-            open={!!info}
-            autoHideDuration={1000}
-            onClose={() => setInfo("")}
-          >
-            <Alert severity="info" onClose={() => setInfo("")}>
-              {info}
-            </Alert>
-          </Snackbar>
-          {(!messages || messages.length === 0) && <h2>No messages</h2>}
-          {!!messages &&
-            messages
-              ?.sort((a, b) => (a.pid < b.pid ? 1 : -1))
-              // sort by pid
-              // Fun fact: because iemb doesn't do this their messages are sorted correctly by date but not by time
-              ?.map((message) => (
-                <div className="messages__item" key={message.subject}>
-                  <Card
-                    variant="outlined"
-                    className={`messages__item__content ${
-                      message.read ? "read-msg" : "unread-msg"
-                    }`}
-                    sx={{
-                      borderLeft: `5px solid ${
-                        colors[message.urgency]
-                          ? colors[message.urgency]
-                          : "#ce9eff"
-                      }`,
-                    }}
-                  >
-                    <a href={`/post?boardID=${boardID}&pid=${message.pid}`}>
-                      <h2 className="messages__item__content__subject">
-                        {message.subject}
-                      </h2>
-                      <div className="messages__item__content__info-wrapper">
-                        <div className="messages__item__content__info-item">
-                          <span className="messages__item__content__info-item-icon">
-                            <PersonIcon fontSize="small" />
-                          </span>
-                          <span className="messages__item__content__info-item-field">
-                            {message.username
-                              ? message.username
-                              : message.sender}
-                          </span>
-                        </div>
-                        {/* <div className="messages__item__content__info-item">
+        <ThemeProvider theme={t}>
+          <div className="messages" id="messages">
+            <Snackbar
+              open={!!info}
+              autoHideDuration={1000}
+              onClose={() => setInfo("")}
+            >
+              <Alert severity="info" onClose={() => setInfo("")}>
+                {info}
+              </Alert>
+            </Snackbar>
+            {(!messages || messages.length === 0) && <h2>No messages</h2>}
+            {!!messages &&
+              messages
+                ?.sort((a, b) => (a.pid < b.pid ? 1 : -1))
+                // sort by pid
+                // Fun fact: because iemb doesn't do this their messages are sorted correctly by date but not by time
+                ?.map((message) => (
+                  <div className="messages__item" key={message.pid}>
+                    <Card
+                      variant="outlined"
+                      className={`messages__item__content ${
+                        message.read ? "read-msg" : "unread-msg"
+                      }`}
+                      sx={{
+                        borderLeft: `5px solid ${
+                          colors[message.urgency]
+                            ? colors[message.urgency]
+                            : "#ce9eff"
+                        }`,
+                      }}
+                    >
+                      <a href={`/post?boardID=${boardID}&pid=${message.pid}`}>
+                        <h2 className="messages__item__content__subject">
+                          {message.subject}
+                        </h2>
+                        <div className="messages__item__content__info-wrapper">
+                          <div className="messages__item__content__info-item">
+                            <span className="messages__item__content__info-item-icon">
+                              <PersonIcon fontSize="small" />
+                            </span>
+                            <span className="messages__item__content__info-item-field">
+                              {message.username
+                                ? message.username
+                                : message.sender}
+                            </span>
+                          </div>
+                          {/* <div className="messages__item__content__info-item">
                     <span className="messages__item__content__info-item-icon">
                       <GroupIcon fontSize="small" />
                     </span>
@@ -239,32 +246,31 @@ const Messages = ({ boardID }) => {
                       {message.recipient}
                     </span>
                   </div> */}
-                        <div className="messages__item__content__info-item">
-                          <span className="messages__item__content__info-item-icon">
-                            <EventIcon fontSize="small" />
-                          </span>
-                          <span className="messages__item__content__info-item-field">
-                            {getTimePassed(message.date)}
-                          </span>
+                          <div className="messages__item__content__info-item">
+                            <span className="messages__item__content__info-item-icon">
+                              <EventIcon fontSize="small" />
+                            </span>
+                            <span className="messages__item__content__info-item-field">
+                              {getTimePassed(message.date)}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    </a>
-                  </Card>
-                </div>
-              ))}
+                      </a>
+                    </Card>
+                  </div>
+                ))}
 
-          {!!messages &&
-            (router.query.type === "archived" ||
-              router.query.type === "starred") && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  paddingTop: "1rem",
-                }}
-              >
-                <ThemeProvider theme={theme}>
+            {!!messages &&
+              (router.query.type === "archived" ||
+                router.query.type === "starred") && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    paddingTop: "1rem",
+                  }}
+                >
                   <Pagination
                     color="primary"
                     count={totalPages}
@@ -273,38 +279,38 @@ const Messages = ({ boardID }) => {
                       setPage(page);
                     }}
                   />
-                </ThemeProvider>
-              </div>
-            )}
-          <Zoom in={isVisible} timeout={300}>
-            <Fab
-              size="medium"
-              color="secondary"
-              aria-label="back-to-top"
-              sx={{
-                margin: 0,
-                top: "auto",
-                right: "2rem",
-                bottom: "3.2rem",
-                left: "auto",
-                position: "fixed",
-                backgroundColor: "#ce9eff",
-                "&:hover": {
-                  backgroundColor: "#b46bff",
-                },
-              }}
-              onClick={() => {
-                document.querySelector(".contentframe").scrollTo({
-                  top: 0,
-                  left: 0,
-                  behavior: "smooth",
-                });
-              }}
-            >
-              <KeyboardArrowUpIcon />
-            </Fab>
-          </Zoom>
-        </div>
+                </div>
+              )}
+            <Zoom in={isVisible} timeout={300}>
+              <Fab
+                size="medium"
+                color="secondary"
+                aria-label="back-to-top"
+                sx={{
+                  margin: 0,
+                  top: "auto",
+                  right: "2rem",
+                  bottom: "3.2rem",
+                  left: "auto",
+                  position: "fixed",
+                  backgroundColor: "#ce9eff",
+                  "&:hover": {
+                    backgroundColor: "#b46bff",
+                  },
+                }}
+                onClick={() => {
+                  document.querySelector(".contentframe").scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: "smooth",
+                  });
+                }}
+              >
+                <KeyboardArrowUpIcon />
+              </Fab>
+            </Zoom>
+          </div>
+        </ThemeProvider>
       )}
     </>
   );

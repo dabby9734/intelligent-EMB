@@ -38,7 +38,7 @@
       @include stroke-color(#111827);
       color: transparent;
 
-      text-shadow: 6px 6px #ce9eff;
+      text-shadow: 6px 6px var(--accent);
     }
 
     &__description {
