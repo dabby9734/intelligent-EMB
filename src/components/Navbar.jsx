@@ -121,6 +121,9 @@ const Navbar = () => {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
   useEffect(() => {
+    if (theme === "light" || theme === "dark") {
+      return;
+    }
     setTheme(prefersDarkMode ? "dark" : "light");
   }, [prefersDarkMode]);
 
