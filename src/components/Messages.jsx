@@ -193,15 +193,6 @@ const Messages = ({ boardID }) => {
       ) : (
         <ThemeProvider theme={t}>
           <div className="messages" id="messages">
-            <Snackbar
-              open={!!info}
-              autoHideDuration={1000}
-              onClose={() => setInfo("")}
-            >
-              <Alert severity="info" onClose={() => setInfo("")}>
-                {info}
-              </Alert>
-            </Snackbar>
             {(!messages || messages.length === 0) && <h2>No messages</h2>}
             {!!messages &&
               messages
@@ -312,6 +303,15 @@ const Messages = ({ boardID }) => {
           </div>
         </ThemeProvider>
       )}
+      <Snackbar
+        open={!!info}
+        autoHideDuration={1000}
+        onClose={() => setInfo("")}
+      >
+        <Alert severity="info" onClose={() => setInfo("")}>
+          {info}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
