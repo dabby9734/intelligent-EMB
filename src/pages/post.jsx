@@ -130,6 +130,9 @@ const Post = () => {
     document.querySelectorAll("span").forEach((span) => {
       span.classList.add("post-text");
     });
+    document.querySelectorAll("p").forEach((p) => {
+      p.classList.add("post-text");
+    });
 
     setAttachments(data.attachments);
 
