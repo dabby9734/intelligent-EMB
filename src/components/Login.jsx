@@ -125,6 +125,7 @@ const Login = () => {
                     </FormGroup>
                     <LoadingButton
                       variant="contained"
+                      type="submit"
                       onClick={loginUser}
                       endIcon={<LoginIcon />}
                       loading={loading}
