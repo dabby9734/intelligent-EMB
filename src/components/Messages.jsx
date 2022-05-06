@@ -214,7 +214,7 @@ const Messages = ({ boardID }) => {
                         }`,
                       }}
                     >
-                      <a href={`/post?boardID=${boardID}&pid=${message.pid}`}>
+                      <a href={`/post?boardID=${boardID}&pid=${message.pid}&type=${type}`}>
                         <h2 className="messages__item__content__subject">
                           {message.subject}
                         </h2>

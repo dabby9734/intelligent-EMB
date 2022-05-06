@@ -14,7 +14,7 @@ import PostReply from "../components/PostReply";
 
 const Post = () => {
   const router = useRouter();
-  const { pid, boardID } = router.query;
+  const { pid, boardID, type } = router.query;
   const [attachments, setAttachments] = useState([]);
   const [details, setDetails] = useState({});
   const [replyInfo, setReplyInfo] = useState({ canReply: false });
@@ -125,6 +125,17 @@ const Post = () => {
 
     setDetails(data.postInfo);
     setReplyInfo(data.postReply);
+    try {
+      let b = JSON.parse(localStorage.getItem(`${boardID}+${type}`));
+      b.forEach((post) => {
+        if (post.pid === pid) {
+          post.read = true;
+        } 
+      });
+      localStorage.setItem(`${boardID}+${type}`, JSON.stringify(b));
+    } catch (err) {
+      console.log(err);
+    }
     setPostLoading(false);
     document.querySelector(".post-content").innerHTML = data.post;
     document.querySelectorAll("span").forEach((span) => {
