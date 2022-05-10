@@ -6,9 +6,9 @@ import { refreshToken } from "../lib/browserMonster";
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import LoadingSpinner from "./LoadingSpinner";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useTheme } from "next-themes";
+import MessageSkeleton from "./MessageSkeleton";
 
 const colors = {
   Information: "#4caf50",
@@ -189,18 +189,20 @@ const Messages = ({ boardID }) => {
   return (
     <>
       {loading ? (
-        <LoadingSpinner />
+        new Array(20).fill(0).map((_, i) => (
+          <MessageSkeleton key={i} />
+        ))
       ) : (
         <ThemeProvider theme={t}>
           <div className="messages" id="messages">
             {(!messages || messages.length === 0) && <h2>No messages</h2>}
             {!!messages &&
               messages
-                ?.sort((a, b) => (a.pid < b.pid ? 1 : -1))
-                // sort by pid
-                // Fun fact: because iemb doesn't do this their messages are sorted correctly by date but not by time
-                ?.map((message) => (
-                  <div className="messages__item" key={message.pid}>
+              ?.sort((a, b) => (a.pid < b.pid ? 1 : -1))
+              // sort by pid
+              // Fun fact: because iemb doesn't do this their messages are sorted correctly by date but not by time
+              ?.map((message) => (
+                <div className="messages__item" key={message.pid}>
                     <Card
                       variant="outlined"
                       className={`messages__item__content ${
