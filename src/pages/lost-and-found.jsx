@@ -12,9 +12,7 @@ export default function lostBoard() {
       </Head>
 
       <Navbar />
-      <div className="contentframe">
-        <Messages boardID={1050} />
-      </div>
+      <Messages boardID={1050} />
     </>
   );
 }

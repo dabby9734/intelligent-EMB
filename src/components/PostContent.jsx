@@ -4,10 +4,10 @@ import download from "downloadjs";
 
 import Button from "@mui/material/Button";
 import DownloadIcon from "@mui/icons-material/Download";
-import { Grid } from "@mui/material";
+import { Grid, useTheme } from "@mui/material";
 import { refreshToken } from "../lib/browserMonster";
 
-const PostContent = ({ attachments, setInfo }) => {
+const PostContent = ({ attachments, setInfo, content }) => {
   const router = useRouter();
   const downloadFile = async (attachment) => {
     if (
@@ -62,11 +62,17 @@ const PostContent = ({ attachments, setInfo }) => {
     download(blob, attachment.fileName, blob.type);
   };
 
+  const theme = useTheme();
+
   return (
     // animation by:
     // https://codepen.io/stix/pen/qNZajO/
     <div className="post">
-      <div className="post-content"></div>
+      <div
+        className="post-content"
+        style={{ color: theme.palette.text.primary }}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
       {attachments && (
         <div
           className="post-attachments"

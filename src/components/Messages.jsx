@@ -1,13 +1,20 @@
 import { useRouter } from "next/router";
-import { useState, useEffect, useMemo } from "react";
-import { Card, Fab, Zoom, Pagination, Snackbar, Alert } from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Card,
+  Fab,
+  Zoom,
+  Pagination,
+  Snackbar,
+  Alert,
+  useTheme,
+} from "@mui/material";
 import { getCookie, checkCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useTheme } from "next-themes";
 import MessageSkeleton from "./MessageSkeleton";
 
 const colors = {
@@ -171,67 +178,72 @@ const Messages = ({ boardID }) => {
     }
   }, [page]);
 
-  const { theme, setTheme } = useTheme();
-  const t = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: theme === "dark" ? "dark" : "light",
-          primary: {
-            main: "#ce9eff",
-            contrastText: "#fff",
-          },
-        },
-      }),
-    [theme]
-  );
+  const theme = useTheme();
 
   return (
-    <>
+    <Box
+      className="contentframe"
+      sx={{
+        backgroundColor: theme.palette.background.default,
+      }}
+    >
       {loading ? (
-        new Array(20).fill(0).map((_, i) => (
-          <MessageSkeleton key={i} />
-        ))
+        new Array(20).fill(0).map((_, i) => <MessageSkeleton key={i} />)
       ) : (
-        <ThemeProvider theme={t}>
-          <div className="messages" id="messages">
-            {(!messages || messages.length === 0) && <h2>No messages</h2>}
-            {!!messages &&
-              messages
+        <Box className="messages" id="messages">
+          {(!messages || messages.length === 0) && (
+            <h2
+              style={{
+                color: theme.palette.text.primary,
+              }}
+            >
+              No messages
+            </h2>
+          )}
+          {!!messages &&
+            messages
               ?.sort((a, b) => (a.pid < b.pid ? 1 : -1))
               // sort by pid
               // Fun fact: because iemb doesn't do this their messages are sorted correctly by date but not by time
               ?.map((message) => (
                 <div className="messages__item" key={message.pid}>
-                    <Card
-                      variant="outlined"
-                      className={`messages__item__content ${
-                        message.read ? "read-msg" : "unread-msg"
-                      }`}
-                      sx={{
-                        borderLeft: `5px solid ${
-                          colors[message.urgency]
-                            ? colors[message.urgency]
-                            : "#ce9eff"
-                        }`,
-                      }}
+                  <Card
+                    variant="outlined"
+                    className={`messages__item__content ${
+                      message.read ? "read-msg" : "unread-msg"
+                    }`}
+                    sx={{
+                      borderLeft: `5px solid ${
+                        colors[message.urgency]
+                          ? colors[message.urgency]
+                          : "#ce9eff"
+                      }`,
+                      backgroundColor: theme.palette.background.paper,
+                      "&:hover": {
+                        backgroundColor: theme.palette.action.hover,
+                      },
+                      transition: "all 0.2s ease-in-out",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <a
+                      href={`/post?boardID=${boardID}&pid=${message.pid}&type=${type}`}
                     >
-                      <a href={`/post?boardID=${boardID}&pid=${message.pid}&type=${type}`}>
-                        <h2 className="messages__item__content__subject">
-                          {message.subject}
-                        </h2>
-                        <div className="messages__item__content__info-wrapper">
-                          <div className="messages__item__content__info-item">
-                            <span className="messages__item__content__info-item-icon">
-                              <PersonIcon fontSize="small" />
-                            </span>
-                            <span className="messages__item__content__info-item-field">
-                              {message.username
-                                ? message.username
-                                : message.sender}
-                            </span>
-                          </div>
-                          {/* <div className="messages__item__content__info-item">
+                      <h2 className="messages__item__content__subject">
+                        {message.subject}
+                      </h2>
+                      <div className="messages__item__content__info-wrapper">
+                        <div className="messages__item__content__info-item">
+                          <span className="messages__item__content__info-item-icon">
+                            <PersonIcon fontSize="small" />
+                          </span>
+                          <span className="messages__item__content__info-item-field">
+                            {message.username
+                              ? message.username
+                              : message.sender}
+                          </span>
+                        </div>
+                        {/* <div className="messages__item__content__info-item">
                     <span className="messages__item__content__info-item-icon">
                       <GroupIcon fontSize="small" />
                     </span>
@@ -239,71 +251,70 @@ const Messages = ({ boardID }) => {
                       {message.recipient}
                     </span>
                   </div> */}
-                          <div className="messages__item__content__info-item">
-                            <span className="messages__item__content__info-item-icon">
-                              <EventIcon fontSize="small" />
-                            </span>
-                            <span className="messages__item__content__info-item-field">
-                              {getTimePassed(message.date)}
-                            </span>
-                          </div>
+                        <div className="messages__item__content__info-item">
+                          <span className="messages__item__content__info-item-icon">
+                            <EventIcon fontSize="small" />
+                          </span>
+                          <span className="messages__item__content__info-item-field">
+                            {getTimePassed(message.date)}
+                          </span>
                         </div>
-                      </a>
-                    </Card>
-                  </div>
-                ))}
-
-            {!!messages &&
-              (router.query.type === "archived" ||
-                router.query.type === "starred") && (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    paddingTop: "1rem",
-                  }}
-                >
-                  <Pagination
-                    color="primary"
-                    count={totalPages}
-                    page={page}
-                    onChange={(e, page) => {
-                      setPage(page);
-                    }}
-                  />
+                      </div>
+                    </a>
+                  </Card>
                 </div>
-              )}
-            <Zoom in={isVisible} timeout={300}>
-              <Fab
-                size="medium"
-                color="secondary"
-                aria-label="back-to-top"
-                sx={{
-                  margin: 0,
-                  top: "auto",
-                  right: "2rem",
-                  bottom: "3.2rem",
-                  left: "auto",
-                  position: "fixed",
-                  backgroundColor: "#ce9eff",
-                  "&:hover": {
-                    backgroundColor: "#b46bff",
-                  },
-                }}
-                onClick={() => {
-                  document.querySelector(".contentframe").scrollTo({
-                    top: 0,
-                    left: 0,
-                    behavior: "smooth",
-                  });
+              ))}
+
+          {!!messages &&
+            (router.query.type === "archived" ||
+              router.query.type === "starred") && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingTop: "1rem",
                 }}
               >
-                <KeyboardArrowUpIcon />
-              </Fab>
-            </Zoom>
-          </div>
-        </ThemeProvider>
+                <Pagination
+                  color="primary"
+                  count={totalPages}
+                  page={page}
+                  onChange={(e, page) => {
+                    setPage(page);
+                  }}
+                />
+              </div>
+            )}
+          <Zoom in={isVisible} timeout={300}>
+            <Fab
+              size="medium"
+              color="secondary"
+              aria-label="back-to-top"
+              sx={{
+                margin: 0,
+                top: "auto",
+                right: "2rem",
+                bottom: "3.2rem",
+                left: "auto",
+                position: "fixed",
+                backgroundColor: "#ce9eff",
+                "&:hover": {
+                  backgroundColor: "#b46bff",
+                },
+              }}
+              onClick={() => {
+                document.querySelector(".contentframe").scrollTo({
+                  top: 0,
+                  left: 0,
+                  behavior: "smooth",
+                });
+              }}
+            >
+              <KeyboardArrowUpIcon />
+            </Fab>
+          </Zoom>
+        </Box>
       )}
       <Snackbar
         open={!!info}
@@ -314,7 +325,7 @@ const Messages = ({ boardID }) => {
           {info}
         </Alert>
       </Snackbar>
-    </>
+    </Box>
   );
 };
 

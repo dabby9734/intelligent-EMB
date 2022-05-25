@@ -47,11 +47,6 @@
       }
     }
 
-    & > div:hover {
-      background-color: var(--hover);
-      transition: all 0.2s ease-in-out;
-      cursor: pointer;
-    }
   }
 
   @keyframes fade-skeleton {
