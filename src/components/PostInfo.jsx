@@ -1,12 +1,16 @@
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 import GroupIcon from "@mui/icons-material/Group";
-import { Chip } from "@mui/material";
+import { Chip, useTheme } from "@mui/material";
 
-const postInfo = ({ info }) => {
+const PostInfo = ({ info }) => {
+  const theme = useTheme();
+  
   return (
     <div className="post-info">
-      <h1>{info && info.title}</h1>
+      <h1 style={{
+            color: theme.palette.text.primary,
+          }}>{info && info.title}</h1>
       <div className="post-info__meta">
         <div className="post-info__field-wrapper">
           <Chip
@@ -35,4 +39,4 @@ const postInfo = ({ info }) => {
   );
 };
 
-export default postInfo;
+export default PostInfo;

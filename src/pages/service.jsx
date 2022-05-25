@@ -12,9 +12,7 @@ export default function serviceBoard() {
       </Head>
 
       <Navbar />
-      <div className="contentframe">
-        <Messages boardID={1039} />
-      </div>
+      <Messages boardID={1039} />
     </>
   );
 }

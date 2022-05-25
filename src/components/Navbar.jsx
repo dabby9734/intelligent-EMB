@@ -1,5 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
-import { useTheme } from "next-themes";
+import { useState, useEffect, useContext } from "react";
 import {
   Drawer,
   List,
@@ -10,9 +9,8 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  ThemeProvider,
-  createTheme,
-  useMediaQuery,
+  useTheme,
+  Box,
   Divider,
 } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
@@ -32,6 +30,8 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 import { getCookie, deleteCookie } from "../lib/cookieMonster";
 import { useRouter } from "next/router";
+
+import { ColorModeContext } from "../pages/_app";
 
 const Navbar = () => {
   const router = useRouter();
@@ -115,160 +115,158 @@ const Navbar = () => {
       return `${router.route}?type=${type}`;
     }
   };
-
-  // theme switcher state
-  const { theme, setTheme } = useTheme();
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-
-  useEffect(() => {
-    if (theme === "light" || theme === "dark") {
-      return;
-    }
-    setTheme(prefersDarkMode ? "dark" : "light");
-  }, [prefersDarkMode]);
-
-  const t = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: theme === "dark" ? "dark" : "light",
-        },
-      }),
-    [theme]
-  );
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
 
   return (
     <>
-      <ThemeProvider theme={t}>
-        <div className="nav">
-          <div className="nav__menu-button">
-            <Tooltip title="Menu" enterTouchDelay={0}>
-              <div className="nav__item">
-                <IconButton
-                  aria-label="Menu"
-                  onClick={() => setOpen(!open)}
-                  className="nav__item-button"
-                  sx={{ color: "var(--text)" }}
-                >
-                  <MenuIcon />
-                </IconButton>
-              </div>
-            </Tooltip>
-          </div>
-          <div className="nav__paths">
-            {pages.map((item) => (
-              <Tooltip title={item.text} enterTouchDelay={0} key={item.text}>
-                <div className="nav__item">
-                  <Button
-                    className="nav__item-button desktop-only"
-                    variant="text"
-                    startIcon={item.icon}
-                    href={`${item.path}?type=inbox`}
-                    sx={{
-                      textTransform: "none",
-                      color:
-                        router?.route === item.path
-                          ? "var(--accent)"
-                          : "var(--text)",
-                    }}
-                  >
-                    <span className="nav__item-text">{item.text}</span>
-                  </Button>
-                  <IconButton
-                    aria-label={item.text}
-                    href={`${item.path}?type=inbox`}
-                    className="nav__item-button mobile-only"
-                    sx={{
-                      color:
-                        router?.route === item.path
-                          ? "var(--accent)"
-                          : "var(--text)",
-                    }}
-                  >
-                    {item.icon}
-                  </IconButton>
-                </div>
-              </Tooltip>
-            ))}
-          </div>
-          <div className="nav__sign-out-button">
-            <Tooltip title="Sign Out" enterTouchDelay={0}>
+      <Box
+        className="nav"
+        sx={{
+          backgroundColor: theme.palette.background.default,
+          borderBottom: "1px solid",
+          borderColor: theme.palette.divider,
+        }}
+      >
+        <div className="nav__menu-button">
+          <Tooltip title="Menu" enterTouchDelay={0}>
+            <div className="nav__item">
+              <IconButton
+                aria-label="Menu"
+                onClick={() => setOpen(!open)}
+                className="nav__item-button"
+              >
+                <MenuIcon />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+        <div className="nav__paths">
+          {pages.map((item) => (
+            <Tooltip title={item.text} enterTouchDelay={0} key={item.text}>
               <div className="nav__item">
                 <Button
                   className="nav__item-button desktop-only"
                   variant="text"
-                  startIcon={<LogoutIcon />}
-                  onClick={handleSignOut}
-                  sx={{ textTransform: "none", color: "var(--text)" }}
+                  startIcon={item.icon}
+                  href={`${item.path}?type=inbox`}
+                  sx={{
+                    textTransform: "none",
+                    color:
+                      router?.route === item.path
+                        ? "var(--accent)"
+                        : theme.palette.text.primary,
+                  }}
                 >
-                  <span className="nav__item-text">Sign Out</span>
+                  <span className="nav__item-text">{item.text}</span>
                 </Button>
                 <IconButton
-                  aria-label="Sign Out"
-                  onClick={handleSignOut}
+                  aria-label={item.text}
+                  href={`${item.path}?type=inbox`}
                   className="nav__item-button mobile-only"
-                  sx={{ color: "var(--text)" }}
+                  sx={{
+                    color:
+                      router?.route === item.path
+                        ? "var(--accent)"
+                        : theme.palette.text.primary,
+                  }}
                 >
-                  <LogoutIcon />
+                  {item.icon}
                 </IconButton>
               </div>
             </Tooltip>
-          </div>
+          ))}
         </div>
-        <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
-          <List>
-            {data.map((item) => (
-              <ListItem
-                component={item.type ? "a" : "div"}
-                href={getHref(router, item.type)}
-                key={item.text}
-                sx={{}}
+        <div className="nav__sign-out-button">
+          <Tooltip title="Sign Out" enterTouchDelay={0}>
+            <div className="nav__item">
+              <Button
+                className="nav__item-button desktop-only"
+                variant="text"
+                startIcon={<LogoutIcon />}
+                onClick={handleSignOut}
+                sx={{
+                  textTransform: "none",
+                  color: theme.palette.text.primary,
+                }}
               >
-                <ListItemButton
+                <span className="nav__item-text">Sign Out</span>
+              </Button>
+              <IconButton
+                aria-label="Sign Out"
+                onClick={handleSignOut}
+                className="nav__item-button mobile-only"
+                sx={{ color: theme.palette.text.primary }}
+              >
+                <LogoutIcon />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+      </Box>
+      <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
+        <List>
+          {data.map((item) => (
+            <ListItem
+              component={item.type ? "a" : "div"}
+              href={getHref(router, item.type)}
+              key={item.text}
+            >
+              <ListItemButton
+                sx={{
+                  borderRadius: "2rem",
+                  color:
+                    router.query.type !== undefined &&
+                    router.query.type === item.type
+                      ? "var(--accent)"
+                      : "",
+                }}
+              >
+                <ListItemIcon
                   sx={{
-                    borderRadius: "2rem",
                     color:
                       router.query.type !== undefined &&
                       router.query.type === item.type
                         ? "var(--accent)"
-                        : "var(--text)",
+                        : "",
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      color:
-                        router.query.type !== undefined &&
-                        router.query.type === item.type
-                          ? "var(--accent)"
-                          : "var(--text)",
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-            <Divider />
-            <ListItem>
-              <ListItemButton
-                sx={{
-                  borderRadius: "2rem",
-                }}
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              >
-                <ListItemIcon sx={{ color: "var(--text)" }}>
-                  {theme === "dark" ? <DarkModeIcon /> : <LightModeIcon />}
+                  {item.icon}
                 </ListItemIcon>
-                <ListItemText
-                  sx={{ color: "var(--text)" }}
-                  primary={theme === "dark" ? "Dark Mode 🌌" : "Light Mode 🌈"}
-                />
+                <ListItemText primary={item.text} />
               </ListItemButton>
             </ListItem>
-          </List>
-        </Drawer>
-      </ThemeProvider>
+          ))}
+          <Divider />
+          <ListItem>
+            <ListItemButton
+              sx={{
+                borderRadius: "2rem",
+              }}
+              onClick={() => {
+                colorMode.toggleColorMode(
+                  theme.palette.mode === "dark" ? "light" : "dark"
+                );
+              }}
+            >
+              <ListItemIcon>
+                {theme.palette.mode === "dark" ? (
+                  <DarkModeIcon />
+                ) : (
+                  <LightModeIcon />
+                )}
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  theme.palette.mode === "dark"
+                    ? "Dark Mode 🌌"
+                    : "Light Mode 🌈"
+                }
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Drawer>
     </>
   );
 };

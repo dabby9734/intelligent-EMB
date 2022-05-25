@@ -1,8 +1,7 @@
 import Head from "next/head";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Snackbar, Alert, ThemeProvider, createTheme } from "@mui/material";
-import { useTheme } from "next-themes";
+import { Box, Snackbar, Alert, useTheme } from "@mui/material";
 
 import { getCookie, setCookie, deleteCookie } from "../lib/cookieMonster";
 
@@ -15,6 +14,7 @@ import PostReply from "../components/PostReply";
 const Post = () => {
   const router = useRouter();
   const { pid, boardID, type } = router.query;
+  const [content, setContent] = useState("");
   const [attachments, setAttachments] = useState([]);
   const [details, setDetails] = useState({});
   const [replyInfo, setReplyInfo] = useState({ canReply: false });
@@ -130,23 +130,15 @@ const Post = () => {
       b.forEach((post) => {
         if (post.pid === pid) {
           post.read = true;
-        } 
+        }
       });
       localStorage.setItem(`${boardID}+${type}`, JSON.stringify(b));
     } catch (err) {
       console.log(err);
     }
     setPostLoading(false);
-    document.querySelector(".post-content").innerHTML = data.post;
-    document.querySelectorAll("span").forEach((span) => {
-      span.classList.add("post-text");
-    });
-    document.querySelectorAll("p").forEach((p) => {
-      p.classList.add("post-text");
-    });
-
+    setContent(data.post);
     setAttachments(data.attachments);
-
     setInfo(`Post ${pid} fetched`);
   };
 
@@ -162,16 +154,7 @@ const Post = () => {
     }
   }, [router.query]);
 
-  const { theme, setTheme } = useTheme();
-  const t = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: theme === "dark" ? "dark" : "light",
-        },
-      }),
-    [theme]
-  );
+  const theme = useTheme();
 
   return (
     <>
@@ -192,24 +175,31 @@ const Post = () => {
       </Snackbar>
 
       <Navbar />
-      <div className="contentframe">
+      <Box
+        className="contentframe"
+        sx={{
+          backgroundColor: theme.palette.background.default,
+        }}
+      >
         {postLoading ? (
           <LoadingSpinner />
         ) : (
           <>
-            <ThemeProvider theme={t}>
-              <PostInfo info={details} />
-              <PostContent attachments={attachments} setInfo={setInfo} />
-              <PostReply
-                info={replyInfo}
-                pid={pid}
-                boardID={boardID}
-                setInfo={setInfo}
-              />
-            </ThemeProvider>
+            <PostInfo info={details} />
+            <PostContent
+              attachments={attachments}
+              setInfo={setInfo}
+              content={content}
+            />
+            <PostReply
+              info={replyInfo}
+              pid={pid}
+              boardID={boardID}
+              setInfo={setInfo}
+            />
           </>
         )}
-      </div>
+      </Box>
     </>
   );
 };

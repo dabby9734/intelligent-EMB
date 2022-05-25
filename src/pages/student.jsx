@@ -12,9 +12,7 @@ export default function studentBoard() {
       </Head>
 
       <Navbar />
-      <div className="contentframe">
-        <Messages boardID={1048} />
-      </div>
+      <Messages boardID={1048} />
     </>
   );
 }
