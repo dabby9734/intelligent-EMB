@@ -35,6 +35,8 @@ export default function LoginPage() {
           setInfo,
           router
         );
+      } else {
+        router.push("/student?type=inbox");
       }
     }
   });
