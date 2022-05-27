@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Snackbar,
   TextField,
@@ -14,7 +14,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import LoginIcon from "@mui/icons-material/Login";
 import Link from "next/link";
 
-import { getCookie, setCookie } from "../lib/cookieMonster";
+import { setCookie } from "../lib/cookieMonster";
 import { useRouter } from "next/router";
 
 const Login = () => {
@@ -112,7 +112,7 @@ const Login = () => {
                   <div className="login-button-right-align">
                     <FormGroup>
                       <FormControlLabel
-                        control={<Checkbox defaultChecked />}
+                        control={<Checkbox />}
                         label="Remember Me"
                         sx={{
                           color: "text.secondary",
