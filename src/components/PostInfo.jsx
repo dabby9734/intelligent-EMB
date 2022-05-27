@@ -5,12 +5,12 @@ import { Chip, useTheme } from "@mui/material";
 
 const PostInfo = ({ info }) => {
   const theme = useTheme();
-  
+
   return (
     <div className="post-info">
-      <h1 style={{
-            color: theme.palette.text.primary,
-          }}>{info && info.title}</h1>
+      <h1 style={{ color: theme.palette.text.primary }}>
+        {info && info.title}
+      </h1>
       <div className="post-info__meta">
         <div className="post-info__field-wrapper">
           <Chip

@@ -1,14 +1,19 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { Box, Snackbar, Alert, useTheme } from "@mui/material";
+import {
+  Box,
+  Snackbar,
+  Alert,
+  CircularProgress,
+  useTheme,
+} from "@mui/material";
 
 import { getCookie, setCookie, deleteCookie } from "../lib/cookieMonster";
 
 import Navbar from "../components/Navbar";
 import PostContent from "../components/PostContent";
 import PostInfo from "../components/PostInfo";
-import LoadingSpinner from "../components/LoadingSpinner";
 import PostReply from "../components/PostReply";
 
 const Post = () => {
@@ -21,9 +26,9 @@ const Post = () => {
 
   const refreshToken = async () => {
     const response = await fetch(
-      `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURI(
+      `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURIComponent(
         getCookie("username")
-      )}&password=${encodeURI(getCookie("password"))}`
+      )}&password=${encodeURIComponent(getCookie("password"))}`
     );
 
     switch (response.status) {
@@ -65,9 +70,7 @@ const Post = () => {
 
       setInfo(data.message);
       setPostLoading(false);
-      document.querySelector(
-        ".post-content"
-      ).innerHTML = `<h2>${data.message}</h2>`;
+      setContent(`<h2>${data.message}</h2>`);
     }
   };
 
@@ -79,9 +82,9 @@ const Post = () => {
     ) {
       return await refreshToken();
     }
-    const url = `https://iemb-backend.azurewebsites.net/api/getPost?authToken=${encodeURI(
+    const url = `https://iemb-backend.azurewebsites.net/api/getPost?authToken=${encodeURIComponent(
       getCookie("auth_token")
-    )}&veriToken=${encodeURI(getCookie("veri_token"))}&sessionID=${encodeURI(
+    )}&veriToken=${encodeURI(getCookie("veri_token"))}&sessionID=${encodeURIComponent(
       getCookie("sess_id")
     )}&pid=${pid}&boardID=${boardID}`;
     const response = await fetch(url).catch((err) => {
@@ -95,36 +98,33 @@ const Post = () => {
         break;
       default:
         // also handles response code 500
+        setPostLoading(false);
+        setContent(`<h2>An error occured while fetching messages</h2>`);
         return setInfo("An error occured while fetching messages");
     }
 
     const data = await response.json();
 
     if (!data.success) {
-      setInfo(data.message);
-
-      if (data.message === "Needs to refresh token") {
-        return await refreshToken();
-      }
-      if (data.message === "Invalid username or password") {
-        deleteCookie("username");
-        deleteCookie("password");
-        deleteCookie("auth_token");
-        deleteCookie("sess_id");
-        deleteCookie("veri_token");
-        localStorage.clear();
-        router.push("/");
-      } else {
-        setPostLoading(false);
-        document.querySelector(
-          ".post-content"
-        ).innerHTML = `<h2>${data.message}</h2>`;
-        return;
+      switch (data.message) {
+        case "Need to refresh token":
+          setInfo(data.message);
+          return await refreshToken();
+        case "Invalid username or password":
+          deleteCookie("username");
+          deleteCookie("password");
+          deleteCookie("auth_token");
+          deleteCookie("sess_id");
+          deleteCookie("veri_token");
+          localStorage.clear();
+          return router.push("/");
+        default:
+          setPostLoading(false);
+          setInfo(data.message);
+          setContent(`<h2>${data.message}</h2>`);
       }
     }
 
-    setDetails(data.postInfo);
-    setReplyInfo(data.postReply);
     try {
       let b = JSON.parse(localStorage.getItem(`${boardID}+${type}`));
       b.forEach((post) => {
@@ -136,9 +136,12 @@ const Post = () => {
     } catch (err) {
       console.log(err);
     }
-    setPostLoading(false);
+    setDetails(data.postInfo);
+    setReplyInfo(data.postReply);
     setContent(data.post);
     setAttachments(data.attachments);
+
+    setPostLoading(false);
     setInfo(`Post ${pid} fetched`);
   };
 
@@ -177,12 +180,19 @@ const Post = () => {
       <Navbar />
       <Box
         className="contentframe"
-        sx={{
-          backgroundColor: theme.palette.background.default,
-        }}
+        sx={{ backgroundColor: theme.palette.background.default }}
       >
         {postLoading ? (
-          <LoadingSpinner />
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress />
+          </Box>
         ) : (
           <>
             <PostInfo info={details} />

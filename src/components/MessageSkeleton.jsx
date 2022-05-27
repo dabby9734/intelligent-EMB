@@ -1,12 +1,11 @@
-import { Skeleton } from "@mui/lab";
-import { Card } from "@mui/material";
+import { Card, Skeleton } from "@mui/material";
 
 export default function MessageSkeleton() {
   return (
     <div className="messages__item">
       <Card
         variant="outlined"
-        className="messages__item__content" 
+        className="messages__item__content"
         sx={{
           borderLeft: "5px solid rgba(0, 0, 0, 0.11)",
           transformOrigin: "0 55%",
