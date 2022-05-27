@@ -20,7 +20,7 @@ import { useRouter } from "next/router";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [rem, setRem] = useState(true);
+  const [rem, setRem] = useState(false);
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
