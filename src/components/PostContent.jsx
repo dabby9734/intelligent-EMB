@@ -64,6 +64,15 @@ const PostContent = ({ attachments, setInfo, content }) => {
 
   const theme = useTheme();
 
+  const clearWhiteBg = (content) => {
+    let pattern = content.match(/background-color:\s*(rgba?\(255[,\s]*255[,\s]*255[,\s]*1?\))|(#f*)|(hsl\(0[,\s]*0%[,\s]*100%\))/)
+    if (pattern) {
+      content = content.replace(pattern, "");
+      content = content.replace(/color:[a-zA-Z0-9#,\(\)\s]*(;|">)/, "") 
+    }
+    return content
+  }
+
   return (
     // animation by:
     // https://codepen.io/stix/pen/qNZajO/
@@ -71,7 +80,7 @@ const PostContent = ({ attachments, setInfo, content }) => {
       <div
         className="post-content"
         style={{ color: theme.palette.text.primary }}
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{ __html: clearWhiteBg(content) }}
       />
       {attachments && (
         <div
