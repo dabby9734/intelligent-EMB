@@ -52,8 +52,13 @@ const Login = () => {
         setCookie("username", username, 2592000);
         setCookie("password", password, 2592000);
       }
+      
+      if (router.query.next) {
+        router.push(router.query.next);
+      } else {
+        router.push("/student?type=inbox");
+      }
 
-      router.push("/student?type=inbox");
     } else {
       setLoading(false);
       setErr(data.message);

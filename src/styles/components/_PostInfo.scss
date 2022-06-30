@@ -18,7 +18,7 @@
   }
 
   &__field-wrapper {
-    padding-right: 1rem;
+    padding-right: 0.5rem;
 
     @include respond(tab-port) {
       padding-bottom: 0.5rem;

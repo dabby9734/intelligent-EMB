@@ -1,7 +1,8 @@
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 import GroupIcon from "@mui/icons-material/Group";
-import { Chip, useTheme } from "@mui/material";
+import LinkIcon from "@mui/icons-material/Link";
+import { Chip, useTheme, IconButton } from "@mui/material";
 
 const PostInfo = ({ info }) => {
   const theme = useTheme();
@@ -32,6 +33,18 @@ const PostInfo = ({ info }) => {
             size="small"
             icon={<EventIcon fontSize="small" />}
             label={info && info.date}
+          />
+        </div>
+        <div className="post-info__field-wrapper">
+          <Chip
+            size="small"
+            icon={<LinkIcon fontSize="small" />}
+            label="Share!"
+            onClick={() => {
+              const url = window.location.href;
+              navigator.clipboard.writeText(url);
+            }}
+            variant="outlined"
           />
         </div>
       </div>

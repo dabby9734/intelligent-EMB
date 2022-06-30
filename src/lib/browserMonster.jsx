@@ -18,7 +18,7 @@ export const refreshToken = async (onComplete, setInfo, router) => {
       deleteCookie("sess_id");
       deleteCookie("veri_token");
       localStorage.clear();
-      router.push("/");
+      router.push("/" + "?next=" + encodeURIComponent(router.asPath));
   }
 
   const data = await response.json();
