@@ -65,17 +65,16 @@ const PostContent = ({ attachments, setInfo, content }) => {
   const theme = useTheme();
 
   const clearWhiteBg = (content) => {
-    let pattern = content.match(/background-color:\s*(rgba?\(255[,\s]*255[,\s]*255[,\s]*1?\))|(#f*)|(hsl\(0[,\s]*0%[,\s]*100%\))/)
+    let expr = /background-color:\s*(rgba?\(255[,\s]*255[,\s]*255[,\s]*1?\))|(#f*)|(hsl\([\d\s]*%,[\d\s]*,\s*100%\))/mg
+    let pattern = content.match(expr)
     if (pattern) {
-      content = content.replace(pattern, "");
-      content = content.replace(/color:[a-zA-Z0-9#,\(\)\s]*(;|">)/, "") 
+      content = content.replace(expr, "");
+      content = content.replace(/color:\s*(rgba?\([\d\s,]*\))|(#0*)|(hsl\([\d\s]*%,[\d\s]*,\s*0%\))/mg, "") 
     }
     return content
   }
 
   return (
-    // animation by:
-    // https://codepen.io/stix/pen/qNZajO/
     <div className="post">
       <div
         className="post-content"
