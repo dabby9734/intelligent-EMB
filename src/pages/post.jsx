@@ -42,7 +42,7 @@ const Post = () => {
         deleteCookie("sess_id");
         deleteCookie("veri_token");
         localStorage.clear();
-        router.push("/");
+        router.push("/" + "?next=" + encodeURIComponent(router.asPath));
     }
 
     const data = await response.json();
@@ -65,7 +65,7 @@ const Post = () => {
         deleteCookie("sess_id");
         deleteCookie("veri_token");
         localStorage.clear();
-        router.push("/");
+        router.push("/" + "?next=" + encodeURIComponent(router.asPath));
       }
 
       setInfo(data.message);
@@ -84,7 +84,9 @@ const Post = () => {
     }
     const url = `https://iemb-backend.azurewebsites.net/api/getPost?authToken=${encodeURIComponent(
       getCookie("auth_token")
-    )}&veriToken=${encodeURI(getCookie("veri_token"))}&sessionID=${encodeURIComponent(
+    )}&veriToken=${encodeURI(
+      getCookie("veri_token")
+    )}&sessionID=${encodeURIComponent(
       getCookie("sess_id")
     )}&pid=${pid}&boardID=${boardID}`;
     const response = await fetch(url).catch((err) => {
@@ -117,7 +119,9 @@ const Post = () => {
           deleteCookie("sess_id");
           deleteCookie("veri_token");
           localStorage.clear();
-          return router.push("/");
+          return router.push(
+            "/" + "?next=" + encodeURIComponent(router.asPath)
+          );
         default:
           setPostLoading(false);
           setInfo(data.message);
