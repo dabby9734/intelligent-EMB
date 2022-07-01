@@ -77,12 +77,25 @@ const PostContent = ({ attachments, setInfo, content }) => {
     return content;
   };
 
+  const limitImageMaxWidth = (content) => {
+    return content.replace(
+      /<img/gm,
+      "<img width='100%'"
+    )
+  }
+
+  const processPostHTML = (content) => {
+    content = clearWhiteBg(content);
+    content = limitImageMaxWidth(content);
+    return content;
+  }
+
   return (
     <div className="post">
       <div
         className="post-content"
         style={{ color: theme.palette.text.primary }}
-        dangerouslySetInnerHTML={{ __html: clearWhiteBg(content) }}
+        dangerouslySetInnerHTML={{ __html: processPostHTML(content) }}
       />
       {attachments && (
         <div

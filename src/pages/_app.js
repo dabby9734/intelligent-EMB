@@ -16,6 +16,8 @@ function MyApp({ Component, pageProps }) {
       toggleColorMode: (newMode) => {
         setMode(newMode);
         localStorage.setItem("mode", newMode);
+        // set data theme attribute of html tag
+        document.documentElement.setAttribute("data-theme", newMode);
       },
     }),
     []
@@ -29,6 +31,9 @@ function MyApp({ Component, pageProps }) {
           primary: {
             main: "#ce9eff",
           },
+          background: {
+            default: mode === "dark" ? "#1c1c1c" : "#f8f8ff",
+          },
         },
       }),
     [mode]
@@ -39,6 +44,7 @@ function MyApp({ Component, pageProps }) {
     // set mode if it is valid
     if (mode === "dark" || mode === "light") {
       setMode(mode);
+      document.documentElement.setAttribute("data-theme", mode);
     }
   }, []);
 
