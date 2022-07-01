@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Box,
   Card,
@@ -16,6 +16,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MessageSkeleton from "./MessageSkeleton";
+import { navPrefsContext } from "../pages/_app";
 
 const colors = {
   Information: "#4caf50",
@@ -179,6 +180,7 @@ const Messages = ({ boardID }) => {
   }, [page]);
 
   const theme = useTheme();
+  const ctx = useContext(navPrefsContext);
 
   return (
     <Box
@@ -205,6 +207,25 @@ const Messages = ({ boardID }) => {
               ?.sort((a, b) => (a.pid < b.pid ? 1 : -1))
               // sort by pid
               // Fun fact: because iemb doesn't do this their messages are sorted correctly by date but not by time
+              ?.filter(
+                (message) =>
+                  ctx.navPrefs?.messagePrefs.indexOf(message.urgency) !== -1 ||
+                  message.read === null
+              )
+              ?.filter((message) => {
+                if (message.read === null) {
+                  return true;
+                }
+                if (
+                  ctx.navPrefs?.messagePrefs.indexOf("Read") === -1 &&
+                  message.read
+                ) {
+                  // don't include the read messages
+                  return false;
+                } else {
+                  return true;
+                }
+              })
               ?.map((message) => (
                 <div className="messages__item" key={message.pid}>
                   <Card

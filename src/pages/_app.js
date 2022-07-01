@@ -2,7 +2,7 @@ import "../styles/main.scss";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 export const ColorModeContext = React.createContext({
   toggleColorMode: () => {},
@@ -48,13 +48,31 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
+  const [navPrefs, setNavPrefs] = React.useState({
+    desktopNavOpen: true,
+    mobileNavOpen: false,
+    messagePrefs: ["Urgent", "Important", "Information", "Read"],
+  });
+
+  useEffect(() => {
+    if (navPrefs === null) {
+      setNavPrefs({
+        desktopNavOpen: true,
+        mobileNavOpen: false,
+        messagePrefs: ["Urgent", "Important", "Information", "Read"],
+      });
+    }
+  }, [navPrefs]);
+
   return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+    <navPrefsContext.Provider value={{ navPrefs, setNavPrefs }}>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </ColorModeContext.Provider>
+    </navPrefsContext.Provider>
   );
 }
-
+export const navPrefsContext = React.createContext();
 export default MyApp;

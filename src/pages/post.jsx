@@ -11,7 +11,9 @@ import {
 
 import { getCookie, setCookie, deleteCookie } from "../lib/cookieMonster";
 
-import Navbar from "../components/Navbar";
+import Header from "../components/Header";
+import MobileNavbar from "../components/MobileNavbar";
+import DesktopNavbar from "../components/DesktopNavbar";
 import PostContent from "../components/PostContent";
 import PostInfo from "../components/PostInfo";
 import PostReply from "../components/PostReply";
@@ -181,39 +183,43 @@ const Post = () => {
         </Alert>
       </Snackbar>
 
-      <Navbar />
-      <Box
-        className="contentframe"
-        sx={{ backgroundColor: theme.palette.background.default }}
-      >
-        {postLoading ? (
-          <Box
-            sx={{
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <>
-            <PostInfo info={details} />
-            <PostContent
-              attachments={attachments}
-              setInfo={setInfo}
-              content={content}
-            />
-            <PostReply
-              info={replyInfo}
-              pid={pid}
-              boardID={boardID}
-              setInfo={setInfo}
-            />
-          </>
-        )}
-      </Box>
+      <Header />
+      <MobileNavbar />
+      <div style={{ display: "flex" }}>
+        <DesktopNavbar />
+        <Box
+          className="contentframe"
+          sx={{ backgroundColor: theme.palette.background.default }}
+        >
+          {postLoading ? (
+            <Box
+              sx={{
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            <>
+              <PostInfo info={details} />
+              <PostContent
+                attachments={attachments}
+                setInfo={setInfo}
+                content={content}
+              />
+              <PostReply
+                info={replyInfo}
+                pid={pid}
+                boardID={boardID}
+                setInfo={setInfo}
+              />
+            </>
+          )}
+        </Box>
+      </div>
     </>
   );
 };
