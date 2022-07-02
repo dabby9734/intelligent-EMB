@@ -90,9 +90,8 @@ const DesktopNavbar = () => {
       return;
     }
 
-    let width = open ? box.offsetWidth : 0;
     box.style.transition = "all 0.3s ease-in-out";
-    box.style.transform = open ? 0 : `translateX(-${width}px)`;
+    box.style.transform = open ? `translateX(0)` : `translateX(-250px)`;
     box.style.opacity = open ? 1 : 0;
     box.style.width = open ? "250px" : "0";
   }, [ctx.navPrefs]);
@@ -109,6 +108,7 @@ const DesktopNavbar = () => {
           <ListItemButton
             sx={{
               borderRadius: "2rem",
+              whiteSpace: "nowrap",
             }}
           >
             <ListItemIcon>
@@ -129,6 +129,7 @@ const DesktopNavbar = () => {
             <ListItemButton
               sx={{
                 borderRadius: "2rem",
+                whiteSpace: "nowrap",
               }}
               selected={
                 router.query.type !== undefined &&
@@ -193,7 +194,7 @@ const DesktopNavbar = () => {
         <Divider />
         <ListItem>
           <ListItemButton
-            sx={{ borderRadius: "2rem" }}
+            sx={{ borderRadius: "2rem", whiteSpace: "nowrap" }}
             onClick={() => {
               colorMode.toggleColorMode(
                 theme.palette.mode === "dark" ? "light" : "dark"
