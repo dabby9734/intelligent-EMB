@@ -1,3 +1,9 @@
+// required to allow page to be scrollable
+.md-scroll {
+  overflow-y: scroll;
+  height: 100vh;
+}
+
 @media (prefers-color-scheme: dark) {
   .markdown-body,
   .md-wrap {

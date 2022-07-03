@@ -36,7 +36,7 @@ export default function PostPage({ frontmatter, content }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="md-wrap">
+      <div className="md-wrap md-scroll">
         <div className="markdown-body md-box">
           <h1>{frontmatter.title}</h1>
           <div dangerouslySetInnerHTML={{ __html: md().render(content) }} />
