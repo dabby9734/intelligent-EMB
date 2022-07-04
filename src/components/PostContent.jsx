@@ -77,16 +77,8 @@ const PostContent = ({ attachments, setInfo, content }) => {
     return content;
   };
 
-  const limitImageMaxWidth = (content) => {
-    return content.replace(
-      /<img/gm,
-      "<img width='100%'"
-    )
-  }
-
   const processPostHTML = (content) => {
     content = clearWhiteBg(content);
-    content = limitImageMaxWidth(content);
     return content;
   }
 
