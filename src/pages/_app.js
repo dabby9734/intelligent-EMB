@@ -1,12 +1,9 @@
 import "../styles/main.scss";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { Alert, Snackbar } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 
 import React, { useEffect } from "react";
-
-export const ColorModeContext = React.createContext({
-  toggleColorMode: () => {},
-});
 
 function MyApp({ Component, pageProps }) {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -64,15 +61,48 @@ function MyApp({ Component, pageProps }) {
     }
   }, [navPrefs]);
 
+  const [notif, setNotif] = React.useState({
+    severity: "info",
+    message: "",
+    close: () =>
+      setNotif({
+        ...notif,
+        severity: "info",
+        message: "",
+      }),
+    open: (message, severity = "info") =>
+      setNotif({
+        ...notif,
+        severity,
+        message,
+      }),
+  });
+
   return (
-    <navPrefsContext.Provider value={{ navPrefs, setNavPrefs }}>
-      <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </ColorModeContext.Provider>
-    </navPrefsContext.Provider>
+    <notifContext.Provider value={notif}>
+      <navPrefsContext.Provider value={{ navPrefs, setNavPrefs }}>
+        <ColorModeContext.Provider value={colorMode}>
+          <ThemeProvider theme={theme}>
+            <Snackbar
+              open={!!notif.message}
+              autoHideDuration={1000}
+              onClose={notif.close}
+            >
+              <Alert severity={notif.severity} onClose={notif.close}>
+                {notif.message}
+              </Alert>
+            </Snackbar>
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </ColorModeContext.Provider>
+      </navPrefsContext.Provider>
+    </notifContext.Provider>
   );
 }
+
+export const ColorModeContext = React.createContext({
+  toggleColorMode: () => {},
+});
 export const navPrefsContext = React.createContext();
+export const notifContext = React.createContext();
 export default MyApp;

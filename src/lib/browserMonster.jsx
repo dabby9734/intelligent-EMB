@@ -1,6 +1,6 @@
 import { getCookie, setCookie, deleteCookie } from "./cookieMonster.jsx";
 
-export const refreshToken = async (onComplete, setInfo, router) => {
+export const refreshToken = async (onComplete, fireNotification, router) => {
   const response = await fetch(
     `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURI(
       getCookie("username")
@@ -11,7 +11,7 @@ export const refreshToken = async (onComplete, setInfo, router) => {
     case 200:
       break;
     default:
-      setInfo("Token refresh failed");
+      fireNotification("Token refresh failed");
       deleteCookie("username");
       deleteCookie("password");
       deleteCookie("auth_token");
@@ -28,7 +28,7 @@ export const refreshToken = async (onComplete, setInfo, router) => {
     setCookie("sess_id", data.SESSION_ID, 1800);
     setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
 
-    setInfo("Token refreshed");
+    fireNotification("Token refreshed");
     return await onComplete();
   }
 };

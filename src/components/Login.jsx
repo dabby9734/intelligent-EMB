@@ -1,8 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
-  Snackbar,
   TextField,
-  Alert,
   createTheme,
   ThemeProvider,
   Stack,
@@ -13,7 +11,7 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton";
 import LoginIcon from "@mui/icons-material/Login";
 import Link from "next/link";
-
+import { notifContext } from "../pages/_app";
 import { setCookie } from "../lib/cookieMonster";
 import { useRouter } from "next/router";
 
@@ -21,9 +19,9 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rem, setRem] = useState(false);
-  const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const notif = useContext(notifContext);
 
   const loginUser = async () => {
     setLoading(true);
@@ -38,7 +36,7 @@ const Login = () => {
         break;
       default:
         setLoading(false);
-        return setErr("Login Failed");
+        return notif.open("Login failed", "error");
     }
 
     const data = await response.json();
@@ -61,7 +59,7 @@ const Login = () => {
 
     } else {
       setLoading(false);
-      setErr(data.message);
+      notif.open(data.message, "error");
     }
   };
 
@@ -74,15 +72,6 @@ const Login = () => {
   return (
     <div className="login-bg">
       <div className="login">
-        <Snackbar
-          open={!!err}
-          autoHideDuration={3000}
-          onClose={() => setErr("")}
-        >
-          <Alert severity="error" onClose={() => setErr("")}>
-            {err}
-          </Alert>
-        </Snackbar>
         <div className="login__hero">
           <p className="login__hero__main-text">iEMB</p>
           <p className="login__hero__description">

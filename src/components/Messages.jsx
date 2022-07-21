@@ -1,22 +1,13 @@
 import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
-import {
-  Box,
-  Card,
-  Fab,
-  Zoom,
-  Pagination,
-  Snackbar,
-  Alert,
-  useTheme,
-} from "@mui/material";
+import { Box, Card, Fab, Zoom, Pagination, useTheme } from "@mui/material";
 import { getCookie, checkCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MessageSkeleton from "./MessageSkeleton";
-import { navPrefsContext } from "../pages/_app";
+import { navPrefsContext, notifContext } from "../pages/_app";
 
 const colors = {
   Information: "#4caf50",
@@ -66,7 +57,6 @@ const Messages = ({ boardID }) => {
 
   // Control message display
   const [messages, setMessages] = useState("");
-  const [info, setInfo] = useState("");
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -82,7 +72,7 @@ const Messages = ({ boardID }) => {
     ) {
       return await refreshToken(
         async () => fetchMessages(type),
-        setInfo,
+        notif.open,
         router
       );
     }
@@ -117,21 +107,21 @@ const Messages = ({ boardID }) => {
       getCookie("sess_id")
     )}&boardID=${boardID}${extraArgs}`;
     const response = await fetch(url).catch((err) => {
-      return setInfo("An error occured while fetching messages");
+      return notif.open("An error occured while fetching messages");
     });
 
     switch (response.status) {
       case 401:
         return await refreshToken(
           async () => fetchMessages(type),
-          setInfo,
+          notif.open,
           router
         );
       case 200:
         break;
       default:
         // also handles response code 500
-        return setInfo("An error occured while fetching messages");
+        return notif.open("An error occured while fetching messages");
     }
 
     const data = await response.json();
@@ -147,7 +137,7 @@ const Messages = ({ boardID }) => {
     }
 
     setMessages(data.messages);
-    setInfo("Messages fetched");
+    notif.open("Messages fetched");
     setLoading(false);
   };
 
@@ -181,6 +171,7 @@ const Messages = ({ boardID }) => {
 
   const theme = useTheme();
   const ctx = useContext(navPrefsContext);
+  const notif = useContext(notifContext);
 
   return (
     <Box
@@ -337,15 +328,6 @@ const Messages = ({ boardID }) => {
           </Zoom>
         </Box>
       )}
-      <Snackbar
-        open={!!info}
-        autoHideDuration={1000}
-        onClose={() => setInfo("")}
-      >
-        <Alert severity="info" onClose={() => setInfo("")}>
-          {info}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };

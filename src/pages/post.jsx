@@ -1,15 +1,10 @@
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
-import {
-  Box,
-  Snackbar,
-  Alert,
-  CircularProgress,
-  useTheme,
-} from "@mui/material";
+import { Box, CircularProgress, useTheme } from "@mui/material";
 
 import { getCookie, setCookie, deleteCookie } from "../lib/cookieMonster";
+import { notifContext } from "./_app";
 
 import Header from "../components/Header";
 import MobileNavbar from "../components/MobileNavbar";
@@ -25,6 +20,7 @@ const Post = () => {
   const [attachments, setAttachments] = useState([]);
   const [details, setDetails] = useState({});
   const [replyInfo, setReplyInfo] = useState({ canReply: false });
+  const notif = useContext(notifContext);
 
   const refreshToken = async () => {
     const response = await fetch(
@@ -37,7 +33,7 @@ const Post = () => {
       case 200:
         break;
       default:
-        setInfo("Token refresh failed");
+        notif.open("Token refresh failed");
         deleteCookie("username");
         deleteCookie("password");
         deleteCookie("auth_token");
@@ -70,7 +66,7 @@ const Post = () => {
         router.push("/" + "?next=" + encodeURIComponent(router.asPath));
       }
 
-      setInfo(data.message);
+      notif.open(data.message);
       setPostLoading(false);
       setContent(`<h2>${data.message}</h2>`);
     }
@@ -92,7 +88,7 @@ const Post = () => {
       getCookie("sess_id")
     )}&pid=${pid}&boardID=${boardID}`;
     const response = await fetch(url).catch((err) => {
-      return setInfo("An error occured while fetching messages");
+      return notif.open("An error occured while fetching messages");
     });
 
     switch (response.status) {
@@ -104,7 +100,7 @@ const Post = () => {
         // also handles response code 500
         setPostLoading(false);
         setContent(`<h2>An error occured while fetching messages</h2>`);
-        return setInfo("An error occured while fetching messages");
+        return notif.open("An error occured while fetching messages");
     }
 
     const data = await response.json();
@@ -112,7 +108,7 @@ const Post = () => {
     if (!data.success) {
       switch (data.message) {
         case "Need to refresh token":
-          setInfo(data.message);
+          notif.open(data.message);
           return await refreshToken();
         case "Invalid username or password":
           deleteCookie("username");
@@ -126,7 +122,7 @@ const Post = () => {
           );
         default:
           setPostLoading(false);
-          setInfo(data.message);
+          notif.open(data.message);
           setContent(`<h2>${data.message}</h2>`);
       }
     }
@@ -148,10 +144,8 @@ const Post = () => {
     setAttachments(data.attachments);
 
     setPostLoading(false);
-    setInfo(`Post ${pid} fetched`);
+    notif.open(`Post ${pid} fetched`);
   };
-
-  const [info, setInfo] = useState("");
   const [postLoading, setPostLoading] = useState(true);
 
   useEffect(() => {
@@ -172,17 +166,6 @@ const Post = () => {
         <meta name="description" content="i-EMB, reimagined." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Snackbar
-        open={!!info}
-        autoHideDuration={5000}
-        onClose={() => setInfo("")}
-      >
-        <Alert severity="info" onClose={() => setInfo("")}>
-          {info}
-        </Alert>
-      </Snackbar>
-
       <Header />
       <MobileNavbar />
       <div style={{ display: "flex" }}>
@@ -205,17 +188,8 @@ const Post = () => {
           ) : (
             <>
               <PostInfo info={details} />
-              <PostContent
-                attachments={attachments}
-                setInfo={setInfo}
-                content={content}
-              />
-              <PostReply
-                info={replyInfo}
-                pid={pid}
-                boardID={boardID}
-                setInfo={setInfo}
-              />
+              <PostContent attachments={attachments} content={content} />
+              <PostReply info={replyInfo} pid={pid} boardID={boardID} />
             </>
           )}
         </Box>
