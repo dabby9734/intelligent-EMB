@@ -12,6 +12,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { useState, useEffect, useContext } from "react";
 import { getCookie, deleteCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
+import { notifContext } from "../pages/_app";
 
 const PostReply = ({ info, boardID, pid }) => {
   const [selection, setSelect] = useState("");
