@@ -9,15 +9,17 @@ import {
 } from "@mui/material";
 import ReplyIcon from "@mui/icons-material/Reply";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getCookie, deleteCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
+import { notifContext } from "../pages/_app";
 
-const PostReply = ({ info, boardID, pid, setInfo }) => {
+const PostReply = ({ info, boardID, pid }) => {
   const [selection, setSelect] = useState("");
   const [val, setVal] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const notif = useContext(notifContext);
 
   useEffect(() => {
     if (info.text) setVal(info.text);
@@ -32,7 +34,7 @@ const PostReply = ({ info, boardID, pid, setInfo }) => {
       !getCookie("sess_id") ||
       !getCookie("veri_token")
     ) {
-      return await refreshToken(processReply, setInfo, router);
+      return await refreshToken(processReply, notif.open, router);
     }
 
     const url = `https://iemb-backend.azurewebsites.net/api/reply?authToken=${encodeURI(
@@ -44,20 +46,20 @@ const PostReply = ({ info, boardID, pid, setInfo }) => {
     )}&selection=${selection}`;
     const response = await fetch(url).catch((err) => {
       setLoading(false);
-      setInfo();
+      notif.open();
       return;
     });
 
     if (response.status != 200) {
-      setInfo("Failed to reply");
+      notif.open("Failed to reply");
     }
 
     const data = await response.json();
 
-    setInfo(data.message);
+    notif.open(data.message);
     if (!data.success) {
       if (data.message === "Needs to refresh token") {
-        return await refreshToken(processReply, setInfo, router);
+        return await refreshToken(processReply, notif.open, router);
       }
       if (data.message === "Invalid username or password") {
         deleteCookie("username");

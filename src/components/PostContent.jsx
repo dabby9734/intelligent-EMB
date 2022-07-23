@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { useRouter } from "next/router";
 import { getCookie } from "../lib/cookieMonster";
 import download from "downloadjs";
@@ -6,9 +7,12 @@ import Button from "@mui/material/Button";
 import DownloadIcon from "@mui/icons-material/Download";
 import { Grid, useTheme } from "@mui/material";
 import { refreshToken } from "../lib/browserMonster";
+import { notifContext } from "../pages/_app";
 
-const PostContent = ({ attachments, setInfo, content }) => {
+const PostContent = ({ attachments, content }) => {
   const router = useRouter();
+  const notif = useContext(notifContext);
+
   const downloadFile = async (attachment) => {
     if (
       !getCookie("auth_token") ||
@@ -19,7 +23,7 @@ const PostContent = ({ attachments, setInfo, content }) => {
         async () => {
           downloadFile(attachment);
         },
-        setInfo,
+        notif.open,
         router
       );
     }
@@ -40,22 +44,22 @@ const PostContent = ({ attachments, setInfo, content }) => {
       }
     ).catch((err) => {
       console.log(err);
-      setInfo("Error downloading file");
+      notif.open("Error downloading file");
     });
 
     if (response.status != 200) {
       const data = await response.json();
-      setInfo(data.message);
+      notif.open(data.message);
 
       if (data.message == "Needs to refresh token") {
         return await refreshToken(
           async () => {
             downloadFile(attachment);
           },
-          setInfo,
+          notif.open,
           router
         );
-      } else setInfo("Error downloading file");
+      } else notif.open("Error downloading file");
     }
 
     const blob = await response.blob();
@@ -80,7 +84,7 @@ const PostContent = ({ attachments, setInfo, content }) => {
   const processPostHTML = (content) => {
     content = clearWhiteBg(content);
     return content;
-  }
+  };
 
   return (
     <div className="post">
