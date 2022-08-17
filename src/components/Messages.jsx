@@ -1,10 +1,21 @@
 import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
-import { Box, Card, Fab, Zoom, Pagination, useTheme } from "@mui/material";
+import {
+  Box,
+  Card,
+  Fab,
+  Zoom,
+  IconButton,
+  Pagination,
+  useTheme,
+} from "@mui/material";
+import { yellow, amber } from "@mui/material/colors";
 import { getCookie, checkCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import MessageSkeleton from "./MessageSkeleton";
 import { navPrefsContext, notifContext } from "../pages/_app";
@@ -60,9 +71,10 @@ const Messages = ({ boardID }) => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [fav, setFav] = useState("");
   const { type } = router.query;
 
-  const fetchMessages = async (type) => {
+  const fetchMessages = async (type, setM = true) => {
     // immediately refresh token if it has expired already
     // saves ~2s because iemb is slow...
     if (
@@ -136,9 +148,93 @@ const Messages = ({ boardID }) => {
       setTotalPages(data.totalPages);
     }
 
-    setMessages(data.messages);
+    if (setM) {
+      setMessages(data.messages);
+    }
+    if (type === "starred") {
+      setFav(data.messages);
+    }
     notif.open("Messages fetched");
     setLoading(false);
+  };
+
+  const updateStarredStatus = async (pid, bid, status) => {
+    // immediately refresh token if it has expired already
+    // saves ~2s because iemb is slow...
+    if (
+      !checkCookie("auth_token") ||
+      !checkCookie("sess_id") ||
+      !checkCookie("veri_token")
+    ) {
+      return await refreshToken(
+        async () => fetchMessages(type),
+        notif.open,
+        router
+      );
+    }
+
+    const url = `https://iemb-backend.azurewebsites.net/api/star?authToken=${encodeURIComponent(
+      getCookie("auth_token")
+    )}&veriToken=${encodeURIComponent(
+      getCookie("veri_token")
+    )}&sessionID=${encodeURIComponent(
+      getCookie("sess_id")
+    )}&bid=${bid}&pid=${pid}&status=${status}`;
+    const response = await fetch(url).catch((err) => {
+      return notif.open(
+        "An error occured while updating starred status for post " + pid,
+        "error"
+      );
+    });
+
+    switch (response.status) {
+      case 401:
+        return await refreshToken(
+          async () => updateStarredStatus(pid, bid, status),
+          notif.open,
+          router
+        );
+      case 200:
+        if (status) {
+          // star smth previously unstarred
+          let newStarredMsg = messages.find((elem) => elem.pid === pid);
+          setFav([newStarredMsg, ...fav]);
+          localStorage.setItem(`${bid}+starred`, JSON.stringify(fav));
+        } else {
+          // unstar smth previously starred
+          let newStarredMsgs = fav.filter(
+            (elem) => elem.pid.toString() !== pid
+          );
+          setFav(newStarredMsgs);
+          localStorage.setItem(`${bid}+starred`, JSON.stringify(fav));
+        }
+        return notif.open(
+          `Successfully ${status ? "starred" : "unstarred"} post ${pid}`,
+          "success"
+        );
+      default:
+        // also handles response code 500
+        return notif.open(
+          "An error occured while updating starred status for post " + pid,
+          "error"
+        );
+    }
+  };
+
+  const updateFavStatus = async (pid) => {
+    try {
+      let curr = fav.find((elem) => elem.pid.toString() === pid);
+      if (curr) {
+        await updateStarredStatus(pid, boardID, false);
+      } else {
+        await updateStarredStatus(pid, boardID, true);
+      }
+    } catch (e) {
+      notif.open(
+        "An error occured while updating starred status for post " + pid,
+        "error"
+      );
+    }
   };
 
   // initiates fetching messages
@@ -146,11 +242,18 @@ const Messages = ({ boardID }) => {
     if (type) {
       try {
         setMessages(JSON.parse(localStorage.getItem(`${boardID}+${type}`)));
+        setFav(JSON.parse(localStorage.getItem(`${boardID}+starred`)));
       } catch (err) {
         console.log(err);
       }
 
-      fetchMessages(type);
+      if (fav === "") {
+        await Promise.all([
+          fetchMessages(type),
+          fetchMessages("starred", false),
+        ]);
+      }
+      await fetchMessages(type);
     }
   }, [type]);
 
@@ -158,16 +261,6 @@ const Messages = ({ boardID }) => {
   useEffect(() => {
     if (!!messages) setLoading(false);
   }, [messages]);
-
-  // fetches messages again if the user navigates to a different board
-  // for archived and starred board only
-  useEffect(() => {
-    if (router.query.type === "archived" || router.query.type === "starred") {
-      setMessages("");
-      setLoading(true);
-      fetchMessages(router.query.type, page);
-    }
-  }, [page]);
 
   const theme = useTheme();
   const ctx = useContext(navPrefsContext);
@@ -244,35 +337,47 @@ const Messages = ({ boardID }) => {
                       <h2 className="messages__item__content__subject">
                         {message.subject}
                       </h2>
-                      <div className="messages__item__content__info-wrapper">
-                        <div className="messages__item__content__info-item">
-                          <span className="messages__item__content__info-item-icon">
-                            <PersonIcon fontSize="small" />
-                          </span>
-                          <span className="messages__item__content__info-item-field">
-                            {message.username
-                              ? message.username
-                              : message.sender}
-                          </span>
-                        </div>
-                        {/* <div className="messages__item__content__info-item">
-                    <span className="messages__item__content__info-item-icon">
-                      <GroupIcon fontSize="small" />
-                    </span>
-                    <span className="messages__item__content__info-item-field">
-                      {message.recipient}
-                    </span>
-                  </div> */}
-                        <div className="messages__item__content__info-item">
-                          <span className="messages__item__content__info-item-icon">
-                            <EventIcon fontSize="small" />
-                          </span>
-                          <span className="messages__item__content__info-item-field">
-                            {getTimePassed(message.date)}
-                          </span>
-                        </div>
-                      </div>
                     </a>
+                    <div className="messages__item__content__info-wrapper">
+                      <div className="messages__item__content__info-item">
+                        <span className="messages__item__content__info-item-icon">
+                          <PersonIcon fontSize="small" />
+                        </span>
+                        <span className="messages__item__content__info-item-field">
+                          {message.username ? message.username : message.sender}
+                        </span>
+                      </div>
+                      <div className="messages__item__content__info-item">
+                        <span className="messages__item__content__info-item-icon">
+                          <EventIcon fontSize="small" />
+                        </span>
+                        <span className="messages__item__content__info-item-field">
+                          {getTimePassed(message.date)}
+                        </span>
+                      </div>
+                      <div className="messages__item__content__info-item">
+                        <span className="messages__item__content__info-item-field">
+                          <IconButton
+                            aria-label="star"
+                            size="small"
+                            onClick={() => {
+                              updateFavStatus(message.pid);
+                            }}
+                          >
+                            {fav?.find(
+                              (elem) => elem.pid.toString() === message.pid
+                            ) ? (
+                              <StarIcon
+                                fontSize="small"
+                                sx={{ color: amber[500] }}
+                              />
+                            ) : (
+                              <StarBorderIcon fontSize="small" />
+                            )}
+                          </IconButton>
+                        </span>
+                      </div>
+                    </div>
                   </Card>
                 </div>
               ))}
