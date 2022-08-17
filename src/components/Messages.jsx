@@ -9,7 +9,7 @@ import {
   Pagination,
   useTheme,
 } from "@mui/material";
-import { yellow, amber } from "@mui/material/colors";
+import { amber } from "@mui/material/colors";
 import { getCookie, checkCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
 import PersonIcon from "@mui/icons-material/Person";
@@ -197,14 +197,17 @@ const Messages = ({ boardID }) => {
       case 200:
         if (status) {
           // star smth previously unstarred
-          let newStarredMsg = messages.find((elem) => elem.pid === pid);
+          let newStarredMsg = messages.find(
+            (elem) => elem.pid.toString() === pid.toString()
+          );
           setFav([newStarredMsg, ...fav]);
           localStorage.setItem(`${bid}+starred`, JSON.stringify(fav));
         } else {
           // unstar smth previously starred
           let newStarredMsgs = fav.filter(
-            (elem) => elem.pid.toString() !== pid
+            (elem) => elem.pid.toString() !== pid.toString()
           );
+
           setFav(newStarredMsgs);
           localStorage.setItem(`${bid}+starred`, JSON.stringify(fav));
         }
@@ -223,7 +226,7 @@ const Messages = ({ boardID }) => {
 
   const updateFavStatus = async (pid) => {
     try {
-      let curr = fav.find((elem) => elem.pid.toString() === pid);
+      let curr = fav.find((elem) => elem.pid.toString() === pid.toString());
       if (curr) {
         await updateStarredStatus(pid, boardID, false);
       } else {
@@ -247,7 +250,7 @@ const Messages = ({ boardID }) => {
         console.log(err);
       }
 
-      if (fav === "") {
+      if (fav === "" && type !== "starred") {
         await Promise.all([
           fetchMessages(type),
           fetchMessages("starred", false),
@@ -365,7 +368,8 @@ const Messages = ({ boardID }) => {
                             }}
                           >
                             {fav?.find(
-                              (elem) => elem.pid.toString() === message.pid
+                              (elem) =>
+                                elem.pid.toString() === message.pid.toString()
                             ) ? (
                               <StarIcon
                                 fontSize="small"
