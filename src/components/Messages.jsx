@@ -250,13 +250,15 @@ const Messages = ({ boardID }) => {
         console.log(err);
       }
 
-      if (fav === "" && type !== "starred") {
+      if (type !== "starred") {
         await Promise.all([
           fetchMessages(type),
           fetchMessages("starred", false),
         ]);
+      } else {
+        // for starred board
+        await fetchMessages(type);
       }
-      await fetchMessages(type);
     }
   }, [type]);
 
