@@ -262,6 +262,16 @@ const Messages = ({ boardID }) => {
     }
   }, [type]);
 
+  // fetches messages again if the user navigates to a different board
+  // for archived and starred board only
+  useEffect(() => {
+    if (router.query.type === "archived" || router.query.type === "starred") {
+      setMessages("");
+      setLoading(true);
+      fetchMessages(router.query.type, page);
+    }
+  }, [page]);
+
   // toggles the loading spinner
   useEffect(() => {
     if (!!messages) setLoading(false);
