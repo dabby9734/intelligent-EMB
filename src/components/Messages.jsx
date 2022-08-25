@@ -83,7 +83,7 @@ const Messages = ({ boardID }) => {
       !checkCookie("veri_token")
     ) {
       return await refreshToken(
-        async () => fetchMessages(type),
+        async () => fetchMessages(type, setM),
         notif.open,
         router
       );
@@ -125,7 +125,7 @@ const Messages = ({ boardID }) => {
     switch (response.status) {
       case 401:
         return await refreshToken(
-          async () => fetchMessages(type),
+          async () => fetchMessages(type, setM),
           notif.open,
           router
         );
@@ -167,7 +167,7 @@ const Messages = ({ boardID }) => {
       !checkCookie("veri_token")
     ) {
       return await refreshToken(
-        async () => fetchMessages(type),
+        async () => updateStarredStatus(pid, bid, status),
         notif.open,
         router
       );
