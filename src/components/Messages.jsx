@@ -75,6 +75,7 @@ const Messages = ({ boardID }) => {
   const { type } = router.query;
 
   const fetchMessages = async (type, setM = true) => {
+    setLoading(true);
     // immediately refresh token if it has expired already
     // saves ~2s because iemb is slow...
     if (
@@ -150,11 +151,11 @@ const Messages = ({ boardID }) => {
 
     if (setM) {
       setMessages(data.messages);
+      notif.open("Messages fetched");
     }
     if (type === "starred") {
       setFav(data.messages);
     }
-    notif.open("Messages fetched");
     setLoading(false);
   };
 
@@ -245,6 +246,10 @@ const Messages = ({ boardID }) => {
     if (type) {
       try {
         setMessages(JSON.parse(localStorage.getItem(`${boardID}+${type}`)));
+      } catch (err) {
+        console.log(err);
+      }
+      try {
         setFav(JSON.parse(localStorage.getItem(`${boardID}+starred`)));
       } catch (err) {
         console.log(err);
