@@ -14,6 +14,7 @@ import Link from "next/link";
 import { notifContext } from "../pages/_app";
 import { setCookie } from "../lib/cookieMonster";
 import { useRouter } from "next/router";
+import { getApiURL } from "../lib/util";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -25,10 +26,10 @@ const Login = () => {
 
   const loginUser = async () => {
     setLoading(true);
+    let un = encodeURIComponent(username);
+    let pw = encodeURIComponent(password);
     const response = await fetch(
-      `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURI(
-        username
-      )}&password=${encodeURI(password)}`
+      `${getApiURL("login")}&username=${un}&password=${pw}`
     );
 
     switch (response.status) {
@@ -50,13 +51,12 @@ const Login = () => {
         setCookie("username", username, 2592000);
         setCookie("password", password, 2592000);
       }
-      
+
       if (router.query.next) {
         router.push(router.query.next);
       } else {
         router.push("/student?type=inbox");
       }
-
     } else {
       setLoading(false);
       notif.open(data.message, "error");

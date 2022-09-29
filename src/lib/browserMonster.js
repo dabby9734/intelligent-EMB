@@ -1,11 +1,11 @@
-import { getCookie, setCookie, deleteCookie } from "./cookieMonster.jsx";
+import { getCookie, setCookie, deleteCookie } from "./cookieMonster";
+import { getApiURL } from "./util";
 
 export const refreshToken = async (onComplete, fireNotification, router) => {
-  const response = await fetch(
-    `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURI(
-      getCookie("username")
-    )}&password=${encodeURI(getCookie("password"))}`
-  );
+  let un = encodeURIComponent(getCookie("username"));
+  let pw = encodeURIComponent(getCookie("password"));
+  let url = `${getApiURL("login")}&username=${un}&password=${pw}`;
+  const response = await fetch(url);
 
   switch (response.status) {
     case 200:
