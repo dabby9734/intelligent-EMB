@@ -8,6 +8,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { Grid, useTheme } from "@mui/material";
 import { refreshToken } from "../lib/browserMonster";
 import { notifContext } from "../pages/_app";
+import { getApiURL } from "../lib/util";
 
 const PostContent = ({ attachments, content }) => {
   const router = useRouter();
@@ -28,21 +29,18 @@ const PostContent = ({ attachments, content }) => {
       );
     }
 
-    const response = await fetch(
-      "https://iemb-backend.azurewebsites.net/api/download",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          veriTokenCookie: getCookie("veri_token"),
-          authToken: getCookie("auth_token"),
-          sessionID: getCookie("sess_id"),
-          attachment,
-        }),
-      }
-    ).catch((err) => {
+    const response = await fetch(getApiURL("download"), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        veriTokenCookie: getCookie("veri_token"),
+        authToken: getCookie("auth_token"),
+        sessionID: getCookie("sess_id"),
+        attachment,
+      }),
+    }).catch((err) => {
       console.log(err);
       notif.open("Error downloading file");
     });

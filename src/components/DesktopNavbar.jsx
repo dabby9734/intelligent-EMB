@@ -22,6 +22,7 @@ import LabelImportantIcon from "@mui/icons-material/LabelImportant";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import ChatIcon from "@mui/icons-material/Chat";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+import SchoolIcon from "@mui/icons-material/School";
 
 import { getCookie } from "../lib/cookieMonster";
 import { useRouter } from "next/router";
@@ -150,6 +151,7 @@ const DesktopNavbar = () => {
           { icon: <LabelImportantIcon />, text: "Important" },
           { icon: <ChatIcon />, text: "Information" },
           { icon: <MarkEmailReadIcon />, text: "Read" },
+          { icon: <SchoolIcon />, text: "ECG" },
         ].map((item) => (
           <ListItem
             key={item.text}

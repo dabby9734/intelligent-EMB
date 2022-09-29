@@ -13,6 +13,7 @@ import { useState, useEffect, useContext } from "react";
 import { getCookie, deleteCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
 import { notifContext } from "../pages/_app";
+import { getApiURL } from "../lib/util";
 
 const PostReply = ({ info, boardID, pid }) => {
   const [selection, setSelect] = useState("");
@@ -37,10 +38,8 @@ const PostReply = ({ info, boardID, pid }) => {
       return await refreshToken(processReply, notif.open, router);
     }
 
-    const url = `https://iemb-backend.azurewebsites.net/api/reply?authToken=${encodeURI(
-      getCookie("auth_token")
-    )}&veriToken=${encodeURI(getCookie("veri_token"))}&sessionID=${encodeURI(
-      getCookie("sess_id")
+    const url = `${getApiURL(
+      "reply"
     )}&pid=${pid}&boardID=${boardID}&replyContent=${encodeURIComponent(
       val
     )}&selection=${selection}`;

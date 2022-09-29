@@ -1,4 +1,4 @@
-import { getCookie, setCookie, deleteCookie } from "./cookieMonster.jsx";
+import { getCookie, setCookie, deleteCookie } from "./cookieMonster";
 
 export const refreshToken = async (onComplete, fireNotification, router) => {
   const response = await fetch(
