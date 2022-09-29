@@ -12,6 +12,7 @@ import DesktopNavbar from "../components/DesktopNavbar";
 import PostContent from "../components/PostContent";
 import PostInfo from "../components/PostInfo";
 import PostReply from "../components/PostReply";
+import { getApiURL } from "../lib/util";
 
 const Post = () => {
   const router = useRouter();
@@ -24,7 +25,7 @@ const Post = () => {
 
   const refreshToken = async () => {
     const response = await fetch(
-      `https://iemb-backend.azurewebsites.net/api/login?username=${encodeURIComponent(
+      `${getApiURL("login")}&username=${encodeURIComponent(
         getCookie("username")
       )}&password=${encodeURIComponent(getCookie("password"))}`
     );
@@ -80,13 +81,7 @@ const Post = () => {
     ) {
       return await refreshToken();
     }
-    const url = `https://iemb-backend.azurewebsites.net/api/getPost?authToken=${encodeURIComponent(
-      getCookie("auth_token")
-    )}&veriToken=${encodeURI(
-      getCookie("veri_token")
-    )}&sessionID=${encodeURIComponent(
-      getCookie("sess_id")
-    )}&pid=${pid}&boardID=${boardID}`;
+    const url = `${getApiURL("getPost")}&pid=${pid}&boardID=${boardID}`;
     const response = await fetch(url).catch((err) => {
       return notif.open("An error occured while fetching messages");
     });
