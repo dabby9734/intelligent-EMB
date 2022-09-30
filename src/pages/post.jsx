@@ -23,12 +23,7 @@ const Post = () => {
       <MobileNavbar />
       <div style={{ display: "flex" }}>
         <DesktopNavbar />
-        <Box
-          className="contentframe"
-          sx={{ backgroundColor: theme.palette.background.default }}
-        >
-          <PostFrame pid={pid} boardID={boardID} type={type} />
-        </Box>
+        <PostFrame pid={pid} boardID={boardID} type={type} />
       </div>
     </>
   );

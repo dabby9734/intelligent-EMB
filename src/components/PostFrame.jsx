@@ -7,7 +7,7 @@ import { notifContext } from "../pages/_app";
 import PostContent from "./PostContent";
 import PostInfo from "./PostInfo";
 import PostReply from "./PostReply";
-import { Box, CircularProgress, useTheme } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 
 const PostFrame = ({ boardID, pid, type }) => {
   const router = useRouter();
@@ -146,7 +146,7 @@ const PostFrame = ({ boardID, pid, type }) => {
     if (pid && boardID) {
       fetchPost(pid, boardID);
     }
-  }, [router.query]);
+  }, [pid, boardID]);
 
   return (
     <div className="contentframe">
