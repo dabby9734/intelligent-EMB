@@ -159,27 +159,26 @@ const DesktopNavbar = () => {
               <Checkbox
                 edge="end"
                 onChange={() => {
-                  let vals = ctx.navPrefs.messagePrefs;
-                  let setvals = ctx.setNavPrefs;
-
-                  if (vals === null) {
+                  let messagePreferences = ctx.navPrefs.messagePrefs;
+                  let setMessagePreferences = ctx.setNavPrefs;
+                  if (messagePreferences === null) {
                     return;
                   }
-                  if (vals.indexOf(item.text) !== -1) {
-                    setvals({
+                  if (messagePreferences.indexOf(item.text) !== -1) {
+                    setMessagePreferences({
                       ...ctx.navPrefs,
-                      messagePrefs: vals.filter(
-                        (urgency) => urgency !== item.text
+                      messagePrefs: messagePreferences.filter(
+                        (tag) => tag !== item.text
                       ),
                     });
                   } else {
-                    setvals({
+                    setMessagePreferences({
                       ...ctx.navPrefs,
-                      messagePrefs: [...vals, item.text],
+                      messagePrefs: [...messagePreferences, item.text],
                     });
                   }
                 }}
-                checked={ctx.navPrefs?.messagePrefs.indexOf(item.text) !== -1}
+                checked={ctx.navPrefs.messagePrefs.indexOf(item.text) !== -1}
                 inputProps={{ "aria-labelledby": item.text }}
               />
             }

@@ -19,10 +19,7 @@
 
   &__field-wrapper {
     padding-right: 0.5rem;
-
-    @include respond(tab-port) {
-      padding-bottom: 0.5rem;
-    }
+    padding-bottom: 0.5rem;
 
     &:last-child {
       padding-right: 0;

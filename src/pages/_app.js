@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }) {
   const [navPrefs, setNavPrefs] = React.useState({
     desktopNavOpen: true,
     mobileNavOpen: false,
-    messagePrefs: ["Urgent", "Important", "Information", "Read"],
+    messagePrefs: ["Urgent", "Important", "Information", "Read", "ECG"],
   });
 
   useEffect(() => {
@@ -56,7 +56,7 @@ function MyApp({ Component, pageProps }) {
       setNavPrefs({
         desktopNavOpen: true,
         mobileNavOpen: false,
-        messagePrefs: ["Urgent", "Important", "Information", "Read"],
+        messagePrefs: ["Urgent", "Important", "Information", "Read", "ECG"],
       });
     }
   }, [navPrefs]);
