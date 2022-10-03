@@ -1,16 +1,16 @@
-import { useTheme, Card, IconButton } from "@mui/material";
+import { useTheme, Card, Checkbox } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import { urgencyToColor, getTimePassed, getApiURL } from "../lib/util";
 import { amber } from "@mui/material/colors";
-import { useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { notifContext } from "../pages/_app";
 import { checkCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
 import { useRouter } from "next/router";
-import { truncate, removeTags } from "../lib/util";
+import AutorenewIcon from "@mui/icons-material/Autorenew";
 
 const MessageCard = ({ message, fav, setFav, messages, boardtype }) => {
   const theme = useTheme();
@@ -54,16 +54,14 @@ const MessageCard = ({ message, fav, setFav, messages, boardtype }) => {
             (elem) => elem.pid.toString() === pid.toString()
           );
           setFav([newStarredMsg, ...fav]);
-          localStorage.setItem(`${bid}+starred`, JSON.stringify(fav));
         } else {
           // unstar smth previously starred
           let newStarredMsgs = fav.filter(
             (elem) => elem.pid.toString() !== pid.toString()
           );
-
           setFav(newStarredMsgs);
-          localStorage.setItem(`${bid}+starred`, JSON.stringify(fav));
         }
+        localStorage.setItem(`${bid}+starred`, JSON.stringify(fav));
         return notif.open(
           `Successfully ${status ? "starred" : "unstarred"} post ${pid}`,
           "success"
@@ -77,14 +75,10 @@ const MessageCard = ({ message, fav, setFav, messages, boardtype }) => {
     }
   };
 
-  const updateFavStatus = async (pid, bid) => {
+  const handleStarredStatusChange = async (e) => {
+    setLoading(true);
     try {
-      let curr = fav.find((elem) => elem.pid.toString() === pid.toString());
-      if (curr) {
-        await updateStarredStatus(pid, bid, false);
-      } else {
-        await updateStarredStatus(pid, bid, true);
-      }
+      await updateStarredStatus(message.pid, message.boardID, e.target.checked);
     } catch (e) {
       console.log(e);
       notif.open(
@@ -92,7 +86,23 @@ const MessageCard = ({ message, fav, setFav, messages, boardtype }) => {
         "error"
       );
     }
+    setLoading(false);
   };
+
+  const [loading, setLoading] = useState(false);
+  const [isMessageStarred, setIsMessageStarred] = useState(false);
+
+  useEffect(() => {
+    if (fav == null) {
+      setLoading(true);
+      setIsMessageStarred(false);
+    } else {
+      setIsMessageStarred(
+        !!fav.find((elem) => elem.pid.toString() === message.pid.toString())
+      );
+      setLoading(false);
+    }
+  }, [fav]);
 
   return (
     <div className="messages__item">
@@ -137,21 +147,22 @@ const MessageCard = ({ message, fav, setFav, messages, boardtype }) => {
           </div>
           <div className="messages__item__content__info-item">
             <span className="messages__item__content__info-item-field">
-              <IconButton
-                aria-label="star"
-                size="small"
-                onClick={() => {
-                  updateFavStatus(message.pid, message.boardID);
-                }}
-              >
-                {fav?.find(
-                  (elem) => elem.pid.toString() === message.pid.toString()
-                ) ? (
-                  <StarIcon fontSize="small" sx={{ color: amber[500] }} />
-                ) : (
-                  <StarBorderIcon fontSize="small" />
-                )}
-              </IconButton>
+              {loading ? (
+                <Checkbox
+                  checked={false}
+                  icon={<AutorenewIcon className="rotate" fontSize="small" />}
+                />
+              ) : (
+                <Checkbox
+                  aria-label="star"
+                  checked={isMessageStarred}
+                  onChange={handleStarredStatusChange}
+                  icon={<StarBorderIcon fontSize="small" />}
+                  checkedIcon={
+                    <StarIcon fontSize="small" sx={{ color: amber[500] }} />
+                  }
+                />
+              )}
             </span>
           </div>
         </div>

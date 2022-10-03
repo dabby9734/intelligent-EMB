@@ -64,6 +64,20 @@ a {
   padding: 1rem;
   @include respond(tab-port) {
     padding: 0.5rem;
-    height: calc(100vh - 140px) // some mobile browsers (e.g. safari) have a bottom navigation bar and top search bar thus we need to subtract the height of both the bottom navigation bar and top search bar
+    height: calc(
+      100vh - 140px
+    ); // some mobile browsers (e.g. safari) have a bottom navigation bar and top search bar thus we need to subtract the height of both the bottom navigation bar and top search bar
+  }
+}
+
+.rotate {
+  animation: loading 1.5s linear infinite;
+  @keyframes loading {
+    0% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 }
