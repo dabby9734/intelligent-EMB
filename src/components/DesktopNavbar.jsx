@@ -178,7 +178,7 @@ const DesktopNavbar = () => {
                     });
                   }
                 }}
-                checked={ctx.navPrefs.messagePrefs.indexOf(item.text) !== -1}
+                checked={ctx.navPrefs?.messagePrefs.indexOf(item.text) !== -1}
                 inputProps={{ "aria-labelledby": item.text }}
               />
             }
