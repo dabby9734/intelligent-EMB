@@ -93,7 +93,11 @@ function MyApp({ Component, pageProps }) {
               <AlertTitle>We are moving!</AlertTitle>
               From 12 October 2022, intelligent-EMB will only be available at{" "}
               <strong>
-                <a href="https://iemb.flappy.me" target="_blank">
+                <a
+                  href="https://iemb.flappy.me"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   iemb.flappy.me
                 </a>
               </strong>
