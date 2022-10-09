@@ -78,18 +78,22 @@ function MyApp({ Component, pageProps }) {
       }),
   });
 
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      window.location.hostname !== "iemb.flappy.me"
+    ) {
+      setAlertOpen(true);
+    }
+  }, []);
+
   return (
     <notifContext.Provider value={notif}>
       <navPrefsContext.Provider value={{ navPrefs, setNavPrefs }}>
         <ColorModeContext.Provider value={colorMode}>
           <ThemeProvider theme={theme}>
-            <Alert
-              severity="warning"
-              open={
-                typeof window !== "undefined" &&
-                window.location.hostname !== "iemb.flappy.me"
-              }
-            >
+            <Alert severity="warning" open={alertOpen}>
               <AlertTitle>We are moving!</AlertTitle>
               From 12 October 2022, intelligent-EMB will only be available at{" "}
               <strong>
