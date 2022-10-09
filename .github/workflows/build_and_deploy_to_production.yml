@@ -16,7 +16,7 @@ jobs:
     name: Build and Deploy
     environment:
       name: Production
-      url: "https://iemb.dabby.studio"
+      url: "https://iemb.flappy.me"
       
     steps:
       - uses: actions/checkout@v2
