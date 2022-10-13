@@ -1,6 +1,6 @@
 import "../styles/main.scss";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { Alert, AlertTitle, Snackbar } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 
 import React, { useEffect } from "react";
@@ -77,37 +77,11 @@ function MyApp({ Component, pageProps }) {
         message,
       }),
   });
-
-  const [alertOpen, setAlertOpen] = React.useState(false);
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      window.location.hostname !== "iemb.flappy.me"
-    ) {
-      setAlertOpen(true);
-    }
-  }, []);
-
   return (
     <notifContext.Provider value={notif}>
       <navPrefsContext.Provider value={{ navPrefs, setNavPrefs }}>
         <ColorModeContext.Provider value={colorMode}>
           <ThemeProvider theme={theme}>
-            <Alert severity="warning" open={alertOpen}>
-              <AlertTitle>We are moving!</AlertTitle>
-              From 12 October 2022, intelligent-EMB will only be available at{" "}
-              <strong>
-                <a
-                  href="https://iemb.flappy.me"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  iemb.flappy.me
-                </a>
-              </strong>
-              , please update your bookmarks with the new link to continue using
-              our website!
-            </Alert>
             <Snackbar
               open={!!notif.message}
               autoHideDuration={1000}
