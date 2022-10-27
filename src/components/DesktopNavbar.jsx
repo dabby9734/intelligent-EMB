@@ -211,7 +211,7 @@ const DesktopNavbar = () => {
             </ListItemIcon>
             <ListItemText
               primary={
-                theme.palette.mode === "dark" ? "Dark Mode 🌌" : "Light Mode 🌈"
+                theme.palette.mode === "dark" ? "Light Mode 🌈" : "Dark Mode 🌌"
               }
               sx={{ color: theme.palette.text.primary }}
             />

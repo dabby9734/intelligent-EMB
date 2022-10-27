@@ -148,8 +148,8 @@ const MobileNavbar = () => {
               <ListItemText
                 primary={
                   theme.palette.mode === "dark"
-                    ? "Dark Mode 🌌"
-                    : "Light Mode 🌈"
+                    ? "Light Mode 🌈"
+                    : "Dark Mode 🌌"
                 }
               />
             </ListItemButton>
