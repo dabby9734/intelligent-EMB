@@ -87,9 +87,7 @@ const DesktopNavbar = () => {
     let box = document.querySelector(".desktop-nav");
 
     let open = ctx.navPrefs?.desktopNavOpen ?? null;
-    if (open === null) {
-      return;
-    }
+    if (open === null) return;
 
     box.style.transition = "all 0.3s ease-in-out";
     box.style.transform = open ? `translateX(0)` : `translateX(-250px)`;

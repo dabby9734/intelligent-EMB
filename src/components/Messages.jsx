@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
-import { Box, Pagination, useTheme } from "@mui/material";
+import { Box, Pagination, useTheme, IconButton } from "@mui/material";
 import { checkCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
 import MessageSkeleton from "./MessageSkeleton";
@@ -8,6 +8,8 @@ import { navPrefsContext, notifContext } from "../pages/_app";
 import ScrollToTopFab from "./ScrollToTopFab";
 import MessageCard from "./MessageCard";
 import { getApiURL } from "../lib/util";
+import PostFrame from "./PostFrame";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Messages = ({ boardID }) => {
   // essentials
@@ -174,62 +176,98 @@ const Messages = ({ boardID }) => {
     setLoading(!messages);
   }, [messages]);
 
+  const [previewPid, setPreviewPid] = useState("");
+  useEffect(() => {
+    let box = document.querySelector(".preview-frame");
+    if (box === null) return;
+
+    box.style.transition = "all 0.3s ease-in-out";
+    box.style.transform = previewPid ? `translateX(0)` : `translateX(100%)`;
+    box.style.opacity = previewPid ? 1 : 0;
+    box.style.flex = previewPid ? 1.5 : 0;
+  }, [previewPid]);
+
   return (
-    <Box
-      className="contentframe"
-      sx={{
-        backgroundColor: theme.palette.background.default,
-      }}
-    >
-      {loading ? (
-        new Array(20).fill(0).map((_, i) => <MessageSkeleton key={i} />)
-      ) : (
-        <Box className="messages" id="messages">
-          {(!messages || messages.length === 0) && (
-            <h2
-              style={{
-                color: theme.palette.text.primary,
-              }}
-            >
-              No messages
-            </h2>
-          )}
-          {!!messages &&
-            getSortedMessages(messages)?.map((message) => (
-              <MessageCard
-                key={message.pid}
-                message={message}
-                fav={fav}
-                setFav={setFav}
-                messages={messages}
-                boardtype={type}
-              />
-            ))}
-          {!!messages &&
-            (router.query.type === "archived" ||
-              router.query.type === "starred") && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  paddingTop: "1rem",
-                }}
-              >
-                <Pagination
-                  color="primary"
-                  count={totalPages}
-                  page={page}
-                  onChange={(e, page) => {
-                    setPage(page);
+    <>
+      <Box
+        className="contentframe"
+        sx={{
+          backgroundColor: theme.palette.background.default,
+          flex: "1",
+        }}
+      >
+        {loading ? (
+          new Array(20).fill(0).map((_, i) => <MessageSkeleton key={i} />)
+        ) : (
+          <>
+            <Box className="messages" id="messages">
+              {(!messages || messages.length === 0) && (
+                <h2
+                  style={{
+                    color: theme.palette.text.primary,
                   }}
-                />
-              </div>
-            )}
-          <ScrollToTopFab />
-        </Box>
-      )}
-    </Box>
+                >
+                  No messages
+                </h2>
+              )}
+              {!!messages &&
+                getSortedMessages(messages)?.map((message) => (
+                  <MessageCard
+                    key={message.pid}
+                    message={message}
+                    fav={fav}
+                    setFav={setFav}
+                    messages={messages}
+                    boardtype={type}
+                    setPreviewPid={setPreviewPid}
+                  />
+                ))}
+              {!!messages &&
+                (router.query.type === "archived" ||
+                  router.query.type === "starred") && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      paddingTop: "1rem",
+                    }}
+                  >
+                    <Pagination
+                      color="primary"
+                      count={totalPages}
+                      page={page}
+                      onChange={(e, page) => {
+                        setPage(page);
+                      }}
+                    />
+                  </div>
+                )}
+              {previewPid || <ScrollToTopFab />}
+            </Box>
+          </>
+        )}
+      </Box>
+      <div
+        className="preview-frame desktop-only"
+        style={{
+          borderLeft: `1px solid ${theme.palette.divider}`,
+          overflowY: "auto",
+        }}
+      >
+        <IconButton
+          sx={{
+            position: "absolute",
+            top: 10,
+            right: 20,
+          }}
+          onClick={() => setPreviewPid("")}
+        >
+          <CloseIcon />
+        </IconButton>
+        <PostFrame boardID={boardID} pid={previewPid} type={type} />
+      </div>
+    </>
   );
 };
 
