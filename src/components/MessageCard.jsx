@@ -1,4 +1,4 @@
-import { useTheme, Card, Checkbox } from "@mui/material";
+import { useTheme, Card, Checkbox, IconButton } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -11,8 +11,16 @@ import { checkCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
 import { useRouter } from "next/router";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-const MessageCard = ({ message, fav, setFav, messages, boardtype }) => {
+const MessageCard = ({
+  message,
+  fav,
+  setFav,
+  messages,
+  boardtype,
+  setPreviewPid,
+}) => {
   const theme = useTheme();
   const notif = useContext(notifContext);
   const router = useRouter();
@@ -163,6 +171,17 @@ const MessageCard = ({ message, fav, setFav, messages, boardtype }) => {
                   }
                 />
               )}
+            </span>
+          </div>
+          <div className="messages__item__content__info-item desktop-only">
+            <span className="messages__item__content__info-item-icon">
+              <IconButton
+                onClick={() => {
+                  setPreviewPid(message.pid);
+                }}
+              >
+                <ChevronRightIcon fontSize="small" />
+              </IconButton>
             </span>
           </div>
         </div>

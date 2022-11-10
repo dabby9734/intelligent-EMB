@@ -144,6 +144,7 @@ const PostFrame = ({ boardID, pid, type }) => {
     // Pages that are statically optimized by Automatic Static Optimization will be hydrated without their route parameters provided, i.e query will be an empty object ({}).
     // After hydration, Next.js will trigger an update to your application to provide the route parameters in the query object.
     if (pid && boardID) {
+      setPostLoading(true);
       fetchPost(pid, boardID);
     }
   }, [pid, boardID]);
