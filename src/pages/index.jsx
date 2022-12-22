@@ -22,16 +22,10 @@ export default function LoginPage() {
         !getCookie("veri_token") ||
         !getCookie("auth_token")
       ) {
+        setInfo("Refreshing token...");
         refreshToken(
           // redirect to student board if token refresh successful
-          async () => {
-            setTimeout(() => {
-              setInfo("Redirecting...");
-            }, 500);
-            setTimeout(() => {
-              router.push("/student?type=inbox");
-            }, 1000);
-          },
+          async () => router.push("/student?type=inbox"),
           setInfo,
           router
         );
