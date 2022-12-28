@@ -53,3 +53,14 @@ export const removeTags = (str) => {
   // unfortunately I don't like the result I get so I'm not implementing it into the app yet
   return str.replace(/\[[^\]]*\]?/, "");
 };
+
+export const validateRedirect = (path) => {
+  // util function to validate redirect url
+  // action, pid, boardID
+  const re = new RegExp(
+    "^s/(student|service|lost-and-found)?type=(inbox|updated-messages|my-messages|my-drafts|starred|archived)",
+    "gm"
+  );
+
+  return re.test(path) || path.startsWith("/post");
+};
