@@ -14,7 +14,7 @@ import Link from "next/link";
 import { notifContext } from "../pages/_app";
 import { setCookie } from "../lib/cookieMonster";
 import { useRouter } from "next/router";
-import { getApiURL } from "../lib/util";
+import { getApiURL, validateRedirect } from "../lib/util";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -52,7 +52,7 @@ const Login = () => {
         setCookie("password", password, 2592000);
       }
 
-      if (router.query.next) {
+      if (router.query.next && validateRedirect(router.query.next)) {
         router.push(router.query.next);
       } else {
         router.push("/student?type=inbox");
