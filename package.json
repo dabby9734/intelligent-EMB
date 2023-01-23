@@ -13,7 +13,7 @@
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.68",
-    "@mui/material": "^5.4.1",
+    "@mui/material": "^5.11.5",
     "downloadjs": "^1.4.7",
     "gray-matter": "^4.0.3",
     "markdown-it": "^12.3.2",
