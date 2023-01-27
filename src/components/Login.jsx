@@ -134,16 +134,24 @@ const Login = () => {
 
               <div className="login__content-links">
                 <p>
-                  <Link href="/articles/faq" passHref>
-                    <a className="underline">FAQ</a>
+                  <Link href="/articles/faq" passHref className="underline">
+                    FAQ
                   </Link>
                   &nbsp;⋅&nbsp;
-                  <Link href="/articles/privacy-policy" passHref>
-                    <a className="underline">Privacy Policy</a>
+                  <Link
+                    href="/articles/privacy-policy"
+                    passHref
+                    className="underline"
+                  >
+                    Privacy Policy
                   </Link>
                   &nbsp;⋅&nbsp;
-                  <Link href="/articles/terms-and-conditions" passHref>
-                    <a className="underline">{"Terms & Conditions"}</a>
+                  <Link
+                    href="/articles/terms-and-conditions"
+                    passHref
+                    className="underline"
+                  >
+                    {"Terms & Conditions"}
                   </Link>
                 </p>
                 <p>

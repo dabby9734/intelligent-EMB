@@ -34,7 +34,7 @@ export const getApiURL = (route) => {
   const at = encodeURIComponent(getCookie("auth_token"));
   const vt = encodeURIComponent(getCookie("veri_token"));
   const si = encodeURIComponent(getCookie("sess_id"));
-  return `https://iemb-backend.azurewebsites.net/api/${route}?authToken=${at}&veriToken=${vt}&sessionID=${si}`;
+  return `https://iemb-backend-cloudflare-workers.dabby.workers.dev/${route}?authToken=${at}&veriToken=${vt}&sessionID=${si}`;
 };
 
 export const truncate = (str) => {
