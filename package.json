@@ -15,8 +15,11 @@
     "@mui/lab": "^5.0.0-alpha.117",
     "@mui/material": "^5.11.6",
     "downloadjs": "^1.4.7",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^13.0.1",
     "next": "^13.1.5",
     "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "sass": "^1.57.1"
   },
   "devDependencies": {
