@@ -137,29 +137,32 @@ const Messages = ({ boardID }) => {
   };
 
   // initiates fetching messages
-  useEffect(async () => {
-    if (type) {
-      try {
-        setMessages(JSON.parse(localStorage.getItem(`${boardID}+${type}`)));
-      } catch (err) {
-        console.log(err);
-      }
-      try {
-        setFav(JSON.parse(localStorage.getItem(`${boardID}+starred`)));
-      } catch (err) {
-        console.log(err);
-      }
+  useEffect(() => {
+    async function fetchData() {
+      if (type) {
+        try {
+          setMessages(JSON.parse(localStorage.getItem(`${boardID}+${type}`)));
+        } catch (err) {
+          console.log(err);
+        }
+        try {
+          setFav(JSON.parse(localStorage.getItem(`${boardID}+starred`)));
+        } catch (err) {
+          console.log(err);
+        }
 
-      if (type !== "starred") {
-        await Promise.all([
-          fetchMessages(type),
-          fetchMessages("starred", false),
-        ]);
-      } else {
-        // for starred board
-        await fetchMessages(type);
+        if (type !== "starred") {
+          await Promise.all([
+            fetchMessages(type),
+            fetchMessages("starred", false),
+          ]);
+        } else {
+          // for starred board
+          await fetchMessages(type);
+        }
       }
     }
+    fetchData();
   }, [type]);
 
   // fetches messages again if the user navigates to a different page

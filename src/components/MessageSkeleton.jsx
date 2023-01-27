@@ -14,12 +14,8 @@ export default function MessageSkeleton() {
       >
         <Skeleton animation="wave">
           <h2 className="messages__item__content__subject">
-            {
-              // randomly generate a string of 80-120 characters
-              Array.from({
-                length: Math.floor(Math.random() * (120 - 80 + 1)) + 80,
-              }).toString()
-            }
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
+            quod.
           </h2>
         </Skeleton>
         <div
