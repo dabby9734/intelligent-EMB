@@ -2,13 +2,13 @@
 title: Privacy Policy of intelligent-EMB website
 ---
 
-intelligent-EMB operates the <https://iemb.dabby.studio> website, which provides the SERVICE. This Service is provided by The intelligent-EMB Developers at no cost and is intended for use as is.
+intelligent-EMB operates the <https://iemb.pages.dev> website, which provides the SERVICE. This Service is provided by The intelligent-EMB Developers at no cost and is intended for use as is.
 
 This page is used to inform website visitors regarding our policies with the collection, use, and disclosure of Personal Information if anyone decided to use our Service, the intelligent-EMB website.
 
 If you choose to use our Service, then you agree to the collection and use of information in relation with this policy. The Personal Information that we collect are used for providing and improving the Service. We will not use or share your information with anyone except as described in this Privacy Policy.
 
-The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at <https://iemb.dabby.studio/articles/terms-and-conditions>, unless otherwise defined in this Privacy Policy.
+The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at <https://iemb.pages.dev/articles/terms-and-conditions>, unless otherwise defined in this Privacy Policy.
 
 ## Information Collection and Use
 
@@ -18,7 +18,7 @@ The app does use third party service(s) that may collect information used to ide
 
 Link to privacy policy of third party service provider(s) used by the app
 
-- [Azure Cloud Computing Service](https://azure.microsoft.com/en-us/overview/trusted-cloud/privacy/)
+- [Cloudflare Network](https://www.cloudflare.com/privacypolicy/)
 
 ## Log Data
 
@@ -57,7 +57,7 @@ Our Services do not address anyone under the age of 13. We do not knowingly coll
 
 We may update our Privacy Policy from time to time. Thus, we advise you to review this page periodically for any changes. We will notify you of any changes by posting the new Privacy Policy on this page. These changes are effective immediately, after they are posted on this page.
 
-This policy is effective as of 2022-02-02
+This policy is effective as of 2023-01-27
 
 ## Contact Us
 

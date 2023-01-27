@@ -4,7 +4,7 @@ title: Terms and Conditions of the intelligent-EMB website
 
 Welcome to intelligent-EMB!
 
-These terms and conditions outline the rules and regulations for the use of intelligent-EMB's Website, located at <https://iemb.dabby.studio>.
+These terms and conditions outline the rules and regulations for the use of intelligent-EMB's Website, located at <https://iemb.pages.dev>
 
 By accessing this website we assume you accept these terms and conditions. Do not continue to use intelligent-EMB if you do not agree to take all of the terms and conditions stated on this page.
 
@@ -16,7 +16,7 @@ The website does use third party services that declare their own Terms and Condi
 
 Link to Terms and Conditions of third party service provider(s) used by the website
 
-- [Azure Cloud Computing Service](https://azure.microsoft.com/en-us/support/legal/)
+- [Cloudflare Network](https://www.cloudflare.com/website-terms/)
 
 You should be aware that there are certain things that The intelligent-EMB developers will not take responsibility for. Certain functions of the website will require the website to have an active internet connection. The connection can be Wi-Fi, or provided by your mobile network provider, but The intelligent-EMB developers cannot take responsibility for the website not working at full functionality if you don’t have access to Wi-Fi, and you don’t have any of your data allowance left.
 
@@ -32,7 +32,7 @@ We may wish to stop providing this Service, and may terminate use of it at any t
 
 We may update our Terms and Conditions from time to time. Thus, you are advised to review this page periodically for any changes. We will notify you of any changes by posting the new Terms and Conditions on this page.
 
-This policy is effective as of 2022-02-02
+This policy is effective as of 2023-01-27
 
 ## Contact Us
 
