@@ -1,4 +1,4 @@
-# [intelligent E-Message Board](https://iemb.dabby.studio) · [![Deploy to Azure Static Web Apps](https://github.com/dabby9734/intelligent-EMB/actions/workflows/build_and_deploy_to_production.yml/badge.svg)](https://github.com/dabby9734/intelligent-EMB/actions/workflows/build_and_deploy_to_production.yml)
+# [intelligent E-Message Board](https://iemb.dabby.studio)
 
 Have you ever found that the integrated-EMB by HCI IT department was hard to use?
 
