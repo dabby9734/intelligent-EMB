@@ -246,7 +246,7 @@ const Messages = ({ boardID }) => {
                     />
                   </div>
                 )}
-              {previewPid || <ScrollToTopFab />}
+              <ScrollToTopFab />
             </Box>
           </>
         )}
