@@ -13,7 +13,7 @@ const ScrollToTopFab = () => {
     return () =>
       document
         .querySelector(".contentframe")
-        .removeEventListener("scroll", (e) => {
+        ?.removeEventListener("scroll", (e) => {
           listenToScroll(e);
         });
   }, []);
