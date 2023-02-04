@@ -1,4 +1,4 @@
-# [intelligent E-Message Board](https://iemb.dabby.studio)
+# [intelligent E-Message Board](https://iemb.pages.dev)
 
 Have you ever found that the integrated-EMB by HCI IT department was hard to use?
 
