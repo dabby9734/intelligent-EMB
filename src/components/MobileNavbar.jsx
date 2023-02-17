@@ -98,6 +98,9 @@ const MobileNavbar = () => {
           {data.map((item) => (
             <ListItem
               component={item.type ? "a" : "div"}
+              onClick={() => {
+                ctx.setNavPrefs({ ...ctx.navPrefs, mobileNavOpen: false });
+              }}
               href={getHref(router, item.type)}
               key={item.text}
             >
