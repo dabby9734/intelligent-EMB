@@ -18,11 +18,10 @@ const PostFrame = ({ boardID, pid, type }) => {
   const notif = useContext(notifContext);
 
   const refreshToken = async () => {
-    const response = await fetch(
-      `${getApiURL("login")}&username=${encodeURIComponent(
-        getCookie("username")
-      )}&password=${encodeURIComponent(getCookie("password"))}`
-    );
+    let url = new URL(getApiURL("login"));
+    url.searchParams.append("username", getCookie("username"));
+    url.searchParams.append("password", getCookie("password"));
+    const response = await fetch(url);
 
     switch (response.status) {
       case 200:

@@ -2,9 +2,9 @@ import { getCookie, setCookie, deleteCookie } from "./cookieMonster";
 import { getApiURL } from "./util";
 
 export const refreshToken = async (onComplete, fireNotification, router) => {
-  let un = encodeURIComponent(getCookie("username"));
-  let pw = encodeURIComponent(getCookie("password"));
-  let url = `${getApiURL("login")}&username=${un}&password=${pw}`;
+  let url = new URL(getApiURL("login"));
+  url.searchParams.append("username", un);
+  url.searchParams.append("password", pw);
   const response = await fetch(url);
 
   switch (response.status) {

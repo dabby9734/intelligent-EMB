@@ -40,7 +40,10 @@ const MessageCard = ({
       );
     }
 
-    const url = `${getApiURL("star")}&bid=${bid}&pid=${pid}&status=${status}`;
+    const url = new URL(getApiURL("star"));
+    url.searchParams.append("bid", bid);
+    url.searchParams.append("pid", pid);
+    url.searchParams.append("status", status);
     const response = await fetch(url).catch((err) => {
       return notif.open(
         "An error occured while updating starred status for post " + pid,
@@ -88,7 +91,6 @@ const MessageCard = ({
     try {
       await updateStarredStatus(message.pid, message.boardID, e.target.checked);
     } catch (e) {
-      console.log(e);
       notif.open(
         "An error occured while updating starred status for post " + pid,
         "error"

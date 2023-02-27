@@ -31,10 +31,13 @@ export const urgencyToColor = (urgency) => {
 };
 
 export const getApiURL = (route) => {
-  const at = encodeURIComponent(getCookie("auth_token"));
-  const vt = encodeURIComponent(getCookie("veri_token"));
-  const si = encodeURIComponent(getCookie("sess_id"));
-  return `https://iemb-backend-cloudflare-workers.dabby.workers.dev/${route}?authToken=${at}&veriToken=${vt}&sessionID=${si}`;
+  let url = new URL(
+    `https://iemb-backend-cloudflare-workers.dabby.workers.dev/${route}`
+  );
+  url.searchParams.append("authToken", getCookie("auth_token"));
+  url.searchParams.append("veriToken", getCookie("veri_token"));
+  url.searchParams.append("sessionID", getCookie("sess_id"));
+  return url;
 };
 
 export const truncate = (str) => {

@@ -42,30 +42,29 @@ const Messages = ({ boardID }) => {
     }
 
     let endpoint = "getBoard";
-    let extraArgs = "";
+    let url = new URL(getApiURL(endpoint));
     switch (type) {
       case "updated-messages":
-        extraArgs = "&isupdated=True&t=1";
+        url.searchParams.append("isupdated", "True");
+        url.searchParams.append("t", "1");
         break;
       case "my-messages":
-        extraArgs = `&postBy=${encodeURIComponent(
-          localStorage.getItem("name")
-        )}&t=2`;
+        url.searchParams.append("postBy", localStorage.getItem("name"));
+        url.searchParams.append("t", "2");
         break;
       case "my-drafts":
-        extraArgs = "&t=3";
+        url.searchParams.append("t", "3");
         break;
       case "starred":
         endpoint = "getBoardStarred";
+        url = new URL(getApiURL("getBoardStarred"));
         break;
       case "archived":
-        endpoint = "getBoardArchived";
-        extraArgs = `&page=${page}`;
+        url = new URL(getApiURL("getBoardArchived"));
+        url.searchParams.append("page", page);
         break;
-      default:
-        endpoint = "getBoard";
     }
-    const url = `${getApiURL(endpoint)}&boardID=${boardID}${extraArgs}`;
+    url.searchParams.append("boardID", boardID);
     const response = await fetch(url).catch((err) => {
       return notif.open("An error occured while fetching messages");
     });
