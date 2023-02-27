@@ -38,14 +38,14 @@ const PostReply = ({ info, boardID, pid }) => {
       return await refreshToken(processReply, notif.open, router);
     }
 
-    const url = `${getApiURL(
-      "reply"
-    )}&pid=${pid}&boardID=${boardID}&replyContent=${encodeURIComponent(
-      val
-    )}&selection=${selection}`;
+    let url = new URL(getApiURL("reply"));
+    url.searchParams.append("pid", pid);
+    url.searchParams.append("boardID", boardID);
+    url.searchParams.append("replyContent", val);
+    url.searchParams.append("selection", selection);
     const response = await fetch(url).catch((err) => {
       setLoading(false);
-      notif.open();
+      notif.open("Failed to reply");
       return;
     });
 

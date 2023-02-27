@@ -26,11 +26,10 @@ const Login = () => {
 
   const loginUser = async () => {
     setLoading(true);
-    let un = encodeURIComponent(username);
-    let pw = encodeURIComponent(password);
-    const response = await fetch(
-      `${getApiURL("login")}&username=${un}&password=${pw}`
-    );
+    const url = new URL(getApiURL("login"));
+    url.searchParams.append("username", username);
+    url.searchParams.append("password", password);
+    const response = await fetch(url);
 
     switch (response.status) {
       case 200:
