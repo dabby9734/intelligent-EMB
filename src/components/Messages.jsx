@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { Box, Pagination, useTheme, IconButton } from "@mui/material";
 import { checkCookie } from "../lib/cookieMonster";
 import { refreshToken } from "../lib/browserMonster";
-import MessageSkeleton from "./MessageSkeleton";
+import MessageSkeleton from "./MessageCardSkeleton";
 import { navPrefsContext, notifContext } from "../pages/_app";
 import ScrollToTopFab from "./ScrollToTopFab";
 import MessageCard from "./MessageCard";
