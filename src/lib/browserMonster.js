@@ -3,8 +3,8 @@ import { getApiURL } from "./util";
 
 export const refreshToken = async (onComplete, fireNotification, router) => {
   let url = new URL(getApiURL("login"));
-  url.searchParams.append("username", un);
-  url.searchParams.append("password", pw);
+  url.searchParams.append("username", getCookie("username"));
+  url.searchParams.append("password", getCookie("password"));
   const response = await fetch(url);
 
   switch (response.status) {
