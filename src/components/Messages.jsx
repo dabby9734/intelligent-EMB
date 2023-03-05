@@ -92,7 +92,7 @@ const Messages = ({ boardID }) => {
       localStorage.setItem("name", data.name);
     }
     // pagination data for archived and starred boards
-    if (type === "archived" || type === "starred") {
+    if ((type === "archived" || type === "starred") && setM) {
       setPage(data.currentPage);
       setTotalPages(data.totalPages);
     }
