@@ -125,11 +125,11 @@ const Messages = ({ boardID }) => {
       }
 
       // fetch fresh messages
-      const data = await fetchMessages(type, boardID, page);
+      let data = await fetchMessages(type, boardID, page);
       // handle error
       if (data === -1) return notif.open("Error fetching messages");
       if (data === -2)
-        return await refreshToken(
+        data = await refreshToken(
           async () => fetchMessages(type, boardID, page),
           notif.open
         );
