@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
 import { deleteCookie, getCookie, setCookie } from "../lib/cookieMonster";
 import { getApiURL } from "../lib/util";
+import { refreshToken } from "../lib/browserMonster";
 import { notifContext } from "../pages/_app";
 
 import PostContent from "./PostContent";
@@ -17,62 +18,13 @@ const PostFrame = ({ boardID, pid, type }) => {
   const [replyInfo, setReplyInfo] = useState({ canReply: false });
   const notif = useContext(notifContext);
 
-  const refreshToken = async () => {
-    let url = new URL(getApiURL("login"));
-    url.searchParams.append("username", getCookie("username"));
-    url.searchParams.append("password", getCookie("password"));
-    const response = await fetch(url);
-
-    switch (response.status) {
-      case 200:
-        break;
-      default:
-        notif.open("Token refresh failed");
-        deleteCookie("username");
-        deleteCookie("password");
-        deleteCookie("auth_token");
-        deleteCookie("sess_id");
-        deleteCookie("veri_token");
-        localStorage.clear();
-        router.push("/" + "?next=" + encodeURIComponent(router.asPath));
-    }
-
-    const data = await response.json();
-
-    if (data.success) {
-      setCookie("auth_token", data.AUTH_TOKEN, 1800);
-      setCookie("sess_id", data.SESSION_ID, 1800);
-      setCookie("veri_token", data.VERI_TOKEN_COOKIE, 1800);
-
-      // You might think it's better to do `return await fetchPost()` here, but
-      // iemb.hci.edu.sg likes to throw a HTTP status code 500 if you do that.
-      // I have no idea why it does that, just like I have no idea how this
-      // seems to work much more reliably...
-      router.reload();
-    } else {
-      if (data.message === "Missing username and/or password") {
-        deleteCookie("username");
-        deleteCookie("password");
-        deleteCookie("auth_token");
-        deleteCookie("sess_id");
-        deleteCookie("veri_token");
-        localStorage.clear();
-        router.push("/" + "?next=" + encodeURIComponent(router.asPath));
-      }
-
-      notif.open(data.message);
-      setPostLoading(false);
-      setContent(`<h2>${data.message}</h2>`);
-    }
-  };
-
   const fetchPost = async (pid, boardID) => {
     if (
       !getCookie("auth_token") ||
       !getCookie("sess_id") ||
       !getCookie("veri_token")
     ) {
-      return await refreshToken();
+      return await refreshToken(() => fetchPost(pid, boardID), notif.open);
     }
     const url = `${getApiURL("getPost")}&pid=${pid}&boardID=${boardID}`;
     const response = await fetch(url).catch((err) => {
@@ -83,7 +35,7 @@ const PostFrame = ({ boardID, pid, type }) => {
 
     switch (response.status) {
       case 401:
-        return await refreshToken();
+        return await refreshToken(() => fetchPost(pid, boardID), notif.open);
       case 200:
         break;
       default:
