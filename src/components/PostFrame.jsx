@@ -26,7 +26,9 @@ const PostFrame = ({ boardID, pid, type }) => {
     ) {
       return await refreshToken(() => fetchPost(pid, boardID), notif.open);
     }
-    const url = `${getApiURL("getPost")}&pid=${pid}&boardID=${boardID}`;
+    let url = new URL(getApiURL("getPost"));
+    url.searchParams.append("pid", pid);
+    url.searchParams.append("boardID", boardID);
     const response = await fetch(url).catch((err) => {
       setPostLoading(false);
       setContent(`<h2>${err}</h2>`);
