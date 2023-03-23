@@ -35,8 +35,7 @@ const MessageCard = ({
     ) {
       return await refreshToken(
         async () => updateStarredStatus(pid, bid, status),
-        notif.open,
-        router
+        notif.open
       );
     }
 
@@ -55,8 +54,7 @@ const MessageCard = ({
       case 401:
         return await refreshToken(
           async () => updateStarredStatus(pid, bid, status),
-          notif.open,
-          router
+          notif.open
         );
       case 200:
         if (status) {

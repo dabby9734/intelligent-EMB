@@ -36,8 +36,7 @@ const Messages = ({ boardID }) => {
     ) {
       return await refreshToken(
         async () => fetchMessages(type, setM),
-        notif.open,
-        router
+        notif.open
       );
     }
 
@@ -73,8 +72,7 @@ const Messages = ({ boardID }) => {
       case 401:
         return await refreshToken(
           async () => fetchMessages(type, setM),
-          notif.open,
-          router
+          notif.open
         );
       case 200:
         break;

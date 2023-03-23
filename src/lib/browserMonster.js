@@ -1,7 +1,8 @@
 import { getCookie, setCookie, deleteCookie } from "./cookieMonster";
 import { getApiURL } from "./util";
+import Router from "next/router";
 
-export const refreshToken = async (onComplete, fireNotification, router) => {
+export const refreshToken = async (onComplete, fireNotification) => {
   let url = new URL(getApiURL("login"));
   url.searchParams.append("username", getCookie("username"));
   url.searchParams.append("password", getCookie("password"));
@@ -18,7 +19,7 @@ export const refreshToken = async (onComplete, fireNotification, router) => {
       deleteCookie("sess_id");
       deleteCookie("veri_token");
       localStorage.clear();
-      router.push("/" + "?next=" + encodeURIComponent(router.asPath));
+      Router.push("/" + "?next=" + encodeURIComponent(Router.asPath));
   }
 
   const data = await response.json();

@@ -20,13 +20,9 @@ const PostContent = ({ attachments, content }) => {
       !getCookie("sess_id") ||
       !getCookie("veri_token")
     ) {
-      return await refreshToken(
-        async () => {
-          downloadFile(attachment);
-        },
-        notif.open,
-        router
-      );
+      return await refreshToken(async () => {
+        downloadFile(attachment);
+      }, notif.open);
     }
 
     const response = await fetch(getApiURL("download"), {
@@ -50,13 +46,9 @@ const PostContent = ({ attachments, content }) => {
       notif.open(data.message);
 
       if (data.message == "Needs to refresh token") {
-        return await refreshToken(
-          async () => {
-            downloadFile(attachment);
-          },
-          notif.open,
-          router
-        );
+        return await refreshToken(async () => {
+          downloadFile(attachment);
+        }, notif.open);
       } else notif.open("Error downloading file");
     }
 

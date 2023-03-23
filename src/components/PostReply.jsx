@@ -35,7 +35,7 @@ const PostReply = ({ info, boardID, pid }) => {
       !getCookie("sess_id") ||
       !getCookie("veri_token")
     ) {
-      return await refreshToken(processReply, notif.open, router);
+      return await refreshToken(processReply, notif.open);
     }
 
     let url = new URL(getApiURL("reply"));
@@ -58,7 +58,7 @@ const PostReply = ({ info, boardID, pid }) => {
     notif.open(data.message);
     if (!data.success) {
       if (data.message === "Needs to refresh token") {
-        return await refreshToken(processReply, notif.open, router);
+        return await refreshToken(processReply, notif.open);
       }
       if (data.message === "Invalid username or password") {
         deleteCookie("username");
