@@ -148,7 +148,12 @@ const Messages = ({ boardID }) => {
       // fetch starred messages (to update star icon)
       if (type !== "starred") {
         fetchMessages("starred", boardID).then((data) => {
+          if (data.messages === undefined) return;
           setFav(data.messages);
+          localStorage.setItem(
+            `${boardID}+starred`,
+            JSON.stringify(data.messages)
+          );
         });
       }
     }
