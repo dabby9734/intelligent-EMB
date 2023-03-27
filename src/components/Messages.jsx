@@ -70,11 +70,11 @@ const Messages = ({ boardID }) => {
   const notif = useContext(notifContext);
 
   // Control message display
-  const [messages, setMessages] = useState("");
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [fav, setFav] = useState("");
+  const [fav, setFav] = useState([]);
   const { type } = router.query;
 
   const getSortedMessages = (messages) => {
@@ -167,11 +167,11 @@ const Messages = ({ boardID }) => {
       if (router.query.type === "archived" || router.query.type === "starred") {
         setMessages("");
         // fetch fresh messages
-        const data = fetchMessages(type, boardID, page);
+        let data = fetchMessages(type, boardID, page);
         // handle error
         if (data === -1) return notif.open("Error fetching messages");
         if (data === -2)
-          return await refreshToken(
+          data = await refreshToken(
             async () => fetchMessages(type),
             boardID,
             page
