@@ -26,8 +26,7 @@ export default function LoginPage() {
         refreshToken(
           // redirect to student board if token refresh successful
           async () => router.push("/student?type=inbox"),
-          setInfo,
-          router
+          setInfo
         );
       } else {
         router.push("/student?type=inbox");
