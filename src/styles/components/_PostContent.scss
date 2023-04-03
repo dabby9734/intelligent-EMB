@@ -16,3 +16,30 @@
     height: auto;
   }
 }
+
+html[data-theme="dark"] {
+  .post-content :link {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #90caf9;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .post-content :link:hover {
+    color: darken(#90caf9, 10%);
+  }
+}
+html[data-theme="light"] {
+  .post-content :link {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #0066cc;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .post-content :link:hover {
+    color: darken(#0066cc, 10%);
+  }
+}
