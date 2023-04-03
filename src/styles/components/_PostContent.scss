@@ -30,7 +30,8 @@ html[data-theme="dark"] {
     color: darken(#90caf9, 10%);
   }
 }
-html[data-theme="light"] {
+html[data-theme="light"],
+html {
   .post-content :link {
     cursor: pointer;
     text-decoration: underline;
