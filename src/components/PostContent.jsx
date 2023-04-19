@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { useRouter } from "next/router";
 import { getCookie } from "../lib/cookieMonster";
 import download from "downloadjs";
 
@@ -11,7 +10,6 @@ import { notifContext } from "../pages/_app";
 import { getApiURL } from "../lib/util";
 
 const PostContent = ({ attachments, content }) => {
-  const router = useRouter();
   const notif = useContext(notifContext);
 
   const downloadFile = async (attachment) => {
