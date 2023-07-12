@@ -38,7 +38,10 @@ export default function LoginPage() {
     <div>
       <Head>
         <title>iEMB :: Login</title>
-        <meta name="description" content="i-EMB, reimagined." />
+        <meta
+          name="description"
+          content="intelligent EMB is blazingly fast and user friendly for the Integrated e-Message Board (i-EMB) of Hwa Chong Institution"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
