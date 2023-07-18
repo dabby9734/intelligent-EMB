@@ -2,9 +2,9 @@ import PersonIcon from "@mui/icons-material/Person";
 import EventIcon from "@mui/icons-material/Event";
 import GroupIcon from "@mui/icons-material/Group";
 import LinkIcon from "@mui/icons-material/Link";
-import { Chip, useTheme, IconButton } from "@mui/material";
+import { Chip, useTheme } from "@mui/material";
 
-const PostInfo = ({ info }) => {
+const PostInfo = ({ info, urlPath }) => {
   const theme = useTheme();
 
   return (
@@ -41,7 +41,12 @@ const PostInfo = ({ info }) => {
             icon={<LinkIcon fontSize="small" />}
             label="Share!"
             onClick={() => {
-              const url = window.location.href;
+              let url = window.location.href;
+              // append post info if we are viewing post using slideover
+              const boardPaths = ["/student", "/service", "/lost-and-found"];
+              console.log(info);
+              if (boardPaths.indexOf(window.location.pathname) > -1)
+                url = window.location.origin + urlPath;
               navigator.clipboard.writeText(url);
             }}
             variant="outlined"

@@ -122,7 +122,10 @@ const PostFrame = ({ boardID, pid, type }) => {
             flexDirection: "column",
           }}
         >
-          <PostInfo info={details} />
+          <PostInfo
+            info={details}
+            urlPath={`/post?boardID=${boardID}&pid=${pid}`}
+          />
           <PostContent attachments={attachments} content={content} />
           <PostReply info={replyInfo} pid={pid} boardID={boardID} />
         </Box>
