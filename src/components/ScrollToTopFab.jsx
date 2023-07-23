@@ -7,12 +7,12 @@ const ScrollToTopFab = () => {
   // Control visibility floating action button to go back up
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
-    document.querySelector(".contentframe").addEventListener("scroll", (e) => {
+    document.querySelector(".messages").addEventListener("scroll", (e) => {
       listenToScroll(e);
     });
     return () =>
       document
-        .querySelector(".contentframe")
+        .querySelector(".messages")
         ?.removeEventListener("scroll", (e) => {
           listenToScroll(e);
         });
@@ -30,18 +30,16 @@ const ScrollToTopFab = () => {
         color="secondary"
         aria-label="back-to-top"
         sx={{
-          top: "auto",
-          right: "2rem",
+          position: "absolute",
           bottom: "3.2rem",
-          left: "auto",
-          position: "fixed",
+          right: "2rem",
           backgroundColor: "#ce9eff",
           "&:hover": {
             backgroundColor: "#b46bff",
           },
         }}
         onClick={() => {
-          document.querySelector(".contentframe").scrollTo({
+          document.querySelector(".messages").scrollTo({
             top: 0,
             left: 0,
             behavior: "smooth",

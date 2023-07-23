@@ -32,7 +32,7 @@ export default function StudentBoard() {
 
       <Header />
       <MobileNavbar />
-      <div style={{ display: "flex" }}>
+      <div className="contentframe">
         <DesktopNavbar />
         <Messages boardID={1048} />
       </div>

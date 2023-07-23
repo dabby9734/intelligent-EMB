@@ -18,7 +18,7 @@ const Post = () => {
       </Head>
       <Header />
       <MobileNavbar />
-      <div style={{ display: "flex" }}>
+      <div className="contentframe">
         <DesktopNavbar />
         <PostFrame pid={pid} boardID={boardID} type={type} />
       </div>

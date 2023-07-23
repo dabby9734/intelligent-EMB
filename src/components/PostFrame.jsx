@@ -102,35 +102,27 @@ const PostFrame = ({ boardID, pid, type }) => {
     }
   }, [pid, boardID]);
 
-  return (
-    <div className="contentframe">
-      {postLoading ? (
-        <Box
-          sx={{
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      ) : (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <PostInfo
-            info={details}
-            urlPath={`/post?boardID=${boardID}&pid=${pid}`}
-          />
-          <PostContent attachments={attachments} content={content} />
-          <PostReply info={replyInfo} pid={pid} boardID={boardID} />
-        </Box>
-      )}
-    </div>
+  return postLoading ? (
+    <Box
+      sx={{
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  ) : (
+    <Box sx={{ padding: "1rem" }}>
+      <PostInfo
+        info={details}
+        urlPath={`/post?boardID=${boardID}&pid=${pid}`}
+      />
+      <PostContent attachments={attachments} content={content} />
+      <PostReply info={replyInfo} pid={pid} boardID={boardID} />
+    </Box>
   );
 };
 
