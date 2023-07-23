@@ -115,7 +115,7 @@ const PostFrame = ({ boardID, pid, type }) => {
       <CircularProgress />
     </Box>
   ) : (
-    <Box sx={{ padding: "1rem", width: "100%" }}>
+    <Box className="postframe">
       <PostInfo
         info={details}
         urlPath={`/post?boardID=${boardID}&pid=${pid}`}
