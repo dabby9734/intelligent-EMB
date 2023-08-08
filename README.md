@@ -18,6 +18,14 @@ It also has a pleasing user interface, which is responsive and adapt to your dis
 
 All source code is available on Github, allowing fellow programmers to evaluate the security of the system and report any vulnerabilities.
 
+## Demo
+
+![Login page](demo_assets/login.png)
+
+![Messages board](demo_assets/board.png)
+
+![Post viewing](demo_assets/post.png)
+
 ## Features
 
 - View messages in a minimal and beautiful way

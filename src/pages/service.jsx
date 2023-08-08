@@ -32,7 +32,7 @@ export default function ServiceBoard() {
 
       <Header />
       <MobileNavbar />
-      <div style={{ display: "flex" }}>
+      <div className="contentframe">
         <DesktopNavbar />
         <Messages boardID={1039} />
       </div>

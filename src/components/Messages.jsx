@@ -205,23 +205,19 @@ const Messages = ({ boardID }) => {
   return (
     <>
       <Box
-        className="contentframe"
         sx={{
+          position: "relative",
           backgroundColor: theme.palette.background.default,
           flex: "1",
         }}
       >
-        {loading ? (
-          new Array(20).fill(0).map((_, i) => <MessageSkeleton key={i} />)
-        ) : (
-          <>
-            <Box className="messages" id="messages">
+        <Box className="messages" id="messages">
+          {loading ? (
+            new Array(20).fill(0).map((_, i) => <MessageSkeleton key={i} />)
+          ) : (
+            <>
               {(!messages || messages.length === 0) && (
-                <h2
-                  style={{
-                    color: theme.palette.text.primary,
-                  }}
-                >
+                <h2 style={{ color: theme.palette.text.primary }}>
                   No messages
                 </h2>
               )}
@@ -258,10 +254,10 @@ const Messages = ({ boardID }) => {
                     />
                   </div>
                 )}
-              <ScrollToTopFab />
-            </Box>
-          </>
-        )}
+            </>
+          )}
+        </Box>
+        <ScrollToTopFab />
       </Box>
       <div
         className="preview-frame desktop-only"
