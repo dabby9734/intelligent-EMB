@@ -29,10 +29,15 @@ All source code is available on Github, allowing fellow programmers to evaluate 
 ## Features
 
 - View messages in a minimal and beautiful way
+- Stay logged in functionality
 - Download attachments from messages
+- Star messages
 - Reply to messages
-- Dark / Light mode
+- Dark and light mode
 - More to come...
+
+## Contributing
+- Please feel free to open new issues and contribute through new pull requests.
 
 ## Also check out
 
