@@ -169,15 +169,6 @@ const Login = () => {
                     Backend
                   </a>
                 </p>
-                <p>
-                  Also check out{" "}
-                  <a
-                    href="https://betteriemb.skytect.one"
-                    className="underline"
-                  >
-                    Better iEMB by The Better iEMB Developers
-                  </a>
-                </p>
               </div>
             </div>
           </div>
