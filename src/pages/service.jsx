@@ -25,9 +25,7 @@ export default function ServiceBoard() {
   return (
     <>
       <Head>
-        <title>iEMB</title>
-        <meta name="description" content="i-EMB, reimagined." />
-        <link rel="icon" href="/favicon.ico" />
+        <title>iEMB :: Service</title>
       </Head>
 
       <Header />

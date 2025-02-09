@@ -37,12 +37,8 @@ export default function LoginPage() {
   return (
     <div>
       <Head>
-        <title>iEMB :: Login</title>
-        <meta
-          name="description"
-          content="intelligent EMB is blazingly fast and user friendly for the Integrated e-Message Board (i-EMB) of Hwa Chong Institution"
-        />
-        <link rel="icon" href="/favicon.ico" />
+        <title>Intelligent e-Message Board (iEMB)</title>
+        {/* Configure other Head tags in _document.js */}
       </Head>
 
       <Snackbar

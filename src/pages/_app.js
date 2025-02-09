@@ -4,6 +4,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 
 import React, { useEffect } from "react";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -78,24 +79,29 @@ function MyApp({ Component, pageProps }) {
       }),
   });
   return (
-    <notifContext.Provider value={notif}>
-      <navPrefsContext.Provider value={{ navPrefs, setNavPrefs }}>
-        <ColorModeContext.Provider value={colorMode}>
-          <ThemeProvider theme={theme}>
-            <Snackbar
-              open={!!notif.message}
-              autoHideDuration={1000}
-              onClose={notif.close}
-            >
-              <Alert severity={notif.severity} onClose={notif.close}>
-                {notif.message}
-              </Alert>
-            </Snackbar>
-            <Component {...pageProps} />
-          </ThemeProvider>
-        </ColorModeContext.Provider>
-      </navPrefsContext.Provider>
-    </notifContext.Provider>
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width" />
+      </Head>
+      <notifContext.Provider value={notif}>
+        <navPrefsContext.Provider value={{ navPrefs, setNavPrefs }}>
+          <ColorModeContext.Provider value={colorMode}>
+            <ThemeProvider theme={theme}>
+              <Snackbar
+                open={!!notif.message}
+                autoHideDuration={1000}
+                onClose={notif.close}
+              >
+                <Alert severity={notif.severity} onClose={notif.close}>
+                  {notif.message}
+                </Alert>
+              </Snackbar>
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </ColorModeContext.Provider>
+        </navPrefsContext.Provider>
+      </notifContext.Provider>
+    </>
   );
 }
 
