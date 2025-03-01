@@ -12,7 +12,7 @@ class MyDocument extends Document {
         <Head>
           <meta
             name="description"
-            content="intelligent EMB is blazingly fast and user friendly client for the Integrated e-Message Board (iEMB) of Hwa Chong Institution"
+            content="iEMB is a blazingly fast and user friendly client for the Integrated e-Message Board (iEMB) of Hwa Chong Institution"
           />
           <meta name="theme-color" content="#CE9EFF" />
           <meta name="author" content="iEMB" />
