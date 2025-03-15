@@ -133,6 +133,10 @@ const Login = () => {
 
               <div className="login__content-links">
                 <p>
+                  <Link href="/articles/about" passHref className="underline">
+                    About
+                  </Link>
+                  &nbsp;⋅&nbsp;
                   <Link href="/articles/faq" passHref className="underline">
                     FAQ
                   </Link>

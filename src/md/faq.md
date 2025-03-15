@@ -10,13 +10,9 @@ No. We store your login credentials as cookies on your browser for session refre
 
 As [iemb.hci.edu.sg](https://iemb.hci.edu.sg) updates, the website may stop working occasionally. In such a case, an update should be released within a few days to rectify the issue.
 
-## Is there a mobile app for iEMB?
-
-You should try out [better iEMB](https://betteriemb.skytect.one) by The Better iEMB Developers.
-
 ## I found a bug, how can I report it?
 
-Please contact us via Telegram [@dabby_dabby_chicken_wing](https://t.me/dabby_dabby_chicken_wing). We, just like The Better iEMB Developers, are currently preoccupied with school work so a response might take some time.
+Please contact me via Telegram [@dabby_dabby_chicken_wing](https://t.me/dabby_dabby_chicken_wing). We will try to fix it as soon as possible.
 
 ## Will you implement XXX feature?
 
