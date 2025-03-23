@@ -40,6 +40,11 @@ class MyDocument extends Document {
             href="/favicon-16x16.png"
           />
           <link rel="manifest" href="/site.webmanifest" />
+          {/* WebSite structured data. See https://developers.google.com/search/docs/appearance/site-names#json-ld */}
+          <div itemscope itemtype="https://schema.org/WebSite">
+            <link itemprop="url" href="https://iemb.pages.dev" />
+            <meta itemprop="name" content="iEMB" />
+          </div>
         </Head>
         <body>
           <Main />
