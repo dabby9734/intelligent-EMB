@@ -1,5 +1,6 @@
 ---
 title: "Frequently Asked Questions"
+description: "FAQs for the intelligent-EMB web client of iemb.hci.edu.sg"
 ---
 
 ## Are you going to steal my passwords and hack my HCI account?
