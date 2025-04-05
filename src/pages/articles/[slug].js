@@ -2,6 +2,7 @@ import fs from "fs";
 import matter from "gray-matter";
 import md from "markdown-it";
 import Head from "next/head";
+import Link from "next/link";
 
 export async function getStaticPaths() {
   const files = fs.readdirSync("src/md");
@@ -44,9 +45,9 @@ export default function PostPage({ frontmatter, content }) {
           <div className="github-callout">
             <div className="callout-content">
               <p>👋 Looking for the iEMB login page?</p>
-              <a href="/" className="callout-button">
+              <Link href="/" className="callout-button">
                 Go to Login →
-              </a>
+              </Link>
             </div>
           </div>
 
