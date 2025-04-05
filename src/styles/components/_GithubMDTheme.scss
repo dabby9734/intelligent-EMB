@@ -1154,6 +1154,63 @@
   ::-webkit-calendar-picker-indicator {
     filter: invert(50%);
   }
+
+  /* GitHub-style callout component */
+  .github-callout {
+    margin: 0 0 20px 0;
+    padding: 20px;
+    color: var(--color-fg-default);
+    background-color: var(--color-canvas-subtle);
+    border: 1px solid var(--color-border-default);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+
+    .callout-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      @media (max-width: 640px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      p {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .callout-button {
+        display: inline-block;
+        padding: 5px 16px;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 20px;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        appearance: none;
+        color: var(--color-fg-default);
+        background-color: var(--color-canvas-default);
+        box-shadow: var(--color-btn-shadow), var(--color-btn-inset-shadow);
+        transition: 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+
+        &:hover {
+          background-color: var(
+            --color-btn-hover-bg,
+            var(--color-canvas-subtle)
+          );
+          border-color: var(--color-btn-hover-border);
+          text-decoration: none;
+        }
+      }
+    }
+  }
 }
 
 .md-wrap {

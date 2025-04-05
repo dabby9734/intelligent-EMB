@@ -32,12 +32,24 @@ export default function PostPage({ frontmatter, content }) {
     <>
       <Head>
         <title>iEMB :: {frontmatter.title}</title>
-        <meta name="description" content={frontmatter.title} />
+        <meta
+          name="description"
+          content={frontmatter.description ?? frontmatter.title}
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div className="md-wrap md-scroll">
         <div className="markdown-body md-box">
+          <div className="github-callout">
+            <div className="callout-content">
+              <p>👋 Looking for the iEMB login page?</p>
+              <a href="/" className="callout-button">
+                Go to Login →
+              </a>
+            </div>
+          </div>
+
           <h1>{frontmatter.title}</h1>
           <div dangerouslySetInnerHTML={{ __html: md().render(content) }} />
         </div>
