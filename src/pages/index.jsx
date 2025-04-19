@@ -37,7 +37,84 @@ export default function LoginPage() {
   return (
     <div>
       <Head>
-        <title>Intelligent e-Message Board (iEMB)</title>
+        <title>
+          Intelligent e-Message Board (iEMB) | Fast & Mobile-Friendly HCI iEMB
+          Client
+        </title>
+        <meta
+          name="description"
+          content="Access Hwa Chong Institution's e-Message Board with our responsive, fast, and user-friendly interface. Log in to view student announcements, service messages, and more."
+        />
+        <meta
+          name="keywords"
+          content="iEMB, Hwa Chong Institution, HCI message board, school announcements, student portal, e-Message Board"
+        />
+
+        {/* Canonical URL to prevent duplicate content issues */}
+        <link rel="canonical" href="https://iemb.pages.dev" />
+
+        {/* OpenGraph tags for better social sharing */}
+        <meta
+          property="og:title"
+          content="Intelligent e-Message Board (iEMB)"
+        />
+        <meta
+          property="og:description"
+          content="Fast, responsive client for Hwa Chong Institution's e-Message Board. Access school announcements and messages easily."
+        />
+        <meta property="og:url" content="https://iemb.pages.dev" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="iEMB" />
+        <meta
+          property="og:image"
+          content="https://iemb.pages.dev/android-chrome-512x512.png"
+        />
+        <meta
+          property="og:image:alt"
+          content="Intelligent e-Message Board Logo"
+        />
+        <meta property="og:image:width" content="512" />
+        <meta property="og:image:height" content="512" />
+
+        {/* Twitter Card data */}
+        <meta name="twitter:card" content="summary" />
+        <meta
+          name="twitter:title"
+          content="Intelligent e-Message Board (iEMB)"
+        />
+        <meta
+          name="twitter:description"
+          content="Fast, responsive client for Hwa Chong Institution's e-Message Board."
+        />
+        <meta
+          name="twitter:image"
+          content="https://iemb.pages.dev/android-chrome-512x512.png"
+        />
+
+        {/* Structured data for improved search results */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "Intelligent e-Message Board",
+              alternateName: "iEMB",
+              description:
+                "A fast and user-friendly client for accessing Hwa Chong Institution's e-Message Board.",
+              applicationCategory: "Education",
+              operatingSystem: "All",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+              },
+              author: {
+                "@type": "Person",
+                name: "dabby",
+              },
+            }),
+          }}
+        />
         {/* Configure other Head tags in _document.js */}
       </Head>
 
