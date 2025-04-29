@@ -173,6 +173,13 @@ const Login = () => {
                     Backend
                   </a>
                 </p>
+                <p>
+                  Also check out&nbsp;
+                  <a href="https://atd.pages.dev" className="underline">
+                    ISP
+                  </a>{" "}
+                  for attendance and exam results
+                </p>
               </div>
             </div>
           </div>
